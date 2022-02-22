@@ -1,19 +1,23 @@
 <template>
 
-    <div>
+    <div class="login-form">
         <h1 class="titulo">Resetar Senha</h1>
 
         <form class="login">
+
+            <img src="../assets/logo.png" alt="">
+
             <div>
                 <label for="email">seu e-mail</label>
-                <input type="email" id="email" name="email" placeholder="e-mail" v-model="form.email">
-                <span>
-                    <img v-if="form.email.length < 32" src="../assets/email.png" alt="">
-                </span>
+                <input type="email" id="email" name="email" placeholder="e-mail" v-model="form.email" required>
             </div>
 
-            <button class="btn-form" type="submit">Recuperar</button>
+            <button class="btn-form" type="submit" @click.prevent="recoverPassword">Recuperar</button>
         </form>
+
+        <h2 class="subtitulo">
+            <router-link to="/login">Login</router-link>
+        </h2>
     </div>
 </template>
 
@@ -26,6 +30,12 @@ export default {
             },
         }
     },
+
+    methods: {
+        recoverPassword() {
+            console.log('clicou')
+        }
+    }
 }
 </script>
 

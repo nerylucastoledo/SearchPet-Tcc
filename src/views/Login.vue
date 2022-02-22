@@ -1,27 +1,17 @@
 <template>
 
-    <div>
+    <div class="login-form">
         <h1 class="titulo">Login</h1>
 
         <form class="login">
 
             <img src="../assets/logo.png" alt="">
 
-            <div>
-                <input type="email" id="email" name="email" placeholder="e-mail" v-model="form.email">
-                <span>
-                    <img id="logo-email" src="../assets/email.png" alt="">
-                </span>
-            </div>
+            <input type="email" id="email" name="email" placeholder="e-mail" v-model="form.email" required>
 
-            <div>
-                <input type="password" id="password" name="password" placeholder="password" v-model="form.password">
-                <span>
-                    <img id="logo-password" src="../assets/cadeado.png" alt="">
-                </span>
-            </div>
+            <input type="password" id="password" name="password" placeholder="password" v-model="form.password" required>
 
-            <button class="btn-form" type="submit" @click="login">Login</button>
+            <button class="btn-form" type="submit" @click.prevent="login">Login</button>
 
             <p>Esqueceu a senha?
                 <router-link to="/reset-password">
@@ -49,13 +39,17 @@ export default {
 
     methods: {
         login() {
-            console.log(this.form.password)
+            console.log('clicou')
         }
     }
 }
 </script>
 
 <style>
+
+.login-form {
+    padding: 0 20px;
+}
 
 .login {
     background-color: #fff;
@@ -67,7 +61,7 @@ export default {
     padding: 40px 0;
 }
 
-.login input, select{
+.login input{
     display: block;
     margin: 0 auto 30px;
     padding: 15px 0;
@@ -80,7 +74,7 @@ export default {
     font-size: 16px;
 }
 
-.login input:nth-child(1), select {
+.login input:nth-child(1) {
     margin-bottom: 30px;
 }
 
@@ -88,10 +82,6 @@ input:focus {
     outline: none !important;
     border: none;
     box-shadow: 0 0 10px #36C9D2;
-}
-
-select {
-    width: 300px;
 }
 
 .login img {
@@ -115,16 +105,6 @@ select {
 
 .subtitulo a {
     color: #36C9D2;
-}
-
-.login div {
-    position: relative;
-}
-
-.login div span {
-    position: absolute;
-    top: 10px;
-    left: 400px;
 }
 
 </style>

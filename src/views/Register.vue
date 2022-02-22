@@ -1,48 +1,55 @@
 <template>
 
-    <div>
-        <h1 class="titulo">Crie uma Conta</h1>
+    <div class="login-form">
+        <h1 class="titulo">Crie sua Conta</h1>
 
         <form class="login">
 
-            <select 
-                name="typeAccount" 
-                required
-                id="typeAccount"
-                v-model="type_account"
-            >   
-                <option value="ong">Ong</option>
-                <option value="particular">Particular</option>
-            </select>
+            <img src="../assets/logo.png" alt="">
 
-            <input 
-                v-if="type_account === 'ong'" 
-                id="imagem_produto" 
-                type="file" 
-                name="imagem_produto" 
-                autocomplete="imagem_produto" 
-                required 
-                ref="imagem_produto"
-            >
+            <div>
+                <input 
+                    id="imagem_produto" 
+                    type="file" 
+                    name="imagem_produto" 
+                    autocomplete="imagem_produto" 
+                    required 
+                    ref="imagem_produto">
 
-            <input type="text" id="name" name="name" placeholder="nome" v-model="form.name" required>
+                <input type="text" id="name" name="name" placeholder="nome da ONG" v-model="form.name" required>
+            </div>
 
-            <input type="text" id="username" name="username" placeholder="username" v-model="form.username" required>
+            <div>
+                <input type="text" id="username" name="username" placeholder="username" v-model="form.username" required>
 
-            <input type="number" id="cep" name="cep" placeholder="cep" v-model="form.cep" @change="verifyCep(form.cep)" required>
+                <input type="number" id="cep" name="cep" placeholder="cep" v-model="form.cep" required>
+            </div>
 
-            <input type="text" id="cidade" name="cidade" placeholder="cidade" v-model="form.cidade" required>
+            <div>
+                <input type="text" id="city" name="city" placeholder="city" v-model="form.city" required>
 
-            <input type="text" id="bairro" name="bairro" placeholder="bairro" v-model="form.bairro" required>
+                <input type="text" id="district" name="district" placeholder="district" v-model="form.district" required>
+            </div>
 
-            <input type="number" id="celular" name="celular" placeholder="celular" v-model="form.celular" required>
+            <div>
+                <input type="text" id="street" name="street" placeholder="street" v-model="form.street" required>
 
-            <input type="email" id="email" name="email" placeholder="e-mail" v-model="form.email" required>
+                <input type="number" id="cellphone" name="cellphone" placeholder="cellphone" v-model="form.cellphone" required>
+            </div>
 
-            <input type="password" id="password" name="password" placeholder="password" v-model="form.password" required>
 
-            <button class="btn-form" type="submit">Login</button>
+            <div>
+                <input type="email" id="email" name="email" placeholder="e-mail" v-model="form.email" required>
+
+                <input type="password" id="password" name="password" placeholder="password" v-model="form.password" required>
+            </div>
+
+            <button class="btn-form" type="submit" @click.prevent="register">Cadastrar</button>
         </form>
+
+        <h2 class="subtitulo">
+            <router-link to="/login">Login</router-link>
+        </h2>
     </div>
 </template>
 
@@ -50,32 +57,24 @@
 export default {
     data() {
         return {
-            type_account: 'Particular',
             form: {
                 imagem_produto: null,
-                name: '',
-                username: '',
-                cep: null,
-                cidade: '',
-                bairro: '',
-                celular: null,
-                email: '',
+                name: "",
+                username: "",
+                cep: "",
+                city: "",
+                district: "",
+                street: "",
+                cellphone: "",
+                email: "",
                 password: ""
             },
         }
     },
 
     methods: {
-        async verifyCep(cep) {
-            fetch(`https://viacep.com.br/ws/${cep}/json/`)
-            .then(req => req.json())
-            .then(res => {
-                if(res.bairro) {
-                    console.log(res)
-                    this.form.cidade = res.localidade
-                    this.form.bairro = res.bairro
-                }
-            })
+        register() {
+            console.log('clicou')
         }
     }
 }
@@ -83,23 +82,20 @@ export default {
 
 <style scoped>
 
+.login div {
+    display: flex;
+    align-items: center;
+    flex: 1;
+    flex-wrap: wrap;
+    justify-content: space-around;
+}
+
 input {
-    margin-bottom: 30px;
+    width: 250px;
 }
 
-#typeAccount {
-    background-color: #fff;
-}
-
-#typeAccount option {
-    background-color: #36C9D2;
-    color: #fff;
-    border: none;
-    font-size: 16px;
-}
-
-.login {
-    margin-bottom: 60px;
+.login div div span{
+    left: 240px;
 }
 
 </style>

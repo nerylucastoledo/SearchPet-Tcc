@@ -1,7 +1,9 @@
 <template>
     <header>
         <nav class="container header">
-            <img id="logo" src="../assets/logo.png" alt="Logo da empresa">
+            <router-link to="/">
+                <img id="logo" src="../assets/logo.png" alt="Logo da empresa">
+            </router-link>
 
             <ul class="menu">
                 <li>
