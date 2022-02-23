@@ -4,6 +4,10 @@ import Home from '../views/Home.vue'
 import Login from '../views/Login.vue'
 import Register from '../views/Register.vue'
 import ResetPassword from '../views/ResetPassword.vue'
+import Animal from '../views/Animal.vue'
+import Perfil from '../views/Perfil.vue'
+import Meus from '../views/Meus.vue'
+import Anuncio from '../views/Anuncio.vue'
 
 Vue.use(VueRouter)
 
@@ -27,6 +31,26 @@ const routes = [
     path: '/reset-password',
     name: 'reset-password',
     component: ResetPassword
+  },
+  {
+    path: '/animal',
+    name: 'animal',
+    component: Animal
+  },
+  {
+    path: '/meus',
+    name: 'meus',
+    component: Meus
+  },
+  {
+    path: '/anuncio',
+    name: 'anuncio',
+    component: Anuncio
+  },
+  {
+    path: '/perfil',
+    name: 'perfil',
+    component: Perfil
   },
 ]
 

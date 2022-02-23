@@ -46,7 +46,7 @@ body, a, ul, li, h1, h2, h3, p, img {
 }
 
 body  {
-  background-color: #F6F3F3;
+  background-color: #fff;
 }
 
 .container {
