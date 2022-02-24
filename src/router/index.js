@@ -8,6 +8,7 @@ import Animal from '../views/Animal.vue'
 import Perfil from '../views/Perfil.vue'
 import Meus from '../views/Meus.vue'
 import Anuncio from '../views/Anuncio.vue'
+import Vacinas from '../views/Vacinas.vue'
 
 Vue.use(VueRouter)
 
@@ -51,6 +52,11 @@ const routes = [
     path: '/perfil',
     name: 'perfil',
     component: Perfil
+  },
+  {
+    path: '/vacinas',
+    name: 'vacinas',
+    component: Vacinas
   },
 ]
 
