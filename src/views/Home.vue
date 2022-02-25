@@ -1,5 +1,6 @@
 <template>
     <main class="container content-principal">
+
         <div class="filter-home">
             <select v-model="city" class="filter-selected">
                 <option disabled value="">Selecione a Cidade</option>

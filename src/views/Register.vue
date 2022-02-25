@@ -126,11 +126,11 @@ export default {
 
         async createUser() {
             await firebase.auth().createUserWithEmailAndPassword(this.form.email, this.form.password)
-            .then(() => {
+            .then(data => {
                 firebase.auth().currentUser.updateProfile({
                     displayName: this.form.username
                 })  
-                
+                this.$store.dispatch("fetchUser", data)
                 this.mensagem = 'Usuario criado com sucesso!';
                 this.success = true
 
