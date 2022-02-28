@@ -14,50 +14,12 @@
 
 import Header from './components/Header.vue'
 import Footer from './components/Footer.vue'
-import firebase from 'firebase'
 
 export default {
   components: {
     Header,
     Footer
   },
-
-  methods: {
-      async getMyDatas(listKey) {
-        const listAnuncios = []
-
-        listKey.forEach(key => {
-          firebase.database()
-          .ref('/Anuncios')
-          .child(key)
-          .once("value", snapshot => {
-            Object.keys(snapshot.val()).forEach((key2) => {
-              firebase.database()
-              .ref('/Anuncios')
-              .child(`${key}/${key2}`)
-              .once("value", item => {
-                listAnuncios.push(item.val())
-              }) 
-            })
-            this.$store.dispatch('allAnuncios', listAnuncios)
-          })
-        })
-      },
-  },
-
-  mounted() {
-    setTimeout(() => {
-      const listKey = []
-
-      firebase.database().ref('/Anuncios')
-      .once("value", snapshot => {
-        Object.keys(snapshot.val()).forEach((key) => {
-            listKey.push(key)
-        })
-        this.getMyDatas(listKey)
-      })
-    }, 700);
-  }
 }
 </script>
 

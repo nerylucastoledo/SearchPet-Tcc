@@ -1,22 +1,15 @@
 <template>
     <div class="login-form">
-        <h1 class="titulo">Anuncio do Scooby</h1>
+        <h1 class="titulo">Anuncio do {{anuncio.nome}}</h1>
 
         <form class="login">
 
             <img :src="anuncio.imagem" alt="">
 
-            <input 
-                id="imagem_produto" 
-                type="file" 
-                name="imagem_produto" 
-                autocomplete="imagem_produto" 
-                required 
-                ref="imagem_produto">
-
+            <input type="file" @change="previewImage" accept="image/*" >
 
             <div>
-                <input type="text" id="name" name="name" placeholder="nome" v-model="anuncio.name" required>
+                <input type="text" id="name" name="name" placeholder="nome" v-model="anuncio.nome" required>
 
                 <input type="text" id="peso" name="peso" placeholder="peso" v-model="anuncio.peso" required>
             </div>           
@@ -64,13 +57,15 @@ export default {
     data() {
         return {
             anuncio: {
-                imagem_produto: null,
-                name: "",
+                nome: "",
+                peso: '',
                 sexo: "",
                 castrado: "",
                 categoria: "",
                 imagem: ''
             },
+            imageData: null,
+            picture: null,
         }
     },
     watch: {
@@ -80,8 +75,58 @@ export default {
     },
 
     methods: {
-        updatePerfil() {
-            console.log('clicou')
+        previewImage(event) {
+            this.picture=null;
+            this.imageData = event.target.files[0];
+        },
+
+        async updatePerfil() {
+            if(this.imageData) {
+                await this.addPhotoAndSaveUrl()
+            }
+
+        },
+
+        async addPhotoAndSaveUrl() {
+            this.picture = null;
+
+            const storageRef = firebase.storage().ref(`${this.imageData.name}`).put(this.imageData);
+            
+            storageRef.on(`state_changed`, snapshot => {}, error => {}, () => {
+                    storageRef.snapshot.ref.getDownloadURL().then((url)=>{
+                        this.picture = url;
+                        this.updateAnuncio()
+                    });
+                }
+            );
+        },
+
+        async updateAnuncio() {
+            const id = this.$route.params.id
+            const anuncio = this.$route.params.anuncio
+
+            console.log(this.picture)
+
+            const new_image = this.picture ? this.picture : this.anuncio.imagem
+            const castramento = this.anuncio.castrado ? true : false
+
+            firebase.database()
+            .ref('/Anuncios/' + anuncio)
+            .child(id)
+            .update({
+               nome: this.anuncio.nome,
+               sexo: this.anuncio.sexo,
+               imagem: new_image,
+               peso: this.anuncio.peso,
+               idade: this.anuncio.idade,
+               categoria: this.anuncio.categoria,
+               castrado: castramento
+             })
+            .then(() => {
+                setTimeout(() => {
+                    this.$router.replace({ name: "home" });
+                }, 500);
+            })
         }
     },
 
@@ -89,12 +134,10 @@ export default {
         const id = this.$route.params.id
         const anuncio = this.$route.params.anuncio
 
-        console.log('/Anuncios/' + anuncio + '/' + id)
-
         firebase.database().ref('/Anuncios/' + anuncio)
         .child(id)
         .once("value", snapshot => {
-            this.anuncio.name = snapshot.val()["nome"]
+            this.anuncio.nome = snapshot.val()["nome"]
             this.anuncio.peso = snapshot.val()["peso"]
             this.anuncio.idade = snapshot.val()["idade"]
             this.anuncio.imagem = snapshot.val()["imagem"]
