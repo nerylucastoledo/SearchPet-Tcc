@@ -1,22 +1,22 @@
 <template>
     <div class="container">
-        <h1 class="titulo">Scooby</h1>
+        <h1 class="titulo">{{anuncio.nome}}</h1>
 
         <div>
             <div class="detail-animal">
-                <img id="foto-animal" src="../assets/cachorro.png" alt="">
+                <img v-if="anuncio.imagem" id="foto-animal" :src="anuncio.imagem" alt="Imagem de um animal">
 
                 <div>
                     <div>
                         <h2>Idade</h2>
 
-                        <span>7 Anos</span>
+                        <span>{{anuncio.idade}}</span>
                     </div>
 
                     <div>
                         <h2>Sexo</h2>
 
-                        <span>Fêmea</span>
+                        <span>{{anuncio.sexo}}</span>
                     </div>
                 </div>
 
@@ -24,13 +24,14 @@
                     <div>
                         <h2>Peso</h2>
 
-                        <span>3 Kg</span>
+                        <span>{{anuncio.peso}}</span>
                     </div>
 
                     <div>
                         <h2>Castrado</h2>
 
-                        <span>SIm</span>
+                        <span v-if="anuncio.castrado === false">Não castrado</span>
+                        <span v-else>Castrado</span>
                     </div>
                 </div>
             </div>
@@ -40,22 +41,24 @@
 
         <div class="local-animal">
             <div>
-                <p>Minha ONG: <strong>Ong São Franscisco de Assis</strong></p>
+                <p>Meu dono: <strong>{{dono.nameOng}}</strong></p>
 
-                <p>Telefone: <strong>(35) 9 9742-0423</strong></p>
+                <p>Telefone: <strong>{{dono.whatsapp}}</strong></p>
             </div>
 
             <div>
-                <p>Endereço: <strong>Rua José Ferreira da Costa</strong></p>
+                <p>Endereço: <strong>{{dono.street}}</strong></p>
 
-                <p>Bairro <strong>Santo Ivo</strong></p>
+                <p>Bairro <strong>{{dono.district}}</strong></p>
             </div>
         </div>
 
-        <button class="button-whatsapp">
-            <span>Me chame</span>
-            <img src="../assets/whatsapp.png" alt="Loggo do Whatsapp">
-        </button>
+        <a target= "_blank" :href="whatsapp">
+            <button class="button-whatsapp">
+                <span>Me chame</span>
+                <img src="../assets/whatsapp.png" alt="Loggo do Whatsapp">
+            </button>
+        </a>
 
         <PorqueAdotar/>
     </div>
@@ -64,12 +67,56 @@
 <script>
 
 import PorqueAdotar from '../components/PorqueAdotar.vue'
+import firebase from 'firebase'
 
 export default {
 
     components: {
         PorqueAdotar,
     },
+
+    data() {
+        return {
+            anuncio: '',
+            dono: '',
+            whatsapp: ''
+        }
+    },
+
+    watch: {
+        anuncio() {
+            return this.anuncio
+        }
+    },
+
+    methods: {
+        getDono() {
+            const userName = this.$store.state.user.data.displayName
+
+            firebase.database()
+            .ref(userName)
+            .once("value", snapshot => {
+                this.dono = snapshot.val()
+
+                this.whatsapp = `https://api.whatsapp.com/send?phone=55${this.dono.whatsapp}&amp;text=Entrei%20pelo%20site.%20Esta%20podendo%20falar%20agora?%20`
+            })
+        }
+    },
+
+    mounted() {
+        const id = this.$route.params.id
+        const anuncio = this.$route.params.anuncio
+
+        console.log('/Anuncios/' + anuncio + '/' + id)
+
+        firebase.database().ref('/Anuncios/' + anuncio)
+        .child(id)
+        .once("value", snapshot => {
+            this.anuncio = snapshot.val()
+
+            this.getDono()
+        })
+    }
     
 }
 </script>

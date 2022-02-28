@@ -4,7 +4,7 @@ import Home from '../views/Home.vue'
 import Login from '../views/Login.vue'
 import Register from '../views/Register.vue'
 import ResetPassword from '../views/ResetPassword.vue'
-import Animal from '../views/Animal.vue'
+import AnimalDetail from '../views/AnimalDetail.vue'
 import Perfil from '../views/Perfil.vue'
 import Meus from '../views/Meus.vue'
 import Anuncio from '../views/Anuncio.vue'
@@ -34,9 +34,9 @@ const routes = [
     component: ResetPassword
   },
   {
-    path: '/animal',
+    path: '/animal/:anuncio/:id',
     name: 'animal',
-    component: Animal
+    component: AnimalDetail
   },
   {
     path: '/meus',
@@ -44,7 +44,7 @@ const routes = [
     component: Meus
   },
   {
-    path: '/anuncio',
+    path: '/anuncio/:anuncio/:id',
     name: 'anuncio',
     component: Anuncio
   },

@@ -1,11 +1,10 @@
 <template>
-
     <div class="login-form">
         <h1 class="titulo">Anuncio do Scooby</h1>
 
         <form class="login">
 
-            <img src="../assets/cachorro.png" alt="">
+            <img :src="anuncio.imagem" alt="">
 
             <input 
                 id="imagem_produto" 
@@ -17,15 +16,15 @@
 
 
             <div>
-                <input type="text" id="name" name="name" placeholder="nome" v-model="form.name" required>
+                <input type="text" id="name" name="name" placeholder="nome" v-model="anuncio.name" required>
 
-                <input type="text" id="peso" name="peso" placeholder="peso" v-model="form.peso" required>
+                <input type="text" id="peso" name="peso" placeholder="peso" v-model="anuncio.peso" required>
             </div>           
 
             <div>
-                <input type="number" id="idade" name="idade" placeholder="idade" v-model="form.idade" required>
+                <input type="text" id="idade" name="idade" placeholder="idade" v-model="anuncio.idade" required>
 
-                <select v-model="sexo" class="filter-selected">
+                <select v-model="anuncio.sexo" class="filter-selected">
                     <option disabled value="">Sexo</option>
 
                     <option value="Macho">Macho</option>
@@ -35,15 +34,15 @@
             </div>    
         
             <div>
-                <select v-model="motivo" class="filter-selected">
-                    <option disabled value="">Motivo</option>
+                <select v-model="anuncio.categoria" class="filter-selected">
+                    <option disabled value="">Categoria</option>
 
                     <option value="Adocao">Adoção</option>
 
-                    <option value="Perdidos">Perdidos</option>
+                    <option value="Perdido">Perdidos</option>
                 </select>
 
-                <select v-model="castrado" class="filter-selected">
+                <select v-model="anuncio.castrado" class="filter-selected">
                     <option disabled value="">Castrado</option>
 
                     <option value="Sim">Sim</option>
@@ -58,21 +57,25 @@
 </template>
 
 <script>
+
+import firebase from 'firebase'
+
 export default {
     data() {
         return {
-            form: {
+            anuncio: {
                 imagem_produto: null,
                 name: "",
-                cep: "",
-                city: "",
-                district: "",
-                street: "",
-                number_whatsapp: "",
                 sexo: "",
                 castrado: "",
-                motivo: ""
+                categoria: "",
+                imagem: ''
             },
+        }
+    },
+    watch: {
+        anuncio() {
+            return this.anuncio
         }
     },
 
@@ -80,6 +83,26 @@ export default {
         updatePerfil() {
             console.log('clicou')
         }
+    },
+
+    mounted() {
+        const id = this.$route.params.id
+        const anuncio = this.$route.params.anuncio
+
+        console.log('/Anuncios/' + anuncio + '/' + id)
+
+        firebase.database().ref('/Anuncios/' + anuncio)
+        .child(id)
+        .once("value", snapshot => {
+            this.anuncio.name = snapshot.val()["nome"]
+            this.anuncio.peso = snapshot.val()["peso"]
+            this.anuncio.idade = snapshot.val()["idade"]
+            this.anuncio.imagem = snapshot.val()["imagem"]
+            this.anuncio.sexo = snapshot.val()["sexo"]
+            this.anuncio.categoria = snapshot.val()["categoria"]
+
+            this.anuncio.castrado = snapshot.val()["castrado"] ? 'Sim' : 'Nao'
+        })
     }
 }
 </script>

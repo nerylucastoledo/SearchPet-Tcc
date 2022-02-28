@@ -5,7 +5,7 @@
 
         <div v-if="anuncios.length" class="cards">
             <div v-for="anuncio in anuncios" :key="anuncio.nome+1">
-                <router-link :to="`/animal/${anuncio.categoria}/${anuncio.id}`">
+                <router-link :to="`/anuncio/${anuncio.categoria}/${anuncio.id}`">
                     <img v-if="anuncio.imagem" id="image-animal" :src="anuncio.imagem" alt="Imagem de um animal">
                     <p v-else>Particular</p>
 

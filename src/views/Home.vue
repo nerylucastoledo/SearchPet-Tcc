@@ -20,14 +20,13 @@
         </div>
 
         <div class="cards">
-
-            <div>
-                <router-link to="/animal">
-                    <img id="image-animal" src="../assets/cachorro.png" alt="">
+            <div v-for="anuncio in anuncios" :key="anuncio.imagen">
+                <router-link :to="`/animal/${anuncio.categoria}/${anuncio.id}`">
+                    <img v-if="anuncio.imagem" id="image-animal" :src="anuncio.imagem" alt="Imagem de um animal">
 
                     <div>
                         <div class="info-animal">
-                            <h2 id="name-animal">Scooby</h2>
+                            <h2 id="name-animal">{{anuncio.nome}}</h2>
                             <span>
                                 <img id="logo-ong" src="../assets/image_ong.png" alt="">
                             </span>
@@ -38,194 +37,20 @@
                                 <img src="../assets/local.png" alt="">
                             </span>
 
-                            <p>Arvore Grande</p>
+                            <p>{{anuncio.local}}</p>
                         </div>
 
                         <div class="category">
-                            <p>Para Adoção</p>
+                            <p>{{anuncio.categoria}}</p>
                         </div>
 
                         <div class="quality">
-                            <span>Macho</span>
+                            <span>{{anuncio.sexo}}</span>
 
-                            <span>7 Meses</span>
+                            <span>{{anuncio.idade}}</span>
 
-                            <span>Não castrado</span>
-                        </div>
-                    </div>
-                </router-link>
-            </div>
-
-            <div>
-                <router-link to="/animal">
-                    <img id="image-animal" src="../assets/cachorro.png" alt="">
-
-                    <div>
-                        <div class="info-animal">
-                            <h2 id="name-animal">Scooby</h2>
-                            <span>
-                                <img id="logo-ong" src="../assets/image_ong.png" alt="">
-                            </span>
-                        </div>
-
-                        <div class="local-animal">
-                            <span>
-                                <img src="../assets/local.png" alt="">
-                            </span>
-
-                            <p>Arvore Grande</p>
-                        </div>
-
-                        <div class="category">
-                            <p>Para Adoção</p>
-                        </div>
-
-                        <div class="quality">
-                            <span>Macho</span>
-
-                            <span>7 Meses</span>
-
-                            <span>Não castrado</span>
-                        </div>
-                    </div>
-                </router-link>
-            </div>
-
-            <div>
-                <router-link to="/animal">
-                    <img id="image-animal" src="../assets/cachorro.png" alt="">
-
-                    <div>
-                        <div class="info-animal">
-                            <h2 id="name-animal">Scooby</h2>
-                            <span>
-                                <img id="logo-ong" src="../assets/image_ong.png" alt="">
-                            </span>
-                        </div>
-
-                        <div class="local-animal">
-                            <span>
-                                <img src="../assets/local.png" alt="">
-                            </span>
-
-                            <p>Arvore Grande</p>
-                        </div>
-
-                        <div class="category">
-                            <p>Para Adoção</p>
-                        </div>
-
-                        <div class="quality">
-                            <span>Macho</span>
-
-                            <span>7 Meses</span>
-
-                            <span>Não castrado</span>
-                        </div>
-                    </div>
-                </router-link>
-            </div>
-
-            <div>
-                <router-link to="/animal">
-                    <img id="image-animal" src="../assets/cachorro.png" alt="">
-
-                    <div>
-                        <div class="info-animal">
-                            <h2 id="name-animal">Scooby</h2>
-                            <span>
-                                <img id="logo-ong" src="../assets/image_ong.png" alt="">
-                            </span>
-                        </div>
-
-                        <div class="local-animal">
-                            <span>
-                                <img src="../assets/local.png" alt="">
-                            </span>
-
-                            <p>Arvore Grande</p>
-                        </div>
-
-                        <div class="category">
-                            <p>Para Adoção</p>
-                        </div>
-
-                        <div class="quality">
-                            <span>Macho</span>
-
-                            <span>7 Meses</span>
-
-                            <span>Não castrado</span>
-                        </div>
-                    </div>
-                </router-link>
-            </div>
-
-            <div>
-                <router-link to="/animal">
-                    <img id="image-animal" src="../assets/cachorro.png" alt="">
-
-                    <div>
-                        <div class="info-animal">
-                            <h2 id="name-animal">Scooby</h2>
-                            <span>
-                                <img id="logo-ong" src="../assets/image_ong.png" alt="">
-                            </span>
-                        </div>
-
-                        <div class="local-animal">
-                            <span>
-                                <img src="../assets/local.png" alt="">
-                            </span>
-
-                            <p>Arvore Grande</p>
-                        </div>
-
-                        <div class="category">
-                            <p>Para Adoção</p>
-                        </div>
-
-                        <div class="quality">
-                            <span>Macho</span>
-
-                            <span>7 Meses</span>
-
-                            <span>Não castrado</span>
-                        </div>
-                    </div>
-                </router-link>
-            </div>
-
-            <div>
-                <router-link to="/animal">
-                    <img id="image-animal" src="../assets/cachorro.png" alt="">
-
-                    <div>
-                        <div class="info-animal">
-                            <h2 id="name-animal">Scooby</h2>
-                            <span>
-                                <img id="logo-ong" src="../assets/image_ong.png" alt="">
-                            </span>
-                        </div>
-
-                        <div class="local-animal">
-                            <span>
-                                <img src="../assets/local.png" alt="">
-                            </span>
-
-                            <p>Arvore Grande</p>
-                        </div>
-
-                        <div class="category">
-                            <p>Para Adoção</p>
-                        </div>
-
-                        <div class="quality">
-                            <span>Macho</span>
-
-                            <span>7 Meses</span>
-
-                            <span>Não castrado</span>
+                            <span v-if="anuncio.castrado === false">Não castrado</span>
+                            <span v-else>Castrado</span>
                         </div>
                     </div>
                 </router-link>
@@ -251,7 +76,13 @@ export default {
             city: "",
             type: ""
         }
-    }
+    },
+
+    computed: {
+        anuncios() {
+            return this.$store.state.allAnuncios
+        }
+    },
 }
 </script>
 
@@ -279,9 +110,9 @@ export default {
 }
 
 .cards {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: space-between;
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    grid-gap: 20px;
     padding: 0 20px;
     margin-bottom: 60px;
 }
