@@ -27,6 +27,9 @@
 </template>
 
 <script>
+
+import firebase from 'firebase'
+
 export default {
     data() {
         return {
@@ -39,7 +42,14 @@ export default {
 
     methods: {
         login() {
-            console.log('clicou')
+            firebase.auth().signInWithEmailAndPassword(this.form.email, this.form.password)
+            .then(() => {
+                this.$store.state.user.loggedIn = true
+                this.$router.replace({ name: "home" });
+            })
+            .catch(() => {
+                console.log('email incorreto')
+            });
         }
     }
 }

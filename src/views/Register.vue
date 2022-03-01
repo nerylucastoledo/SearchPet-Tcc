@@ -161,8 +161,6 @@ export default {
                     }, 1000);
 
                 } else {
-                    console.log(this.picture)
-
                     firebase.database()
                     .ref(`/${username}`)
                     .update({

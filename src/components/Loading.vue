@@ -1,5 +1,7 @@
 <template>
-    <div class="carregar"></div>
+    <div class="carregar">
+      Carregando...
+    </div>
 </template>
 
 <style>

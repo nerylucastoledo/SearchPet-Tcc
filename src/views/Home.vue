@@ -1,25 +1,22 @@
 <template>
     <main class="container content-principal">
-
         <div class="filter-home">
             <select v-model="city" class="filter-selected">
                 <option disabled value="">Selecione a Cidade</option>
 
-                <option value="Pouso Alegre">Pouso Alegre</option>
-
-                <option value="Santa Rita do Sapucai">Santa Rita do Sapucai</option>
+                <option v-for="stayedCity of anuncios" :key="stayedCity.cidade" :value="stayedCity.cidade">{{stayedCity.cidade}}</option>
             </select>
 
             <select v-model="type" class="filter-selected">
-                <option disabled value="">Buscar por</option>
+                <option disabled value="">Selecione a Categoria</option>
 
                 <option value="Adocao">Adoção</option>
 
-                <option value="Perdidos">Perdidos</option>
+                <option value="Perdido">Perdidos</option>
             </select>
         </div>
 
-        <div class="cards">
+        <div class="cards" v-if="!loading">
             <div v-for="anuncio in anuncios" :key="anuncio.imagen">
                 <router-link :to="`/animal/${anuncio.categoria}/${anuncio.id}`">
                     <img v-if="anuncio.imagem" id="image-animal" :src="anuncio.imagem" alt="Imagem de um animal">
@@ -57,6 +54,10 @@
             </div>
         </div>
 
+        <div v-else>
+            <Loading/>
+        </div>
+
         <PorqueAdotar/>
     </main>
 </template>
@@ -64,58 +65,55 @@
 <script>
 
 import PorqueAdotar from '../components/PorqueAdotar.vue'
-import firebase from 'firebase'
+import { getMydatas } from '@/help.js'
+import Loading from '../components/Loading'
 
 export default {
 
     components: {
         PorqueAdotar,
+        Loading
     },
 
     data() {
         return {
             city: "",
             type: "",
-            anuncios: ''
+            anuncios: [],
+            loading: true
+        }
+    },
+
+    watch: {
+        city() {
+        },
+
+        type() {
         }
     },
 
     methods: {
-        async getMyDatas(listKey) {
-            const listAnuncios = []
+        async getDatas() {
+            this.anuncios = await getMydatas()
 
-            listKey.forEach(key => {
-            firebase.database()
-            .ref('/Anuncios')
-            .child(key)
-            .once("value", snapshot => {
-                Object.keys(snapshot.val()).forEach((key2) => {
-                firebase.database()
-                    .ref('/Anuncios')
-                    .child(`${key}/${key2}`)
-                    .once("value", item => {
-                        listAnuncios.push(item.val())
-                    }) 
-                })
-                this.anuncios = listAnuncios
-                this.$store.dispatch('allAnuncios', listAnuncios)
-            })
-            })
+            setTimeout(() => {
+                this.loading = false
+            }, 500);
         },
     },
 
     mounted() {
         setTimeout(() => {
-        const listKey = []
+            this.getDatas()
+        }, 600);
+    },
 
-        firebase.database().ref('/Anuncios')
-        .once("value", snapshot => {
-            Object.keys(snapshot.val()).forEach((key) => {
-                listKey.push(key)
-            })
-            this.getMyDatas(listKey)
-        })
-        }, 700);
+    beforeCreate() {
+        const logado = localStorage.getItem('login')
+        
+        if(!logado) {
+        this.$router.replace({ name: "login" });
+        }
     }
 }
 </script>

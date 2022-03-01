@@ -20,6 +20,14 @@ export default {
     Header,
     Footer
   },
+
+  beforeCreate() {
+    const logado = localStorage.getItem('login')
+    
+    if(!logado) {
+      this.$router.replace({ name: "login" });
+    }
+  }
 }
 </script>
 

@@ -9,7 +9,6 @@ export default new Vuex.Store({
       loggedIn: false,
       data: null
     },
-    allAnuncios: []
   },
 
   getters: {
@@ -24,9 +23,6 @@ export default new Vuex.Store({
       state.user.data = data;
     },
 
-    ALL_ANUNCIOS(state, data) {
-      state.allAnuncios = data
-    }
   },
 
   actions: {
@@ -43,10 +39,6 @@ export default new Vuex.Store({
         commit("SET_USER", null);
         
       }
-    },
-
-    allAnuncios({ commit }, anuncios) {
-      commit("ALL_ANUNCIOS", anuncios)
     },
   },
   

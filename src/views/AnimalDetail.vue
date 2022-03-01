@@ -107,8 +107,6 @@ export default {
         const id = this.$route.params.id
         const anuncio = this.$route.params.anuncio
 
-        console.log('/Anuncios/' + anuncio + '/' + id)
-
         firebase.database().ref('/Anuncios/' + anuncio)
         .child(id)
         .once("value", snapshot => {
@@ -116,6 +114,14 @@ export default {
 
             this.getDono()
         })
+    },
+
+    beforeCreate() {
+        const logado = localStorage.getItem('login')
+        
+        if(!logado) {
+        this.$router.replace({ name: "login" });
+        }
     }
     
 }

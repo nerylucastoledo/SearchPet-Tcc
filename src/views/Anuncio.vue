@@ -2,6 +2,10 @@
     <div class="login-form">
         <h1 class="titulo">Anuncio do {{anuncio.nome}}</h1>
 
+        <div v-if="mensagem.length">
+            <ModalSuccess :mensagem="mensagem" :success="success"></ModalSuccess>
+        </div>
+
         <form class="login">
 
             <img :src="anuncio.imagem" alt="">
@@ -22,12 +26,12 @@
 
                     <option value="Macho">Macho</option>
 
-                    <option value="Femea">Fêmnea</option>
+                    <option value="Femea">Fêmea</option>
                 </select>
             </div>    
         
             <div>
-                <select v-model="anuncio.categoria" class="filter-selected">
+                <select v-model="anuncio.categoria" aria-readonly="" class="filter-selected">
                     <option disabled value="">Categoria</option>
 
                     <option value="Adocao">Adoção</option>
@@ -52,8 +56,14 @@
 <script>
 
 import firebase from 'firebase'
+import ModalSuccess from '../components/ModalSuccess.vue'
 
 export default {
+
+    components: {
+        ModalSuccess
+    },
+
     data() {
         return {
             anuncio: {
@@ -66,6 +76,8 @@ export default {
             },
             imageData: null,
             picture: null,
+            success: true,
+            mensagem: "",
         }
     },
     watch: {
@@ -83,6 +95,9 @@ export default {
         async updatePerfil() {
             if(this.imageData) {
                 await this.addPhotoAndSaveUrl()
+            } else {
+
+                this.updateAnuncio()
             }
 
         },
@@ -105,10 +120,9 @@ export default {
             const id = this.$route.params.id
             const anuncio = this.$route.params.anuncio
 
-            console.log(this.picture)
-
             const new_image = this.picture ? this.picture : this.anuncio.imagem
-            const castramento = this.anuncio.castrado ? true : false
+            const castramento = this.anuncio.castrado === 'Sim' ? true : false
+            console.log(castramento)
 
             firebase.database()
             .ref('/Anuncios/' + anuncio)
@@ -123,9 +137,15 @@ export default {
                castrado: castramento
              })
             .then(() => {
+                this.mensagem = 'Anuncio atualizado com sucesso!';
+                this.success = true
+
+                setTimeout(() => {
+                    this.mensagem = ''
+                }, 1000);
                 setTimeout(() => {
                     this.$router.replace({ name: "home" });
-                }, 500);
+                }, 1500);
             })
         }
     },
@@ -146,6 +166,14 @@ export default {
 
             this.anuncio.castrado = snapshot.val()["castrado"] ? 'Sim' : 'Nao'
         })
+    },
+
+    beforeCreate() {
+        const logado = localStorage.getItem('login')
+        
+        if(!logado) {
+        this.$router.replace({ name: "login" });
+        }
     }
 }
 </script>
