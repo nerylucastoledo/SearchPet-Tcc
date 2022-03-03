@@ -7,8 +7,8 @@
         </div>
 
         <form class="login">
-
-            <img :src="anuncio.imagem" alt="">
+            <img v-if="!preview" :src="anuncio.imagem" alt="">
+            <img v-else id="img_preview" :src="preview">
 
             <input type="file" @change="previewImage" accept="image/*" >
 
@@ -49,6 +49,9 @@
             </div>
 
             <button class="btn-form" type="submit" @click.prevent="updatePerfil">Salvar</button>
+            <router-link to="/">
+                <button class="btn-form btn-cancel" type="submit">Cancelar</button>
+            </router-link>
         </form>
     </div>
 </template>
@@ -76,6 +79,7 @@ export default {
             },
             imageData: null,
             picture: null,
+            preview: null,
             success: true,
             mensagem: "",
         }
@@ -83,6 +87,10 @@ export default {
     watch: {
         anuncio() {
             return this.anuncio
+        },
+
+        preview() {
+            return this.preview
         }
     },
 
@@ -90,6 +98,11 @@ export default {
         previewImage(event) {
             this.picture=null;
             this.imageData = event.target.files[0];
+            const fileReader = new FileReader()
+            fileReader.onloadend = () => {
+                this.preview = fileReader.result
+            }
+            fileReader.readAsDataURL(this.imageData)
         },
 
         async updatePerfil() {
@@ -226,4 +239,9 @@ input {
     background-color: #fff;
     font-size: 18px;
 }
+
+.btn-cancel {
+    background-color: tomato;
+}
+
 </style>

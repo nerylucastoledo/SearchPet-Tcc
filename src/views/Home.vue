@@ -4,7 +4,7 @@
             <select v-model="city" class="filter-selected">
                 <option disabled value="">Selecione a Cidade</option>
 
-                <option v-for="stayedCity of anuncios" :key="stayedCity.cidade" :value="stayedCity.cidade">{{stayedCity.cidade}}</option>
+                <option v-for="cidade of citys" :key="cidade" :value="cidade">{{cidade}}</option>
             </select>
 
             <select v-model="type" class="filter-selected">
@@ -15,6 +15,9 @@
                 <option value="Perdido">Perdidos</option>
             </select>
         </div>
+
+        <p @click="clearFiler">{{this.city}}</p>
+        <p @click="clearFiler">{{this.type}}</p>
 
         <div class="cards" v-if="!loading">
             <div v-for="anuncio in anuncios" :key="anuncio.imagen">
@@ -37,7 +40,8 @@
                             <p>{{anuncio.local}}</p>
                         </div>
 
-                        <div class="category">
+                        <div id="category" 
+                            :class="[anuncio.categoria === 'Adocao' ? 'adocao' : 'perdido']">
                             <p>{{anuncio.categoria}}</p>
                         </div>
 
@@ -78,28 +82,68 @@ export default {
     data() {
         return {
             city: "",
+            citys: [],
             type: "",
             anuncios: [],
-            loading: true
+            backup_anuncios: [],
+            loading: true,
+            isActive: true
         }
     },
 
     watch: {
+        anuncios() {
+            this.anuncios.forEach(anuncio => {
+                if(!this.citys.includes(anuncio.cidade)) {
+                    this.citys.push(anuncio.cidade)
+                }
+            })
+        },
+
         city() {
+            this.anuncios = this.backup_anuncios
+
+            if(this.city === '' && this.type === '') {
+                this.anuncios = this.backup_anuncios
+            } else if(this.city && this.type){
+                this.anuncios = this.anuncios.filter(
+                    anuncio => anuncio.cidade === this.city && anuncio.categoria === this.type
+                )
+            } else {
+                this.anuncios = this.anuncios.filter(anuncio => anuncio.cidade === this.city)
+            }
         },
 
         type() {
+            this.anuncios = this.backup_anuncios
+
+            if(this.city === '' && this.type === '') {
+                this.anuncios = this.backup_anuncios
+
+            } else if(this.city && this.type){
+                this.anuncios = this.anuncios.filter(
+                    anuncio => anuncio.cidade === this.city && anuncio.categoria === this.type
+                )
+            } else {
+                this.anuncios = this.anuncios.filter(anuncio => anuncio.categoria === this.type)
+            }
         }
     },
 
     methods: {
         async getDatas() {
             this.anuncios = await getMydatas()
+            this.backup_anuncios = await getMydatas()
 
             setTimeout(() => {
                 this.loading = false
             }, 500);
         },
+
+        clearFiler() {
+            this.type = ''
+            this.city = ''
+        }
     },
 
     mounted() {
@@ -112,9 +156,9 @@ export default {
         const logado = localStorage.getItem('login')
         
         if(!logado) {
-        this.$router.replace({ name: "login" });
+            this.$router.replace({ name: "login" });
         }
-    }
+    },
 }
 </script>
 
@@ -160,8 +204,8 @@ export default {
 }
 
 #image-animal {
-    max-width: 150px;
-    max-height: 162px;
+    width: 200px;
+    height: 200px;
     object-fit: cover;
     border-radius: 10px 0 0 10px;
 }
@@ -198,20 +242,28 @@ export default {
     margin-right: 10px;
 }
 
-.category {
-    background-color: #6DB662;
+#category {
     text-align: center;
     color: #fff;
     margin: 10px 0 0 20px;
     padding: 5px; 
     width: 150px;
     border-radius: 15px;
+    font-weight: bold;
+}
+
+.adocao {
+   background-color: #6DB662; 
+}
+
+.perdido {
+    background-color: #aeb116;
 }
 
 .quality {
     display: flex;
     font-size: 12px;
-    margin-top: 10px;
+    margin-top: 30px;
     justify-content: space-between;
     align-items: center;
     margin-left: 15px;

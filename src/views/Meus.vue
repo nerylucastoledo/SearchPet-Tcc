@@ -26,7 +26,8 @@
                                 <p>{{anuncio.local}}</p>
                             </div>
 
-                            <div class="category">
+                            <div id="category" 
+                                :class="[anuncio.categoria === 'Adocao' ? 'adocao' : 'perdido']">
                                 <p>{{anuncio.categoria}}</p>
                             </div>
 
@@ -44,12 +45,16 @@
             </div>
 
             <h2 v-else class="subtitulo">Nenhum anuncio para visualizar</h2>
+
+            <div>
+                <button class="btn-form">Novo Anuncio</button>
+            </div>
+
         </div>
 
         <div v-else>
             <Loading/>
         </div>
-
     </main>
 </template>
 
