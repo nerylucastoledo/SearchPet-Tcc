@@ -36,7 +36,7 @@
 
                     <option value="Adocao">Adoção</option>
 
-                    <option value="Perdido">Perdid</option>
+                    <option value="Perdido">Perdidos</option>
                 </select>
 
                 <select v-model="anuncio.castrado" class="filter-selected">
@@ -73,7 +73,6 @@ export default {
                 nome: "",
                 peso: '',
                 sexo: "",
-                idade: "",
                 castrado: "",
                 categoria: "",
                 imagem: ''
@@ -131,55 +130,8 @@ export default {
         },
 
         async updateAnuncio() {
-            const id = this.$route.params.id
-            const anuncio = this.$route.params.anuncio
-
-            const new_image = this.picture ? this.picture : this.anuncio.imagem
-            const castramento = this.anuncio.castrado === 'Sim' ? true : false
-            console.log(castramento)
-
-            firebase.database()
-            .ref('/Anuncios/' + anuncio)
-            .child(id)
-            .update({
-               nome: this.anuncio.nome,
-               sexo: this.anuncio.sexo,
-               imagem: new_image,
-               peso: this.anuncio.peso,
-               idade: this.anuncio.idade,
-               categoria: this.anuncio.categoria,
-               castrado: castramento
-             })
-            .then(() => {
-                this.mensagem = 'Anuncio atualizado com sucesso!';
-                this.success = true
-
-                setTimeout(() => {
-                    this.mensagem = ''
-                }, 1000);
-                setTimeout(() => {
-                    this.$router.replace({ name: "home" });
-                }, 1500);
-            })
+            
         }
-    },
-
-    mounted() {
-        const id = this.$route.params.id
-        const anuncio = this.$route.params.anuncio
-
-        firebase.database().ref('/Anuncios/' + anuncio)
-        .child(id)
-        .once("value", snapshot => {
-            this.anuncio.nome = snapshot.val()["nome"]
-            this.anuncio.peso = snapshot.val()["peso"]
-            this.anuncio.idade = snapshot.val()["idade"]
-            this.anuncio.imagem = snapshot.val()["imagem"]
-            this.anuncio.sexo = snapshot.val()["sexo"]
-            this.anuncio.categoria = snapshot.val()["categoria"]
-
-            this.anuncio.castrado = snapshot.val()["castrado"] ? 'Sim' : 'Nao'
-        })
     },
 
     beforeCreate() {

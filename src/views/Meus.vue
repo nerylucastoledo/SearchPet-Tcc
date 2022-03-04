@@ -47,7 +47,9 @@
             <h2 v-else class="subtitulo">Nenhum anuncio para visualizar</h2>
 
             <div>
-                <button class="btn-form">Novo Anuncio</button>
+                <router-link to="/new-anuncio">
+                    <button class="btn-form">Novo Anuncio</button>
+                </router-link>
             </div>
 
         </div>

@@ -16,8 +16,9 @@
             </select>
         </div>
 
-        <p @click="clearFiler">{{this.city}}</p>
-        <p @click="clearFiler">{{this.type}}</p>
+        <p v-if="type || city" class="clear-filter" @click="clearFiler">Limpar filtro
+            <span>X</span>
+        </p>
 
         <div class="cards" v-if="!loading">
             <div v-for="anuncio in anuncios" :key="anuncio.imagen">
@@ -101,32 +102,11 @@ export default {
         },
 
         city() {
-            this.anuncios = this.backup_anuncios
-
-            if(this.city === '' && this.type === '') {
-                this.anuncios = this.backup_anuncios
-            } else if(this.city && this.type){
-                this.anuncios = this.anuncios.filter(
-                    anuncio => anuncio.cidade === this.city && anuncio.categoria === this.type
-                )
-            } else {
-                this.anuncios = this.anuncios.filter(anuncio => anuncio.cidade === this.city)
-            }
+            this.filter('cidade', 'city')
         },
 
         type() {
-            this.anuncios = this.backup_anuncios
-
-            if(this.city === '' && this.type === '') {
-                this.anuncios = this.backup_anuncios
-
-            } else if(this.city && this.type){
-                this.anuncios = this.anuncios.filter(
-                    anuncio => anuncio.cidade === this.city && anuncio.categoria === this.type
-                )
-            } else {
-                this.anuncios = this.anuncios.filter(anuncio => anuncio.categoria === this.type)
-            }
+            this.filter('categoria', 'type')
         }
     },
 
@@ -143,6 +123,21 @@ export default {
         clearFiler() {
             this.type = ''
             this.city = ''
+        },
+
+        filter(filter, value) {
+            this.anuncios = this.backup_anuncios
+
+            if(this.city === '' && this.type === '') {
+                this.anuncios = this.backup_anuncios
+
+            } else if(this.city && this.type){
+                this.anuncios = this.anuncios.filter(
+                    anuncio => anuncio.cidade === this.city && anuncio.categoria === this.type
+                )
+            } else {
+                this.anuncios = this.anuncios.filter(anuncio => anuncio[filter] === this[value])
+            }
         }
     },
 
@@ -273,6 +268,23 @@ export default {
 
 .quality span {
     margin: 0 5px;
+}
+
+.clear-filter {
+    cursor: pointer;
+    padding: 10px;
+    display: block;
+    margin: 0 auto;
+    text-align: center;
+    max-width: 140px;
+    border-radius: 15px;
+    margin-right: 40px;
+    box-shadow: 0px 7px 7px rgba(0, 0, 0, 0.25);
+}
+
+.clear-filter span {
+    color: red;
+    font-weight: bold;
 }
 
 </style>

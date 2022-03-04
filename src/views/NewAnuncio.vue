@@ -1,14 +1,13 @@
 <template>
     <div class="login-form">
-        <h1 class="titulo">Anuncio {{anuncio.nome}}</h1>
+        <h1 class="titulo">Anuncio</h1>
 
         <div v-if="mensagem.length">
             <ModalSuccess :mensagem="mensagem" :success="success"></ModalSuccess>
         </div>
 
         <form class="login">
-            <img v-if="!preview" :src="anuncio.imagem" alt="">
-            <img v-else id="img_preview" :src="preview">
+            <img v-if="preview" id="img_preview" :src="preview">
 
             <input type="file" @change="previewImage" accept="image/*" >
 
@@ -36,7 +35,7 @@
 
                     <option value="Adocao">Adoção</option>
 
-                    <option value="Perdido">Perdid</option>
+                    <option value="Perdido">Perdido</option>
                 </select>
 
                 <select v-model="anuncio.castrado" class="filter-selected">
@@ -48,7 +47,7 @@
                 </select>
             </div>
 
-            <button class="btn-form" type="submit" @click.prevent="updatePerfil">Salvar</button>
+            <button class="btn-form" type="submit" @click.prevent="createAnuncio">Salvar</button>
             <router-link to="/">
                 <button class="btn-form btn-cancel" type="submit">Cancelar</button>
             </router-link>
@@ -59,6 +58,7 @@
 <script>
 
 import firebase from 'firebase'
+
 import ModalSuccess from '../components/ModalSuccess.vue'
 
 export default {
@@ -83,13 +83,10 @@ export default {
             preview: null,
             success: true,
             mensagem: "",
+            dataUser: ""
         }
     },
     watch: {
-        anuncio() {
-            return this.anuncio
-        },
-
         preview() {
             return this.preview
         }
@@ -106,12 +103,12 @@ export default {
             fileReader.readAsDataURL(this.imageData)
         },
 
-        async updatePerfil() {
+        async createAnuncio() {
             if(this.imageData) {
                 await this.addPhotoAndSaveUrl()
             } else {
 
-                this.updateAnuncio()
+                this.create()
             }
 
         },
@@ -124,34 +121,36 @@ export default {
             storageRef.on(`state_changed`, snapshot => {}, error => {}, () => {
                     storageRef.snapshot.ref.getDownloadURL().then((url)=>{
                         this.picture = url;
-                        this.updateAnuncio()
+                        this.create()
                     });
                 }
             );
         },
 
-        async updateAnuncio() {
-            const id = this.$route.params.id
-            const anuncio = this.$route.params.anuncio
-
-            const new_image = this.picture ? this.picture : this.anuncio.imagem
-            const castramento = this.anuncio.castrado === 'Sim' ? true : false
-            console.log(castramento)
-
+        async create() {
+            var id = "id" + Math.random().toString(16).slice(2)
             firebase.database()
-            .ref('/Anuncios/' + anuncio)
-            .child(id)
+            .ref('/Anuncios/')
+            .child(this.anuncio.categoria)
             .update({
-               nome: this.anuncio.nome,
-               sexo: this.anuncio.sexo,
-               imagem: new_image,
-               peso: this.anuncio.peso,
-               idade: this.anuncio.idade,
-               categoria: this.anuncio.categoria,
-               castrado: castramento
-             })
+                [id]: {
+                    castrado: this.anuncio.categoria,
+                    categoria: this.anuncio.categoria,
+                    cidade: this.dataUser.city,
+                    id: id,
+                    idade: this.anuncio.idade,
+                    imagem: this.picture,
+                    local: this.dataUser.district,
+                    nome: this.anuncio.nome,
+                    pausado: false,
+                    peso: this.anuncio.peso,
+                    sexo: this.anuncio.sexo,
+                    telefone: this.dataUser.whatsapp, 
+                    username: this.$store.state.user.data.displayName,
+                }
+            })
             .then(() => {
-                this.mensagem = 'Anuncio atualizado com sucesso!';
+                this.mensagem = 'Anuncio inserido!';
                 this.success = true
 
                 setTimeout(() => {
@@ -164,26 +163,13 @@ export default {
         }
     },
 
-    mounted() {
-        const id = this.$route.params.id
-        const anuncio = this.$route.params.anuncio
-
-        firebase.database().ref('/Anuncios/' + anuncio)
-        .child(id)
-        .once("value", snapshot => {
-            this.anuncio.nome = snapshot.val()["nome"]
-            this.anuncio.peso = snapshot.val()["peso"]
-            this.anuncio.idade = snapshot.val()["idade"]
-            this.anuncio.imagem = snapshot.val()["imagem"]
-            this.anuncio.sexo = snapshot.val()["sexo"]
-            this.anuncio.categoria = snapshot.val()["categoria"]
-
-            this.anuncio.castrado = snapshot.val()["castrado"] ? 'Sim' : 'Nao'
-        })
-    },
-
     beforeCreate() {
         const logado = localStorage.getItem('login')
+        const userName = this.$store.state.user.data.displayName
+        
+        firebase.database()
+        .ref(userName)
+        .once("value", snapshot => this.dataUser = snapshot.val())
         
         if(!logado) {
         this.$router.replace({ name: "login" });

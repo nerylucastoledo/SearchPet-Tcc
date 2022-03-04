@@ -9,6 +9,7 @@ import Perfil from '../views/Perfil.vue'
 import Meus from '../views/Meus.vue'
 import Anuncio from '../views/Anuncio.vue'
 import Vacinas from '../views/Vacinas.vue'
+import NewAnuncio from '../views/NewAnuncio.vue'
 
 Vue.use(VueRouter)
 
@@ -57,6 +58,11 @@ const routes = [
     path: '/vacinas',
     name: 'vacinas',
     component: Vacinas
+  },
+  {
+    path: '/new-anuncio',
+    name: 'new',
+    component: NewAnuncio
   },
 ]
 
