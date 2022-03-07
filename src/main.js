@@ -9,8 +9,10 @@ import {
   faLock
 } from '@fortawesome/free-solid-svg-icons'
 import * as firebase from 'firebase';
+import VueMask from 'v-mask';
 
 Vue.config.productionTip = false
+Vue.use(VueMask)
 
 new Vue({
   router,

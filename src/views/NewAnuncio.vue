@@ -3,22 +3,54 @@
         <h1 class="titulo">Anuncio</h1>
 
         <div v-if="mensagem.length">
-            <ModalSuccess :mensagem="mensagem" :success="success"></ModalSuccess>
+            <ModalSuccess 
+                :mensagem="mensagem" 
+                :success="success">
+            </ModalSuccess>
         </div>
 
         <form class="login">
-            <img v-if="preview" id="img_preview" :src="preview">
+            <img 
+                id="img_preview"
+                v-if="preview" 
+                :src="preview"
+            >
 
-            <input type="file" @change="previewImage" accept="image/*" >
+            <input 
+                type="file"
+                accept="image/*" 
+                @change="previewImage"
+            >
 
             <div>
-                <input type="text" id="name" name="name" placeholder="nome" v-model="anuncio.nome" required>
+                <input 
+                    type="text" 
+                    id="name" 
+                    name="name" 
+                    placeholder="Nome" 
+                    v-model="anuncio.nome" 
+                    required
+                >
 
-                <input type="text" id="peso" name="peso" placeholder="peso" v-model="anuncio.peso" required>
+                <input 
+                    type="text" 
+                    id="peso" 
+                    name="peso" 
+                    placeholder="Peso" 
+                    v-model="anuncio.peso" 
+                    required
+                >
             </div>           
 
             <div>
-                <input type="text" id="idade" name="idade" placeholder="idade" v-model="anuncio.idade" required>
+                <input 
+                    type="text" 
+                    id="idade" 
+                    name="idade" 
+                    placeholder="idade" 
+                    v-model="anuncio.idade" 
+                    required
+                >
 
                 <select v-model="anuncio.sexo" class="filter-selected">
                     <option disabled value="">Sexo</option>
@@ -30,7 +62,7 @@
             </div>    
         
             <div>
-                <select v-model="anuncio.categoria" aria-readonly="" class="filter-selected">
+                <select v-model="anuncio.categoria" class="filter-selected">
                     <option disabled value="">Categoria</option>
 
                     <option value="Adocao">Adoção</option>
@@ -48,6 +80,7 @@
             </div>
 
             <button class="btn-form" type="submit" @click.prevent="createAnuncio">Salvar</button>
+
             <router-link to="/">
                 <button class="btn-form btn-cancel" type="submit">Cancelar</button>
             </router-link>
@@ -94,20 +127,20 @@ export default {
 
     methods: {
         previewImage(event) {
-            this.picture=null;
+            this.picture = null;
             this.imageData = event.target.files[0];
             const fileReader = new FileReader()
-            fileReader.onloadend = () => {
-                this.preview = fileReader.result
-            }
+
+            fileReader.onloadend = () => this.preview = fileReader.result
+
             fileReader.readAsDataURL(this.imageData)
         },
 
         async createAnuncio() {
             if(this.imageData) {
                 await this.addPhotoAndSaveUrl()
-            } else {
 
+            } else {
                 this.create()
             }
 
@@ -150,14 +183,12 @@ export default {
                 }
             })
             .then(() => {
-                this.mensagem = 'Anuncio inserido!';
+                this.mensagem = 'Anuncio inserido!'
                 this.success = true
 
+                setTimeout(() => this.mensagem = '', 1000)
                 setTimeout(() => {
-                    this.mensagem = ''
-                }, 1000);
-                setTimeout(() => {
-                    this.$router.replace({ name: "home" });
+                    this.$router.replace({ name: "home" })
                 }, 1500);
             })
         }
@@ -172,7 +203,7 @@ export default {
         .once("value", snapshot => this.dataUser = snapshot.val())
         
         if(!logado) {
-        this.$router.replace({ name: "login" });
+            this.$router.replace({ name: "login" })
         }
     }
 }

@@ -3,23 +3,59 @@
         <h1 class="titulo">Anuncio {{anuncio.nome}}</h1>
 
         <div v-if="mensagem.length">
-            <ModalSuccess :mensagem="mensagem" :success="success"></ModalSuccess>
+            <ModalSuccess 
+                :mensagem="mensagem" 
+                :success="success">
+            </ModalSuccess>
         </div>
 
         <form class="login">
-            <img v-if="!preview" :src="anuncio.imagem" alt="">
-            <img v-else id="img_preview" :src="preview">
+            <img 
+                v-if="!preview" 
+                :src="anuncio.imagem" 
+                alt=""
+            >
+            <img 
+                v-else 
+                id="img_preview" 
+                :src="preview"
+            >
 
-            <input type="file" @change="previewImage" accept="image/*" >
+            <input 
+                type="file" 
+                accept="image/*"
+                @change="previewImage"
+            >
 
             <div>
-                <input type="text" id="name" name="name" placeholder="nome" v-model="anuncio.nome" required>
+                <input 
+                    type="text" 
+                    id="name" 
+                    name="name" 
+                    placeholder="Nome" 
+                    v-model="anuncio.nome" 
+                    required
+                >
 
-                <input type="text" id="peso" name="peso" placeholder="peso" v-model="anuncio.peso" required>
+                <input 
+                    type="text" 
+                    id="peso" 
+                    name="peso" 
+                    placeholder="Peso" 
+                    v-model="anuncio.peso" 
+                    required
+                >
             </div>           
 
             <div>
-                <input type="text" id="idade" name="idade" placeholder="idade" v-model="anuncio.idade" required>
+                <input 
+                    type="text" 
+                    id="idade" 
+                    name="idade" 
+                    placeholder="idade" 
+                    v-model="anuncio.idade" 
+                    required
+                >
 
                 <select v-model="anuncio.sexo" class="filter-selected">
                     <option disabled value="">Sexo</option>
@@ -49,6 +85,7 @@
             </div>
 
             <button class="btn-form" type="submit" @click.prevent="updatePerfil">Salvar</button>
+
             <router-link to="/">
                 <button class="btn-form btn-cancel" type="submit">Cancelar</button>
             </router-link>
@@ -100,17 +137,17 @@ export default {
             this.picture=null;
             this.imageData = event.target.files[0];
             const fileReader = new FileReader()
-            fileReader.onloadend = () => {
-                this.preview = fileReader.result
-            }
+            
+            fileReader.onloadend = () => this.preview = fileReader.result
+
             fileReader.readAsDataURL(this.imageData)
         },
 
         async updatePerfil() {
             if(this.imageData) {
                 await this.addPhotoAndSaveUrl()
-            } else {
 
+            } else {
                 this.updateAnuncio()
             }
 
@@ -119,7 +156,10 @@ export default {
         async addPhotoAndSaveUrl() {
             this.picture = null;
 
-            const storageRef = firebase.storage().ref(`${this.imageData.name}`).put(this.imageData);
+            const storageRef = firebase
+                                .storage()
+                                .ref(`${this.imageData.name}`)
+                                .put(this.imageData);
             
             storageRef.on(`state_changed`, snapshot => {}, error => {}, () => {
                     storageRef.snapshot.ref.getDownloadURL().then((url)=>{
@@ -136,7 +176,6 @@ export default {
 
             const new_image = this.picture ? this.picture : this.anuncio.imagem
             const castramento = this.anuncio.castrado === 'Sim' ? true : false
-            console.log(castramento)
 
             firebase.database()
             .ref('/Anuncios/' + anuncio)
@@ -151,14 +190,12 @@ export default {
                castrado: castramento
              })
             .then(() => {
-                this.mensagem = 'Anuncio atualizado com sucesso!';
+                this.mensagem = 'Anuncio atualizado com sucesso!'
                 this.success = true
 
+                setTimeout(() => this.mensagem = '', 1000)
                 setTimeout(() => {
-                    this.mensagem = ''
-                }, 1000);
-                setTimeout(() => {
-                    this.$router.replace({ name: "home" });
+                    this.$router.replace({ name: "home" })
                 }, 1500);
             })
         }
@@ -186,7 +223,7 @@ export default {
         const logado = localStorage.getItem('login')
         
         if(!logado) {
-        this.$router.replace({ name: "login" });
+            this.$router.replace({ name: "login" });
         }
     }
 }

@@ -1,6 +1,6 @@
 <template>
-    <header>
-        <nav class="container header">
+    <header class="header-principal">
+        <nav class="container">
             <router-link to="/">
                 <img id="logo" src="../assets/logo.png" alt="Logo da empresa">
             </router-link>
@@ -31,23 +31,20 @@ export default {
 
 <style>
 
-header {
-    width: 100%;
-    height: 100px;
+.header-principal {
+    padding: 20px 30px;
+    max-width: 100%;
     box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
-    background-color: #fff;
 }
 
-.header {
-    padding-top: 20px;
+.header-principal nav {
     display: flex;
     align-items: center;
     justify-content: space-between;
 }
 
-#logo {
-    max-width: 200px;
-    max-height: 60px;
+.header-principal img {
+    width: 150px;
 }
 
 .menu {

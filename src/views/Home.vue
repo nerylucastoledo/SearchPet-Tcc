@@ -16,18 +16,28 @@
             </select>
         </div>
 
-        <p v-if="type || city" class="clear-filter" @click="clearFiler">Limpar filtro
+        <p 
+            class="clear-filter" 
+            v-if="type || city" 
+            @click="clearFiler">
+            Limpar filtro
             <span>X</span>
         </p>
 
         <div class="cards" v-if="!loading">
             <div v-for="anuncio in anuncios" :key="anuncio.imagen">
                 <router-link :to="`/animal/${anuncio.categoria}/${anuncio.id}`">
-                    <img v-if="anuncio.imagem" id="image-animal" :src="anuncio.imagem" alt="Imagem de um animal">
+                    <img 
+                        id="image-animal"
+                        v-if="anuncio.imagem" 
+                        :src="anuncio.imagem" 
+                        alt="Imagem de um animal"
+                    >
 
                     <div>
                         <div class="info-animal">
                             <h2 id="name-animal">{{anuncio.nome}}</h2>
+
                             <span>
                                 <img id="logo-ong" src="../assets/image_ong.png" alt="">
                             </span>
@@ -41,8 +51,7 @@
                             <p>{{anuncio.local}}</p>
                         </div>
 
-                        <div id="category" 
-                            :class="[anuncio.categoria === 'Adocao' ? 'adocao' : 'perdido']">
+                        <div id="category" :class="[anuncio.categoria === 'Adocao' ? 'adocao' : 'perdido']">
                             <p>{{anuncio.categoria}}</p>
                         </div>
 
@@ -115,9 +124,7 @@ export default {
             this.anuncios = await getMydatas()
             this.backup_anuncios = await getMydatas()
 
-            setTimeout(() => {
-                this.loading = false
-            }, 500);
+            setTimeout(() => this.loading = false, 500);
         },
 
         clearFiler() {
@@ -135,6 +142,7 @@ export default {
                 this.anuncios = this.anuncios.filter(
                     anuncio => anuncio.cidade === this.city && anuncio.categoria === this.type
                 )
+                
             } else {
                 this.anuncios = this.anuncios.filter(anuncio => anuncio[filter] === this[value])
             }
@@ -142,9 +150,7 @@ export default {
     },
 
     mounted() {
-        setTimeout(() => {
-            this.getDatas()
-        }, 600);
+        setTimeout(() => this.getDatas(), 600);
     },
 
     beforeCreate() {

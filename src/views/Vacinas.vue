@@ -126,7 +126,7 @@ export default {
         const logado = localStorage.getItem('login')
         
         if(!logado) {
-        this.$router.replace({ name: "login" });
+            this.$router.replace({ name: "login" });
         }
     },
 

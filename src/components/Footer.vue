@@ -22,6 +22,7 @@ footer {
     padding: 30px 0;
     background-color: #36C9D2;
     height: 90px;
+    font-size: 18px;
 }
 
 footer div img{

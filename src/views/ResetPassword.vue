@@ -5,14 +5,30 @@
 
         <form class="login">
 
-            <img src="../assets/logo.png" alt="">
+            <img 
+                src="../assets/logo.png" 
+                alt=""
+            >
 
             <div>
                 <label for="email">seu e-mail</label>
-                <input type="email" id="email" name="email" placeholder="e-mail" v-model="form.email" required>
+
+                <input 
+                    type="email" 
+                    id="email" 
+                    name="email" 
+                    placeholder="e-mail" 
+                    v-model="form.email" 
+                    required
+                >
             </div>
 
-            <button class="btn-form" type="submit" @click.prevent="recoverPassword">Recuperar</button>
+            <button 
+                class="btn-form" 
+                type="submit" 
+                @click.prevent="recoverPassword">
+                Recuperar
+            </button>
         </form>
 
         <h2 class="subtitulo">

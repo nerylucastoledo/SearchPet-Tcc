@@ -7,12 +7,19 @@
             <div v-if="anuncios.length" class="cards">
                 <div v-for="anuncio in anuncios" :key="anuncio.nome+1">
                     <router-link :to="`/anuncio/${anuncio.categoria}/${anuncio.id}`">
-                        <img v-if="anuncio.imagem" id="image-animal" :src="anuncio.imagem" alt="Imagem de um animal">
+                        <img 
+                            id="image-animal"
+                            :src="anuncio.imagem" 
+                            alt="Imagem de um animal"
+                            v-if="anuncio.imagem" 
+                        >
+
                         <p v-else>Particular</p>
 
                         <div>
                             <div class="info-animal">
                                 <h2 id="name-animal">{{anuncio.nome}}</h2>
+
                                 <span>
                                     <img id="logo-ong" :src="image_ong" alt="">
                                 </span>
@@ -26,8 +33,7 @@
                                 <p>{{anuncio.local}}</p>
                             </div>
 
-                            <div id="category" 
-                                :class="[anuncio.categoria === 'Adocao' ? 'adocao' : 'perdido']">
+                            <div id="category" :class="[anuncio.categoria === 'Adocao' ? 'adocao' : 'perdido']">
                                 <p>{{anuncio.categoria}}</p>
                             </div>
 
@@ -102,23 +108,19 @@ export default {
                 }
             })
 
-            setTimeout(() => {
-                this.loading = false
-            }, 500)
+            setTimeout(() => this.loading = false, 500)
         }
     },
 
     mounted() {
-        setTimeout(() => {
-            this.getDatas()
-        }, 600);
+        setTimeout(() => this.getDatas(), 600);
     },
 
     beforeCreate() {
         const logado = localStorage.getItem('login')
         
         if(!logado) {
-        this.$router.replace({ name: "login" });
+            this.$router.replace({ name: "login" });
         }
     }
 }

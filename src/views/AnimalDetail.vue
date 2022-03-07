@@ -4,7 +4,12 @@
 
         <div>
             <div class="detail-animal">
-                <img v-if="anuncio.imagem" id="foto-animal" :src="anuncio.imagem" alt="Imagem de um animal">
+                <img 
+                    id="foto-animal"
+                    v-if="anuncio.imagem" 
+                    :src="anuncio.imagem" 
+                    alt="Imagem de um animal"
+                >
 
                 <div>
                     <div>
@@ -41,21 +46,34 @@
 
         <div class="local-animal">
             <div>
-                <p>Meu dono: <strong>{{dono.nameOng}}</strong></p>
+                <p>
+                    Meu dono: 
+                    <strong>{{dono.nameOng}}</strong>
+                </p>
 
-                <p>Telefone: <strong>{{dono.whatsapp}}</strong></p>
+                <p>
+                    Telefone: 
+                    <strong>{{dono.whatsapp}}</strong>
+                </p>
             </div>
 
             <div>
-                <p>Endereço: <strong>{{dono.street}}</strong></p>
+                <p>
+                    Endereço: 
+                    <strong>{{dono.street}}</strong>
+                </p>
 
-                <p>Bairro <strong>{{dono.district}}</strong></p>
+                <p>
+                    Bairro 
+                    <strong>{{dono.district}}</strong>
+                </p>
             </div>
         </div>
 
         <a target= "_blank" :href="whatsapp">
             <button class="button-whatsapp">
                 <span>Me chame</span>
+
                 <img src="../assets/whatsapp.png" alt="Loggo do Whatsapp">
             </button>
         </a>
@@ -120,7 +138,7 @@ export default {
         const logado = localStorage.getItem('login')
         
         if(!logado) {
-        this.$router.replace({ name: "login" });
+            this.$router.replace({ name: "login" });
         }
     }
     
