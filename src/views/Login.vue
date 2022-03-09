@@ -1,63 +1,64 @@
 <template>
 
-    <div class="container login-form">
-        <div class="login-img">
-            <img 
-                src="../assets/logo.png" 
-                alt=""
-            >
-        </div>
-
-        <form class="login">
-
-            <div class="new-user">
-                <p>Você é novo por aqui?</p>
-
-                <router-link to="/register" class="go-register">
-                    Inscreva-se
-                </router-link>
+    <div class="form-geral">
+        <div class="container login-form">
+            <div class="login-img">
+                <img 
+                    src="../assets/logo.png" 
+                    alt=""
+                >
             </div>
 
-            <h1 class="titulo">Login</h1>
+            <form class="login">
+                <div class="new-user">
+                    <p>Você é novo por aqui?</p>
 
-            <div>
-                <label for="email">E-mail 🐶</label>
-                <input 
-                    type="email" 
-                    id="email" 
-                    name="email" 
-                    placeholder="e-mail" 
-                    v-model="form.email" 
+                    <router-link to="/register" class="go-register">
+                        Inscreva-se
+                    </router-link>
+                </div>
+
+                <h1 class="titulo">Login</h1>
+
+                <div>
+                    <label for="email">E-mail 🐶</label>
+                    <input 
+                        type="email" 
+                        id="email" 
+                        name="email" 
+                        placeholder="e-mail" 
+                        v-model="form.email" 
+                        required
+                    >
+                </div>
+
+                <div>
+                    <label for="password">Senha 🐿️</label>
+                    <input 
+                    type="password" 
+                    id="password" 
+                    name="password" 
+                    placeholder="password" 
+                    v-model="form.password" 
                     required
-                >
-            </div>
+                    >
+                </div>
 
-            <div>
-                <label for="password">Senha 🐿️</label>
-                <input 
-                type="password" 
-                id="password" 
-                name="password" 
-                placeholder="password" 
-                v-model="form.password" 
-                required
-                >
-            </div>
+                <p>
+                    Esqueceu a senha?
+                    <router-link to="/reset-password">
+                        <span>Clique aqui</span>
+                    </router-link>
+                </p>
 
-            <p>
-                Esqueceu a senha?
-                <router-link to="/reset-password">
-                    <span>Clique aqui</span>
-                </router-link>
-            </p>
-
-            <button 
-                class="btn-form" 
-                type="submit" 
-                @click.prevent="login">
-                Login
-            </button>
-        </form>
+                <button 
+                    class="btn-form" 
+                    type="submit" 
+                    @click.prevent="login">
+                    Login
+                </button>
+            </form>
+        </div>
     </div>
 </template>
 
@@ -90,7 +91,7 @@ export default {
 }
 </script>
 
-<style>
+<style scoped>
 
 body {
     background-image: url("../assets/pattern.svg");
@@ -107,38 +108,6 @@ body {
     justify-content: space-between;
     align-items: center;
     margin-bottom: 60px;
-}
-
-.login {
-    background-color: #36C9D2;
-    padding: 50px 50px 50px 50px;
-    border-radius: 15px 15px 15px 0px;
-}
-
-.login label {
-    display: block;
-    font-size: 24px;
-    margin-bottom: 10px;
-    color: #fff;
-}
-
-.login input{
-    display: block;
-    margin: 0 auto 30px;
-    padding: 15px 0;
-    width: 285px;
-    box-shadow: 0px 7px 7px rgba(0, 0, 0, 0.25);
-    border: none;
-    border-radius: 10px;
-    padding-left: 15px;
-    color: #222;
-    font-size: 18px;
-}
-
-input:focus {
-    outline: none !important;
-    border: none;
-    box-shadow: 0 0 10px #fff;
 }
 
 .login .titulo {
@@ -188,6 +157,57 @@ input:focus {
     border: 1px solid #fff;
     padding: 10px;
     background-color: #fff;
+}
+
+@media (max-width: 847px) {
+    .form-geral {
+        padding: 0 30px;
+    }
+
+    .login {
+        padding: 25px !important;
+    }
+}
+
+@media (max-width: 767px) {
+    .login {
+        border-radius: 15px;
+    }
+
+    .login .titulo {
+        text-align: center;
+    }
+
+    .login-img {
+        display: none;
+    }
+
+    .login-form {
+        display: block;
+    }
+
+    .login input {
+        width: 95%;
+    }
+
+    .new-user {
+        display: block;
+    }
+
+    .new-user p {
+        text-align: center;
+    }
+
+    .new-user a {
+        display: block;
+        text-align: center;
+        max-width: 200px;
+        margin: 20px auto;
+    }
+
+    .login .btn-form {
+        max-width: 100%;
+    } 
 }
 
 </style>

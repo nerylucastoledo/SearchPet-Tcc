@@ -91,4 +91,57 @@ body  {
   cursor: pointer;
 }
 
+input:focus {
+    outline: none !important;
+    border: none;
+    box-shadow: 0 0 10px #fff;
+}
+
+.login {
+    background-color: #36C9D2;
+    padding: 50px 50px 50px 50px;
+    border-radius: 15px 15px 15px 0px;
+}
+
+.login input{
+    display: block;
+    margin: 0 auto 30px;
+    padding: 15px 0;
+    width: 285px;
+    box-shadow: 0px 7px 7px rgba(0, 0, 0, 0.25);
+    border: none;
+    border-radius: 10px;
+    padding-left: 15px;
+    color: #222;
+    font-size: 18px;
+}
+
+.login label {
+    display: block;
+    font-size: 24px;
+    margin-bottom: 10px;
+    color: #fff;
+}
+
+.new-user {
+    font-size: 16px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.new-user p {
+    margin-top: 5px;
+}
+
+.go-register {
+    border-radius: 10px;
+    color: #36C9D2;
+    font-weight: bold;
+    border: 1px solid #fff;
+    padding: 10px;
+    background-color: #fff;
+}
+
+
 </style>

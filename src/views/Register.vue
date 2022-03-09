@@ -1,44 +1,68 @@
 <template>
 
-    <div class="login-form">
-        <h1 class="titulo">Crie sua Conta</h1>
-
+    <div class=" container login-form">
         <div v-if="mensagem.length">
             <ModalSuccess :mensagem="mensagem" :success="success"></ModalSuccess>
         </div>
 
         <form action="#" class="login">
 
+            <div class="new-user">
+                <p>Já possui conta?</p>
+
+                <router-link to="/login" class="go-register">
+                    Login
+                </router-link>
+            </div>
+
             <img src="../assets/logo.png" alt="">
 
-            <div>
-                <input 
-                    type="file" 
-                    @change="previewImage" 
-                    accept="image/*"
-                >
+            <h1 class="titulo">Criar conta 🐶</h1>
 
-                <input 
+            <div>
+                <div>
+                    <label for="name">Nome da ONG</label>
+                    <input 
                     type="text"
                     id="name" 
                     name="name"
                     placeholder="Nome da Ong"
                     required 
                     v-model="form.name"
-                >
+                    >
+                </div>
             </div>
 
             <div>
-                <input 
+                <div>
+                    <label for="username">Seu email</label>
+                    <input 
                     type="text"
                     id="username" 
                     name="username"
                     placeholder="username"
                     required 
                     v-model="form.username"
-                >
+                    >
+                </div>
 
-                <input 
+                <div>
+                    <label for="password">Sua senha</label>
+                    <input 
+                    type="password"
+                    id="password" 
+                    name="password"
+                    placeholder="Sua senha"
+                    required 
+                    v-model="form.password"
+                    >
+                </div>
+            </div>
+
+            <div>
+                <div>
+                    <label for="cep">Cep</label>
+                    <input 
                     type="number"
                     id="cep" 
                     name="cep"
@@ -47,11 +71,11 @@
                     v-mask="'########'"
                     v-model="form.cep"
                     @keyup="addCep()"
-                >
-            </div>
-
-            <div>
-                <input 
+                    >
+                </div>
+                <div>
+                    <label for="city">Cidade</label>
+                    <input 
                     class="read"
                     type="text"
                     id="city" 
@@ -60,9 +84,14 @@
                     required 
                     v-model="form.city"
                     readonly
-                >
+                    >
+                </div>
+            </div>
 
-                <input 
+            <div>
+                <div>
+                    <label for="district">Bairro</label>
+                    <input 
                     class="read"
                     type="text"
                     id="district" 
@@ -71,11 +100,12 @@
                     required 
                     v-model="form.district"
                     readonly
-                >
-            </div>
+                    >
+                </div>
 
-            <div>
-                <input 
+                <div>
+                    <label for="street">Rua</label>
+                    <input 
                     class="read"
                     type="text"
                     id="street" 
@@ -84,37 +114,31 @@
                     required 
                     v-model="form.street"
                     readonly
-                >
+                    >
+                </div>
+            </div>
 
-                <input 
+            <div>
+                <div>
+                    <label for="cellphone">Whatsapp</label>
+                    <input 
                     id="cellphone" 
                     name="cellphone"
                     placeholder="Celular"
                     required 
                     v-mask="'(##) # ####-####'"
                     v-model="form.cellphone"
-                >
-            </div>
+                    >
+                </div>
 
-
-            <div>
-                <input 
-                    type="email"
-                    id="email" 
-                    name="email"
-                    placeholder="Seu e-mail"
-                    required 
-                    v-model="form.email"
-                >
-
-                <input 
-                    type="password"
-                    id="password" 
-                    name="password"
-                    placeholder="Sua senha"
-                    required 
-                    v-model="form.password"
-                >
+                <div>
+                    <label for="image">Foto de perfil</label>
+                    <input 
+                    type="file" 
+                    @change="previewImage" 
+                    accept="image/*"
+                    >
+                </div>
             </div>
 
             <button 
@@ -128,10 +152,6 @@
             <progress id="progress" :value="uploadValue" max="100" ></progress>  
             </p>
         </form>
-
-        <h2 class="subtitulo">
-            <router-link to="/login">Login</router-link>
-        </h2>
     </div>
 </template>
 
@@ -285,25 +305,50 @@ export default {
 
 <style scoped>
 
+.login-form {
+    margin-bottom: 60px;
+    padding: 0 30px;
+}
+
+.login {
+    margin-top: 60px;
+    background-color: #fff;
+    box-shadow: 0px 7px 7px rgba(0, 0, 0, 0.25);
+    border-radius: 15px !important;
+}
+
+.login img {
+    margin: 0 auto;
+    display: block;
+}
+
+.login .titulo {
+    margin-bottom: 60px;
+    color: #36C9D2;
+    text-align: center;
+    font-size: 3rem;
+    margin-top: 60px;
+}
+
 .login div {
     display: flex;
-    align-items: center;
     flex: 1;
     flex-wrap: wrap;
     justify-content: space-around;
 }
 
-input {
-    width: 250px;
+.login input{
+    width: 91%;
 }
 
-.login div div span{
-    left: 240px;
+.login label {
+    color: #36C9D2;
 }
 
 .progress {
     font-weight: bold;
-    margin-bottom: 40px;
+    text-align: center;
+    margin-top: 30px;
 }
 
 #progress {
@@ -312,6 +357,72 @@ input {
 
 .read {
     background-color: rgb(212, 212, 212);
+}
+
+.new-user {
+    justify-content: center !important;
+    margin-bottom: 60px;
+}
+
+.new-user p {
+    color: #36C9D2;
+    font-weight: bold;
+}
+
+.go-register {
+    margin-left: 20px;
+    color: #fff;
+    background-color: #36C9D2;
+    text-align: center;
+    width: 150px;
+}
+
+@media (max-width: 745px) {
+    .login div {
+        display: block;
+    }
+
+    .login input{
+        width: 100%;
+    }
+
+    .login .titulo {
+        font-size: 2rem;
+    }
+
+    .go-register {
+        margin: 20px auto 0;
+    }
+
+    .new-user {
+        display: block;
+    }
+
+    .new-user p {
+        text-align: center;
+    }
+
+    .new-user a {
+        display: block;
+        text-align: center;
+        max-width: 200px;
+        margin: 20px auto;
+    }
+
+    .go-register {
+        width: 100%;
+    }
+}
+
+@media (max-width: 500px) {
+    .login img {
+        display: block;
+        max-width: 100%;
+    }
+
+    .btn-form {
+        max-width: 100%;
+    }
 }
 
 </style>
