@@ -27,41 +27,50 @@
         <div class="cards" v-if="!loading">
             <div v-for="anuncio in anuncios" :key="anuncio.imagen">
                 <router-link :to="`/animal/${anuncio.categoria}/${anuncio.id}`">
-                    <img 
-                        id="image-animal"
-                        v-if="anuncio.imagem" 
-                        :src="anuncio.imagem" 
-                        alt="Imagem de um animal"
-                    >
+                    <div class="image-and-name">
+                        <img :src="anuncio.imagem" alt="Imagem de um animal">
 
-                    <div>
-                        <div class="info-animal">
-                            <h2 id="name-animal">{{anuncio.nome}}</h2>
+                        <h1>{{anuncio.nome}}</h1>
+                    </div>
 
-                            <span>
-                                <img id="logo-ong" src="../assets/image_ong.png" alt="">
-                            </span>
+                    <div id="category" :class="[anuncio.categoria === 'Adocao' ? 'adocao' : 'perdido']">
+                        <p>{{anuncio.categoria}}</p>
+                    </div>
+
+                    <div class="dados">
+                        <div>
+                            <div>
+                                <p class="castrado">{{anuncio.idade}}</p>
+                                <span>
+                                    <img src="../assets/idade.png" alt="Calendario">
+                                </span>
+                            </div>
+
+                            <div>
+                                <p v-if="anuncio.castrado === false">Não castrado</p>
+                                <p v-else>Castrado</p>
+
+                                <span>
+                                    <img src="../assets/castrado.png" alt="Calendario">
+                                </span>
+                            </div>
                         </div>
 
-                        <div class="local-animal">
-                            <span>
-                                <img src="../assets/local.png" alt="">
-                            </span>
+                        <div>
+                            <div>
+                                <p :class="[anuncio.sexo === 'Macho' ? 'macho' : 'femea']">{{anuncio.sexo}}</p>
+                                <span>
+                                    <img src="../assets/sexo.png" alt="Calendario">
+                                </span>
+                            </div>
 
-                            <p>{{anuncio.local}}</p>
-                        </div>
-
-                        <div id="category" :class="[anuncio.categoria === 'Adocao' ? 'adocao' : 'perdido']">
-                            <p>{{anuncio.categoria}}</p>
-                        </div>
-
-                        <div class="quality">
-                            <span>{{anuncio.sexo}}</span>
-
-                            <span>{{anuncio.idade}}</span>
-
-                            <span v-if="anuncio.castrado === false">Não castrado</span>
-                            <span v-else>Castrado</span>
+                            <div>
+                                <p class="castrado">{{anuncio.peso}}</p>
+                                
+                                 <span>
+                                    <img src="../assets/peso.png" alt="Calendario">
+                                </span>
+                            </div>
                         </div>
                     </div>
                 </router-link>
@@ -169,6 +178,102 @@ export default {
     margin-top: 60px;
 }
 
+.cards {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    padding: 0 30px;
+    grid-gap: 30px;
+}
+
+.cards > div {
+    margin-bottom: 30px;
+    box-shadow: 0px 7px 7px rgba(0, 0, 0, 0.25);
+    border-radius: 10px;
+}
+
+.cards div:hover {
+    background-color: #dfeaeb;
+    transition: .5s all;
+}
+
+.image-and-name {
+    position: relative;
+    background-color: #fff;
+}
+
+.image-and-name img {
+    width: 100%;
+    height: 300px;
+    display: block;
+    object-fit: cover;
+    border-radius: 10px 10px 0 0;
+}
+
+.image-and-name h1 {
+    bottom: 20px;
+    left: 10px;
+    color: #36C9D2;
+    font-weight: bold;
+    text-align: center;
+    margin: 20px 0;
+}
+
+.dados {
+    display: flex;
+    justify-content: space-between;
+    padding: 10px 20px;
+}
+
+.dados > div {
+    font-size: 18px;
+    font-weight: bold;
+    color: #000;
+}
+
+.dados > div div {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 20px;
+    text-align: center;
+    border-radius: 10px;
+    padding: 10px;
+    height: 30px;
+    width: 80%;
+    align-items: center;
+    background-color: #fff;
+    box-shadow: 0px 7px 7px rgba(0, 0, 0, 0.25);
+}
+
+.dados > div div img {
+    margin-left: 20px;
+}
+
+#category {
+    text-align: center;
+    color: #fff;
+    margin: 20px auto;
+    padding: 10px; 
+    width: 150px;
+    border-radius: 15px;
+    font-weight: bold;
+}
+
+.adocao {
+   background-color: #6DB662; 
+}
+
+.perdido {
+    background-color: #aeb116;
+}
+
+.macho {
+    color: #3baaf5;
+}
+
+.femea {
+    color: #d254e2;
+}
+
 .filter-home {
     display: flex;
     align-items: center;
@@ -186,101 +291,11 @@ export default {
     margin-bottom: 30px;
 }
 
-.cards {
-    display: grid;
-    grid-template-columns: 1fr 1fr 1fr;
-    grid-gap: 20px;
-    padding: 0 20px;
-    margin-bottom: 60px;
-}
-
-.cards > div a {
-    color: #000;
-    background-color: #fff;
-    box-shadow: 0px 7px 7px rgba(0, 0, 0, 0.25);
-    border-radius: 15px;
-    display: flex;
-    max-width: 100%;
-    margin-top: 30px;
-}
-
-#image-animal {
-    width: 200px;
-    height: 200px;
-    object-fit: cover;
-    border-radius: 10px 0 0 10px;
-}
-
-.info-animal {
-    display: flex;
-    padding: 10px 10px 0 0;
-    justify-content: space-between;
-    align-items: center;
-}
-
-#name-animal {
-    margin-left: 20px;
-}
-
-#logo-ong {
-    width: 30px;
-    height: 30px;
-}
-
-.local-animal {
-    margin-top: 10px;
-    display: flex;
-    font-size: 14px;
-    align-items: center;
-}
-
-.local-animal p {
-    max-width: 150px;
-}
-
-.local-animal span {
-    margin-left: 20px;
-    margin-right: 10px;
-}
-
-#category {
-    text-align: center;
-    color: #fff;
-    margin: 10px 0 0 20px;
-    padding: 5px; 
-    width: 150px;
-    border-radius: 15px;
-    font-weight: bold;
-}
-
-.adocao {
-   background-color: #6DB662; 
-}
-
-.perdido {
-    background-color: #aeb116;
-}
-
-.quality {
-    display: flex;
-    font-size: 12px;
-    margin-top: 30px;
-    justify-content: space-between;
-    align-items: center;
-    margin-left: 15px;
-    padding-bottom: 10px;
-    font-weight: bold;
-}
-
-.quality span {
-    margin: 0 5px;
-}
-
 .clear-filter {
     cursor: pointer;
     padding: 10px;
     display: block;
-    margin: 0 auto;
+    margin: 0 auto 20px;
     text-align: center;
     max-width: 140px;
     border-radius: 15px;
@@ -291,6 +306,55 @@ export default {
 .clear-filter span {
     color: red;
     font-weight: bold;
+}
+
+@media (max-width: 1040px) {
+    .cards {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        padding: 0 30px;
+        grid-gap: 30px;
+    }
+}
+
+@media (max-width: 705px) {
+    .cards {
+        display: grid;
+        grid-template-columns: 1fr;
+    }
+
+    .cards > div {
+        max-width: 100%;
+        width: 100%;
+    }
+
+    .dados div {
+        max-width: 300px;
+        margin: 0 auto;
+        width: 100%;
+    }
+
+    .filter-home {
+        padding: 0 30px;
+    }
+}
+
+@media (max-width: 405px) {
+    .dados {
+        display: block;
+    }
+
+    .image-and-name img {
+        height: 200px;
+    }
+
+    .filter-home {
+        display: block !important;
+    }
+
+    .filter-home select {
+        width: 100%;
+    }
 }
 
 </style>

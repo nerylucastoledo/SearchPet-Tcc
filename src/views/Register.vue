@@ -31,18 +31,31 @@
                     v-model="form.name"
                     >
                 </div>
-            </div>
 
-            <div>
                 <div>
-                    <label for="username">Seu email</label>
+                    <label for="username">Username</label>
                     <input 
                     type="text"
                     id="username" 
                     name="username"
-                    placeholder="username"
+                    max="10"
+                    placeholder="Username"
                     required 
                     v-model="form.username"
+                    >
+                </div>
+            </div>
+
+            <div>
+                <div>
+                    <label for="email">Seu email</label>
+                    <input 
+                    type="email"
+                    id="email" 
+                    name="email"
+                    placeholder="email"
+                    required 
+                    v-model="form.email"
                     >
                 </div>
 
@@ -217,7 +230,6 @@ export default {
 
         register() {
             this.addPhotoAndSaveUrl()
-            console.log(form)
         },
 
         async addPhotoAndSaveUrl() {
@@ -238,6 +250,8 @@ export default {
                     this.uploadValue=100;
                     storageRef.snapshot.ref.getDownloadURL().then((url)=>{
                         this.picture = url;
+
+                        console.log(this.picture)
                         
                         this.insertDatOfPeople(this.form.username)
                     });
@@ -247,6 +261,7 @@ export default {
         },
 
         async createUser() {
+            console.log(this.form, 'e', this.picture)
             await firebase.auth().createUserWithEmailAndPassword(this.form.email, this.form.password)
             .then(data => {
                 firebase.auth().currentUser.updateProfile({
@@ -271,6 +286,7 @@ export default {
         },
 
         insertDatOfPeople(username) {
+            console.log(username)
             firebase.database()
             .ref(`/${username}`)
             .once("value", snapshot => {

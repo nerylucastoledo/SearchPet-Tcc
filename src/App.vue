@@ -123,6 +123,8 @@ input:focus {
     color: #fff;
 }
 
+/* CONTENT TOP FORM */
+
 .new-user {
     font-size: 16px;
     display: flex;

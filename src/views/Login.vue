@@ -20,6 +20,8 @@
 
                 <h1 class="titulo">Login</h1>
 
+                <p v-if="notFoundUser.length" class="not-found">{{notFoundUser}}</p>
+
                 <div>
                     <label for="email">E-mail 🐶</label>
                     <input 
@@ -73,6 +75,7 @@ export default {
                 email: "",
                 password: ""
             },
+            notFoundUser: ''
         }
     },
 
@@ -81,10 +84,18 @@ export default {
             firebase.auth().signInWithEmailAndPassword(this.form.email, this.form.password)
             .then(() => {
                 this.$store.state.user.loggedIn = true
+                this.notFoundUser = ''
                 this.$router.replace({ name: "home" });
             })
-            .catch(() => {
-                console.log('email incorreto')
+            .catch(error => {
+                console.log(error)
+                if(error.code === "auth/user-not-found") {
+                    this.notFoundUser = 'Usuário não encontrado'
+
+                } else if (error.code === "auth/wrong-password") {
+                    this.notFoundUser = 'Senha invalida'
+
+                }
             });
         }
     },
@@ -157,6 +168,15 @@ body {
     border: 1px solid #fff;
     padding: 10px;
     background-color: #fff;
+}
+
+.not-found {
+    text-align: center !important;
+    margin-bottom: 30px;
+    background-color: red;
+    padding: 10px;
+    font-weight: bold;
+    border-radius: 10px;
 }
 
 @media (max-width: 847px) {
