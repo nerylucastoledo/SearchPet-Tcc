@@ -163,7 +163,7 @@ export default {
     },
 
     beforeCreate() {
-        const logado = localStorage.getItem('login')
+        const logado = sessionStorage.getItem('login')
         
         if(!logado) {
             this.$router.replace({ name: "login" });
@@ -189,11 +189,6 @@ export default {
     margin-bottom: 30px;
     box-shadow: 0px 7px 7px rgba(0, 0, 0, 0.25);
     border-radius: 10px;
-}
-
-.cards div:hover {
-    background-color: #dfeaeb;
-    transition: .5s all;
 }
 
 .image-and-name {

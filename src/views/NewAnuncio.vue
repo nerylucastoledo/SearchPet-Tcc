@@ -1,6 +1,6 @@
 <template>
-    <div class="login-form">
-        <h1 class="titulo">Anuncio</h1>
+    <div class="container">
+        <h1 class="titulo titulo-principal">Novo Anuncio</h1>
 
         <div v-if="mensagem.length">
             <ModalSuccess 
@@ -9,7 +9,154 @@
             </ModalSuccess>
         </div>
 
-        <form class="login">
+        <div class="container carrosel-form">
+            <div class="seta-esquerda" @click="backForm()">
+                <font-awesome-icon icon="angle-left" id="angle-left" size="4x"/>
+            </div>
+
+            <div v-if="idForm === -1 | idForm < 6" class="seta-direita" @click="nextForm()">
+                <font-awesome-icon icon="angle-right" id="angle-right" size="4x"/>
+            </div>
+        </div>
+
+        <h1 v-if="idForm === -1" class="titulo">Qual a espécie do seu pet?</h1>
+
+        <div v-if="idForm === -1" class="animal-category">
+            <div @click="animalSelected('Cachorro', 0)">
+                <font-awesome-icon icon="dog" id="animal" size="6x"/>
+
+                <p class="animal">Cachorro</p>
+            </div>
+
+            <div @click="animalSelected('Gato', 1)">
+                <font-awesome-icon icon="cat" id="animal" size="6x"/>
+
+                <p class="animal">Gato</p>
+            </div>
+
+            <div @click="animalSelected('Pássaro', 2)">
+                <font-awesome-icon icon="kiwi-bird" id="animal" size="6x"/>
+
+                <p class="animal">Pássaro</p>
+            </div>
+        </div>
+
+        <form class="name-animal form-geral hide-now" id="0">
+            <h1 class="titulo">Oba! Mais um {{animal}} chegando na nossa matilha!</h1>
+
+            <p>Qual o nome do seu bichinho?</p>
+
+            <div class="input-form">
+                <label for="name">Nome</label>
+                <input 
+                type="text" 
+                id="name" 
+                name="name" 
+                placeholder="Nome do pet" 
+                v-model="anuncio.nome" 
+                min="3"
+                required
+                >
+            </div>
+        </form>
+
+        <form class="sexo-animal form-geral hide-now">
+            <h1 class="titulo">Estamos curiosos para conhecer mais sobre o pet!</h1>
+
+            <p>{{anuncio.nome}} é macho ou fêmea?</p>
+
+            <div>
+                <div @click="sexoAnimal('Macho', 0)">
+                    <font-awesome-icon icon="mars" id="sexo" size="6x"/>
+
+                    <p class="sexo-name">Macho</p>
+                </div>
+
+                <div @click="sexoAnimal('Femea', 1)">
+                    <font-awesome-icon icon="venus" id="sexo" size="6x"/>
+
+                    <p class="sexo-name">Fêmea</p>
+                </div>
+            </div>
+        </form>
+
+        <form class="name-animal form-geral hide-now">
+            <h1 class="titulo">Estamos curiosos para conhecer mais sobre o pet!</h1>
+
+            <p>Você quer anunciar por que?</p>
+
+            <select v-model="anuncio.categoria">
+                <option disabled value="">Categoria</option>
+
+                <option value="Adocao">Adoção</option>
+
+                <option value="Perdido">Perdido</option>
+            </select>
+        </form>
+
+        <form class="castrado-animal form-geral hide-now">
+            <h1 v-if="anuncio.categoria === 'Perdido'" class="titulo">Iremos encontrar o(a) {{anuncio.nome}} juntos!</h1>
+            <h1 v-else class="titulo">Que bacana! Vamos encontrar um dono para o(a) {{anuncio.nome}}</h1>
+            
+            <p>{{anuncio.nome}} é castrado(a)?</p>
+
+            <div>
+                <div @click="castramento('Sim', 0)">
+                    <font-awesome-icon icon="thumbs-up" id="castrado" size="6x"/>
+
+                    <p class="castrado">Sim</p>
+                </div>
+
+                <div @click="castramento('Nao', 1)">
+                    <font-awesome-icon icon="thumbs-down" id="castrado" size="6x"/>
+
+                    <p class="castrado">Não</p>
+                </div>
+            </div>
+        </form>
+
+        <form class="idade-animal form-geral hide-now">
+            <h1 class="titulo">Que fofo! :)</h1>
+
+            <p>Qual a idade do(a) {{anuncio.nome}}?</p>
+
+            <select v-model="idadeSelected">
+                <option disabled value="">Idade</option>
+                <option v-for="ano in listAno" :key="ano" :value="ano">{{ano}}</option>
+            </select>
+
+            <select v-model="tempo">
+                <option disabled value="">Tempo</option>
+                <option value="Anos">Anos</option>
+                <option v-if="idadeSelected < 13" value="Meses">Meses</option>
+            </select>
+        </form>
+
+        <form class="peso-animal form-geral hide-now">
+            <h1 v-if="anuncio.idade < 13" class="titulo">Um filhote, que lindo!</h1>
+            <h1 v-else class="titulo">Um adulto, que bacana!</h1>
+
+            <p>Qual o peso do(a) {{anuncio.nome}}?</p>
+
+            <div class="input-form">
+                <label for="peso">Peso (Kg)</label>
+                <input 
+                    type="number" 
+                    id="peso" 
+                    name="peso" 
+                    placeholder="Peso (KG)" 
+                    v-model="anuncio.peso" 
+                    min="1"
+                    required
+                >
+            </div>
+        </form>
+
+        <form class="image-animal form-geral hide-now">
+            <h1 class="titulo">Ele deve ser lindo :)</h1>
+
+            <p>Gostaria de mostrar ele pro mundo?</p>
+
             <img 
                 id="img_preview"
                 v-if="preview" 
@@ -20,64 +167,7 @@
                 type="file"
                 accept="image/*" 
                 @change="previewImage"
-            >
-
-            <div>
-                <input 
-                    type="text" 
-                    id="name" 
-                    name="name" 
-                    placeholder="Nome" 
-                    v-model="anuncio.nome" 
-                    required
-                >
-
-                <input 
-                    type="text" 
-                    id="peso" 
-                    name="peso" 
-                    placeholder="Peso" 
-                    v-model="anuncio.peso" 
-                    required
-                >
-            </div>           
-
-            <div>
-                <input 
-                    type="text" 
-                    id="idade" 
-                    name="idade" 
-                    placeholder="idade" 
-                    v-model="anuncio.idade" 
-                    required
-                >
-
-                <select v-model="anuncio.sexo" class="filter-selected">
-                    <option disabled value="">Sexo</option>
-
-                    <option value="Macho">Macho</option>
-
-                    <option value="Femea">Fêmea</option>
-                </select>
-            </div>    
-        
-            <div>
-                <select v-model="anuncio.categoria" class="filter-selected">
-                    <option disabled value="">Categoria</option>
-
-                    <option value="Adocao">Adoção</option>
-
-                    <option value="Perdido">Perdido</option>
-                </select>
-
-                <select v-model="anuncio.castrado" class="filter-selected">
-                    <option disabled value="">Castrado</option>
-
-                    <option value="Sim">Sim</option>
-
-                    <option value="Nao">Não</option>
-                </select>
-            </div>
+            >        
 
             <button class="btn-form" type="submit" @click.prevent="createAnuncio">Salvar</button>
 
@@ -111,6 +201,11 @@ export default {
                 categoria: "",
                 imagem: ''
             },
+            animal: '',
+            idForm: -1,
+            idadeSelected: '',
+            tempo: '',
+            listAno: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20],
             imageData: null,
             picture: null,
             preview: null,
@@ -126,6 +221,64 @@ export default {
     },
 
     methods: {
+        animalSelected(animalSelected, id) {
+            this.effectSelectDiv('#animal', '.animal', id)
+
+            this.animal = animalSelected
+        },
+
+        sexoAnimal(sexoSelected, id) {
+            this.effectSelectDiv('#sexo', '.sexo-name', id)
+
+            this.anuncio.sexo = sexoSelected
+        },
+
+        castramento(valueCastrado, id) {
+            this.effectSelectDiv('#castrado', '.castrado', id)
+
+            this.anuncio.castrado = valueCastrado
+        },
+
+        effectSelectDiv(iconAddBorder, classParagraph, idSelected) {
+            const icon = document.querySelectorAll(iconAddBorder)
+            const paragraph = document.querySelectorAll(classParagraph)
+
+            icon.forEach(element => element.style.border = 'none')
+            paragraph.forEach(element => element.style.color = '#000')
+
+            icon[idSelected].style.border = '2px solid #36C9D2'
+            paragraph[idSelected].style.color = '#36C9D2'
+        },
+
+        backForm() {
+            
+            if(this.idForm !== -1) {
+                this.idForm -= 1
+            }
+
+            const allForms = document.querySelectorAll('.form-geral')
+
+            allForms.forEach(element => {
+                if(!element.classList.contains('hide-now')) {
+                    element.classList.add('hide-now')
+                }
+            })
+            allForms[this.idForm].classList.remove('hide-now')
+        },
+
+        nextForm() {
+            this.idForm += 1
+
+            const allForms = document.querySelectorAll('.form-geral')
+
+            allForms.forEach(element => {
+                if(!element.classList.contains('hide-now')) {
+                    element.classList.add('hide-now')
+                }
+            })
+            allForms[this.idForm].classList.remove('hide-now')
+        },
+
         previewImage(event) {
             this.picture = null;
             this.imageData = event.target.files[0];
@@ -171,12 +324,12 @@ export default {
                     categoria: this.anuncio.categoria,
                     cidade: this.dataUser.city,
                     id: id,
-                    idade: this.anuncio.idade,
+                    idade: `${this.idadeSelected.toString()} ${this.tempo}`,
                     imagem: this.picture,
                     local: this.dataUser.district,
                     nome: this.anuncio.nome,
                     pausado: false,
-                    peso: this.anuncio.peso,
+                    peso: `${this.anuncio.peso} Kg`,
                     sexo: this.anuncio.sexo,
                     telefone: this.dataUser.whatsapp, 
                     username: this.$store.state.user.data.displayName,
@@ -195,7 +348,7 @@ export default {
     },
 
     beforeCreate() {
-        const logado = localStorage.getItem('login')
+        const logado = sessionStorage.getItem('login')
         const userName = this.$store.state.user.data.displayName
         
         firebase.database()
@@ -211,55 +364,239 @@ export default {
 
 <style scoped>
 
-.login {
-    margin-bottom: 60px;
-    box-shadow: none;
-}
-
-.login img {
-    margin-top: -40px;
-    width: 500px;
-    max-width: 500px;
-    height: 300px;
-    max-height: 300px;
-    border-radius: 10px;
-    object-fit: cover;
-    margin-bottom: 40px;
-}
-
-.login div {
-    display: flex;
-    align-items: center;
-    flex: 1;
-    flex-wrap: wrap;
-    justify-content: space-around;
-}
-
-input {
-    width: 250px;
-}
-
-.login div div span{
-    left: 240px;
-}
-
-.filter-selected {
+.input-form {
+    max-width: 300px;
+    margin: 0 auto;
     display: block;
-    margin: 0 auto 30px;
-    padding: 15px 0;
-    width: 265px;
-    box-shadow: 0px 7px 7px rgba(0, 0, 0, 0.25);
-    border: none;
-    border-radius: 10px;
-    padding-left: 15px;
-    color: #000;
-    font-size: 16px;
-    background-color: #fff;
+    font-size: 18px !important;
+    margin-top: 30px;
+}
+
+.input-form input {
+    width: 280px;
+    padding: 20px;
+    margin-top: 10px;
+    text-align: initial !important;
     font-size: 18px;
 }
 
+.input-form input:focus {
+    outline: none !important;
+    border: none;
+    box-shadow: 0 0 10px #36C9D2;
+}
+
+.hide-now {
+    display: none;
+}
+
+.carrosel-form {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    position: relative;
+}
+
+#angle-left, #angle-right {
+    box-shadow: 0px 7px 7px rgba(0, 0, 0, 0.25);
+    padding: 10px 15px;
+    border-radius: 10px;
+    color: #36C9D2;
+    cursor: pointer;
+    position: absolute;
+    margin-top: 15%;
+}
+
+#angle-left {
+    left: 30px;
+}
+
+#angle-right {
+    right: 30px;
+}
+
+.animal-category {
+    display: flex;
+    justify-content: center;
+    margin-top: 60px;
+    text-align: center;
+    font-size: 18px;
+}
+
+.animal-category div {
+    cursor: pointer;
+}
+
+.animal-category div p {
+    margin-top: 20px;
+}
+
+.animal-category div #animal {
+    margin: 0 30px;
+    padding: 20px;
+    color: #36C9D2;
+    border-radius: 10px;
+    box-shadow: 0px 7px 7px rgba(0, 0, 0, 0.25);
+}
+
+.titulo {
+    margin: 60px auto 0;
+    max-width: 470px;
+}
+
+.form-geral {
+    padding: 0 30px;
+    margin-bottom: 60px;
+}
+
+/* FORM NAME */
+.form-geral p {
+    font-size: 24px;
+    text-align: center;
+    margin-top: 30px;
+    margin-bottom: 40px;
+    color: #000;
+}
+
+.form-geral h1 {
+    color: #000;
+}
+
+.form-geral select {
+    width: 50%;
+    padding: 15px;
+    color: #36C9D2;
+    font-size: 24px;
+    text-align: initial !important;
+}
+
+/* FORM SEXO */
+.sexo-animal > div {
+    display: flex;
+    justify-content: center;
+    margin-top: 60px;
+    cursor: pointer;
+}
+
+.sexo-animal > div div #sexo {
+    margin: 0 30px;
+    padding: 20px;
+    width: 150px;
+    color: #36C9D2;
+    border-radius: 10px;
+    text-align: center;
+    box-shadow: 0px 7px 7px rgba(0, 0, 0, 0.25);
+}
+
+/* FORM CASTRADO */
+.castrado-animal > div {
+    display: flex;
+    justify-content: center;
+    margin-top: 60px;
+    cursor: pointer;
+}
+
+.castrado-animal > div div #castrado {
+    margin: 0 30px;
+    padding: 20px;
+    width: 150px;
+    color: #36C9D2;
+    border-radius: 10px;
+    text-align: center;
+    box-shadow: 0px 7px 7px rgba(0, 0, 0, 0.25);
+}
+
+input {
+    display: block;
+    text-align: center;
+    margin: 0 auto;
+}
+
+select {
+    display: block;
+    text-align: center;
+    margin: 0 auto;
+}
+
+/* FORM IDADE */
+.idade-animal select{
+    margin-bottom: 30px;
+}
+
+/* FORM IMAGE ANIMAL */
+#img_preview {
+    max-width: 400px;
+    display: block;
+    margin: 0 auto 40px;
+    border-radius: 10px;
+}
+
+.image-animal {
+    margin: 60px 0;
+}
+
 .btn-cancel {
-    background-color: tomato;
+    background-color: red;
+}
+
+@media (max-width: 825px) {
+    .carrosel-form {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        position: relative;
+    }
+
+    .titulo {
+        font-size: 2rem;
+    }
+
+    #angle-left, #angle-right {
+        bottom: -20px;
+    }
+
+    #angle-left {
+        left: 30px;
+    }
+
+    #angle-right {
+        right: 30px;
+    }
+}
+
+@media (max-width: 670px) {
+    .animal-category {
+        display: block;
+    }
+
+    .animal-category div {
+        margin-bottom: 40px;
+    }
+
+    .sexo-animal > div {
+        display: block;
+    }
+
+    .sexo-animal > div div #sexo {
+        display: block;
+        margin: 0 auto 40px;
+        text-align: center;
+    }
+
+    .castrado-animal > div {
+        display: block;
+    }
+
+    .castrado-animal > div div #castrado {
+        display: block;
+        margin: 0 auto 40px;
+        text-align: center;
+    }
+
+    .input-form input {
+        max-width: 90%;
+        width: 100% !important;
+    }
 }
 
 </style>

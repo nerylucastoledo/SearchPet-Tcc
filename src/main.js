@@ -4,10 +4,8 @@ import './registerServiceWorker'
 import router from './router'
 import store from './store'
 import { library } from '@fortawesome/fontawesome-svg-core'
+import { faDog, faCat, faKiwiBird, faMars, faVenus, faThumbsUp, faThumbsDown, faAngleLeft, faAngleRight } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
-import { 
-  faLock
-} from '@fortawesome/free-solid-svg-icons'
 import * as firebase from 'firebase';
 import VueMask from 'v-mask';
 
@@ -21,7 +19,7 @@ new Vue({
 }).$mount('#app')
 
 library.add([
-  faLock
+  faDog, faCat, faKiwiBird, faMars, faVenus, faThumbsUp, faThumbsDown, faAngleLeft, faAngleRight
 ])
 
 Vue.component('font-awesome-icon', FontAwesomeIcon)
@@ -41,8 +39,8 @@ firebase.initializeApp(firebaseConfig);
 
 firebase.auth().onAuthStateChanged(user => {
   if(user.email) {
-    localStorage.setItem('login', true)
-    localStorage.setItem('displayName', user.displayName)
+    sessionStorage.setItem('login', true)
+    sessionStorage.setItem('displayName', user.displayName)
     store.dispatch("fetchUser", user);
   }
 });

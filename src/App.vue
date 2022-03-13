@@ -22,7 +22,7 @@ export default {
   },
 
   beforeCreate() {
-    const logado = localStorage.getItem('login')
+    const logado = sessionStorage.getItem('login')
     
     if(!logado) {
       this.$router.replace({ name: "login" });
