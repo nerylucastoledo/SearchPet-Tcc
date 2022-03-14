@@ -81,7 +81,7 @@
         </form>
 
         <form class="name-animal form-geral hide-now">
-            <h1 class="titulo">Estamos curiosos para conhecer mais sobre o pet!</h1>
+            <h1 class="titulo">Oba! Que legaal :)</h1>
 
             <p>Você quer anunciar por que?</p>
 
@@ -175,6 +175,18 @@
                 <button class="btn-form btn-cancel" type="submit">Cancelar</button>
             </router-link>
         </form>
+
+        <div class="container setas-mobile">
+            <div @click="backForm()">
+                <font-awesome-icon icon="angle-left" size="4x"/>
+                <span>Voltar</span>
+            </div>
+
+            <div v-if="idForm === -1 | idForm < 6" @click="nextForm()">
+                <span>Próximo</span>
+                <font-awesome-icon icon="angle-right" size="4x"/>
+            </div>
+        </div>
     </div>
 </template>
 
@@ -364,6 +376,7 @@ export default {
 
 <style scoped>
 
+
 .input-form {
     max-width: 300px;
     margin: 0 auto;
@@ -440,6 +453,7 @@ export default {
 }
 
 .titulo {
+    padding: 0 30px;
     margin: 60px auto 0;
     max-width: 470px;
 }
@@ -539,58 +553,60 @@ select {
     background-color: red;
 }
 
+.setas-mobile {
+    display: none;
+}
+
 @media (max-width: 825px) {
     .carrosel-form {
         display: flex;
         justify-content: space-between;
         align-items: center;
-        position: relative;
+        display: none;
     }
 
     .titulo {
         font-size: 2rem;
     }
 
-    #angle-left, #angle-right {
-        bottom: -20px;
+    .setas-mobile {
+        margin: 60px 0 40px;
+        padding: 10px 30px;
+        display: flex;
+        justify-content: space-between;
+        box-shadow: 0 0 7px 0 rgb(0 0 0 / 35%);
     }
 
-    #angle-left {
-        left: 30px;
+    .setas-mobile div {
+        display: flex;
+        align-items: center;
+        color: #36C9D2;
+        cursor: pointer;
     }
-
-    #angle-right {
-        right: 30px;
-    }
+    
 }
 
 @media (max-width: 670px) {
-    .animal-category {
-        display: block;
-    }
-
     .animal-category div {
         margin-bottom: 40px;
     }
 
-    .sexo-animal > div {
-        display: block;
-    }
-
     .sexo-animal > div div #sexo {
         display: block;
-        margin: 0 auto 40px;
         text-align: center;
+        width: 45%;
     }
 
-    .castrado-animal > div {
-        display: block;
+    .animal-category div #animal {
+        font-size: 40px;
+        margin: 0 15px;
     }
 
     .castrado-animal > div div #castrado {
         display: block;
         margin: 0 auto 40px;
         text-align: center;
+        width: 45%;
     }
 
     .input-form input {

@@ -99,7 +99,7 @@ export default {
         top: 0;
         margin-top: 100px;
         right: 0px;
-        position: fixed;
+        position: absolute;
         display: block;
         z-index: 2;
         background-color: #36C9D2;

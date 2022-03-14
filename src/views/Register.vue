@@ -286,7 +286,6 @@ export default {
         },
 
         insertDatOfPeople(username) {
-            console.log(username)
             firebase.database()
             .ref(`/${username}`)
             .once("value", snapshot => {
