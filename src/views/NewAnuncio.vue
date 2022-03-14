@@ -10,11 +10,18 @@
         </div>
 
         <div class="container carrosel-form">
-            <div class="seta-esquerda" @click="backForm()">
+            <div 
+                class="seta-esquerda" 
+                @click="backForm()"
+            >
                 <font-awesome-icon icon="angle-left" id="angle-left" size="4x"/>
             </div>
 
-            <div v-if="idForm === -1 | idForm < 6" class="seta-direita" @click="nextForm()">
+            <div 
+                class="seta-direita" 
+                @click="nextForm()"
+                v-if="idForm === -1 | idForm < 6"
+            >
                 <font-awesome-icon icon="angle-right" id="angle-right" size="4x"/>
             </div>
         </div>
@@ -41,7 +48,7 @@
             </div>
         </div>
 
-        <form class="name-animal form-geral hide-now" id="0">
+        <form class="name-animal form-geral hide-now">
             <h1 class="titulo">Oba! Mais um {{animal}} chegando na nossa matilha!</h1>
 
             <p>Qual o nome do seu bichinho?</p>
@@ -49,13 +56,13 @@
             <div class="input-form">
                 <label for="name">Nome</label>
                 <input 
-                type="text" 
-                id="name" 
-                name="name" 
-                placeholder="Nome do pet" 
-                v-model="anuncio.nome" 
-                min="3"
-                required
+                    type="text" 
+                    id="name" 
+                    name="name" 
+                    placeholder="Nome do pet" 
+                    v-model="anuncio.nome" 
+                    min="3"
+                    required
                 >
             </div>
         </form>
@@ -87,27 +94,29 @@
 
             <select v-model="anuncio.categoria">
                 <option disabled value="">Categoria</option>
-
                 <option value="Adocao">Adoção</option>
-
                 <option value="Perdido">Perdido</option>
             </select>
         </form>
 
         <form class="castrado-animal form-geral hide-now">
-            <h1 v-if="anuncio.categoria === 'Perdido'" class="titulo">Iremos encontrar o(a) {{anuncio.nome}} juntos!</h1>
-            <h1 v-else class="titulo">Que bacana! Vamos encontrar um dono para o(a) {{anuncio.nome}}</h1>
+            <h1 v-if="anuncio.categoria === 'Perdido'" class="titulo">
+                Iremos encontrar o(a) {{anuncio.nome}} juntos!
+            </h1>
+            <h1 v-else class="titulo">
+                Que bacana! Vamos encontrar um dono para o(a) {{anuncio.nome}}
+            </h1>
             
             <p>{{anuncio.nome}} é castrado(a)?</p>
 
             <div>
-                <div @click="castramento('Sim', 0)">
+                <div @click="castramento('true', 0)">
                     <font-awesome-icon icon="thumbs-up" id="castrado" size="6x"/>
 
                     <p class="castrado">Sim</p>
                 </div>
 
-                <div @click="castramento('Nao', 1)">
+                <div @click="castramento('false', 1)">
                     <font-awesome-icon icon="thumbs-down" id="castrado" size="6x"/>
 
                     <p class="castrado">Não</p>
@@ -122,7 +131,13 @@
 
             <select v-model="idadeSelected">
                 <option disabled value="">Idade</option>
-                <option v-for="ano in listAno" :key="ano" :value="ano">{{ano}}</option>
+                <option 
+                    v-for="ano in listAno" 
+                    :key="ano" 
+                    :value="ano"
+                    >
+                    {{ano}}
+                </option>
             </select>
 
             <select v-model="tempo">
@@ -133,8 +148,12 @@
         </form>
 
         <form class="peso-animal form-geral hide-now">
-            <h1 v-if="anuncio.idade < 13" class="titulo">Um filhote, que lindo!</h1>
-            <h1 v-else class="titulo">Um adulto, que bacana!</h1>
+            <h1 v-if="anuncio.idade < 13" class="titulo">
+                Um filhote, que lindo!
+            </h1>
+            <h1 v-else class="titulo">
+                Um adulto, que bacana!
+            </h1>
 
             <p>Qual o peso do(a) {{anuncio.nome}}?</p>
 
@@ -263,32 +282,33 @@ export default {
         },
 
         backForm() {
-            
-            if(this.idForm !== -1) {
-                this.idForm -= 1
-            }
+            this.idForm -= 1
 
-            const allForms = document.querySelectorAll('.form-geral')
-
-            allForms.forEach(element => {
-                if(!element.classList.contains('hide-now')) {
-                    element.classList.add('hide-now')
-                }
-            })
-            allForms[this.idForm].classList.remove('hide-now')
+            this.showForm()
         },
 
         nextForm() {
             this.idForm += 1
 
+            this.showForm()
+        },
+
+        showForm() {
             const allForms = document.querySelectorAll('.form-geral')
 
-            allForms.forEach(element => {
-                if(!element.classList.contains('hide-now')) {
-                    element.classList.add('hide-now')
-                }
-            })
-            allForms[this.idForm].classList.remove('hide-now')
+            // para desaparecer um form o id tem que ser no max 0, nao pode ser -1
+            if(this.idForm !== -1) {
+                allForms.forEach(element => {
+                    if(!element.classList.contains('hide-now')) {
+                        element.classList.add('hide-now')
+                    }
+                })
+
+                allForms[this.idForm].classList.remove('hide-now')
+
+            } else {
+                allForms[0].classList.add('hide-now')
+            }
         },
 
         previewImage(event) {
@@ -314,25 +334,30 @@ export default {
         async addPhotoAndSaveUrl() {
             this.picture = null;
 
-            const storageRef = firebase.storage().ref(`${this.imageData.name}`).put(this.imageData);
+            const storageRef = firebase.storage()
+                                        .ref(`${this.imageData.name}`)
+                                        .put(this.imageData);
             
-            storageRef.on(`state_changed`, snapshot => {}, error => {}, () => {
-                    storageRef.snapshot.ref.getDownloadURL().then((url)=>{
-                        this.picture = url;
-                        this.create()
-                    });
-                }
-            );
+            storageRef.on(`state_changed`, () => {
+                storageRef.snapshot.ref.
+                getDownloadURL()
+                .then((url) => {
+                    this.picture = url;
+
+                    this.create()
+                });
+            });
         },
 
         async create() {
             var id = "id" + Math.random().toString(16).slice(2)
+
             firebase.database()
             .ref('/Anuncios/')
             .child(this.anuncio.categoria)
             .update({
                 [id]: {
-                    castrado: this.anuncio.categoria,
+                    castrado: this.anuncio.castrado,
                     categoria: this.anuncio.categoria,
                     cidade: this.dataUser.city,
                     id: id,
@@ -352,9 +377,9 @@ export default {
                 this.success = true
 
                 setTimeout(() => this.mensagem = '', 1000)
-                setTimeout(() => {
-                    this.$router.replace({ name: "home" })
-                }, 1500);
+                setTimeout(() => this.$router.replace(
+                    { name: "home" }
+                ), 1500);
             })
         }
     },
