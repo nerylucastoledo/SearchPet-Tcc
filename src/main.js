@@ -4,7 +4,17 @@ import './registerServiceWorker'
 import router from './router'
 import store from './store'
 import { library } from '@fortawesome/fontawesome-svg-core'
-import { faDog, faCat, faKiwiBird, faMars, faVenus, faThumbsUp, faThumbsDown, faAngleLeft, faAngleRight } from '@fortawesome/free-solid-svg-icons'
+import { faDog, 
+    faCat, 
+    faKiwiBird, 
+    faMars, 
+    faVenus, 
+    faThumbsUp, 
+    faThumbsDown, 
+    faAngleLeft, 
+    faAngleRight,
+    faHeart
+} from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 import * as firebase from 'firebase';
 import VueMask from 'v-mask';
@@ -19,7 +29,7 @@ new Vue({
 }).$mount('#app')
 
 library.add([
-  faDog, faCat, faKiwiBird, faMars, faVenus, faThumbsUp, faThumbsDown, faAngleLeft, faAngleRight
+  faDog, faCat, faHeart, faKiwiBird, faMars, faVenus, faThumbsUp, faThumbsDown, faAngleLeft, faAngleRight
 ])
 
 Vue.component('font-awesome-icon', FontAwesomeIcon)

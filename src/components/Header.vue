@@ -71,6 +71,7 @@ export default {
 .menu a {
     color: #36C9D2;
     font-size: 24px;
+    margin: 0 15px;
 }
 
 .menu a::after {
@@ -79,7 +80,7 @@ export default {
     background-color: #CAC0C0;
     width: 1px;
     height: 20px;
-    margin: 0 30px;
+    margin-left: 30px;
 }
 
 .menu li:last-child a::after {
@@ -90,9 +91,10 @@ export default {
     font-weight: bold;
 }
 
-@media (max-width: 725px) {
+@media (max-width: 773px) {
     .menu {
         display: none;
+        padding: 0px;
     }
 
     .menu.open-menu {
@@ -122,6 +124,7 @@ export default {
 
     .menu a {
         color: #fff;
+        margin: 0px;
     }
 
     .menu a::after {

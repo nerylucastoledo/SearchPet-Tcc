@@ -1,17 +1,28 @@
 <template>
     <main class="container content-principal">
+
+        <div v-if="mensagem.length">
+            <ModalSuccess 
+                :mensagem="mensagem" 
+                :success="success">
+            </ModalSuccess>
+        </div>
+
         <div class="filter-home">
             <select v-model="city" class="filter-selected">
                 <option disabled value="">Selecione a Cidade</option>
-
-                <option v-for="cidade of citys" :key="cidade" :value="cidade">{{cidade}}</option>
+                <option 
+                    v-for="cidade of citys" 
+                    :key="cidade" 
+                    :value="cidade"
+                    >
+                    {{cidade}}
+                </option>
             </select>
 
             <select v-model="type" class="filter-selected">
                 <option disabled value="">Selecione a Categoria</option>
-
                 <option value="Adocao">Adoção</option>
-
                 <option value="Perdido">Perdidos</option>
             </select>
         </div>
@@ -19,13 +30,14 @@
         <p 
             class="clear-filter" 
             v-if="type || city" 
-            @click="clearFiler">
+            @click="clearFiler"
+            >
             Limpar filtro
             <span>X</span>
         </p>
 
         <div class="cards" v-if="!loading">
-            <div v-for="anuncio in anuncios" :key="anuncio.imagen">
+            <div v-for="anuncio, index in anuncios" :key="anuncio.imagen">
                 <router-link :to="`/animal/${anuncio.categoria}/${anuncio.id}`">
                     <div class="image-and-name">
                         <img :src="anuncio.imagem" alt="Imagem de um animal">
@@ -33,7 +45,8 @@
                         <h1>{{anuncio.nome}}</h1>
                     </div>
 
-                    <div id="category" :class="[anuncio.categoria === 'Adocao' ? 'adocao' : 'perdido']">
+                    <div id="category" 
+                        :class="[anuncio.categoria === 'Adocao' ? 'adocao' : 'perdido']">
                         <p>{{anuncio.categoria}}</p>
                     </div>
 
@@ -41,6 +54,7 @@
                         <div>
                             <div>
                                 <p class="castrado">{{anuncio.idade}}</p>
+
                                 <span>
                                     <img src="../assets/idade.png" alt="Calendario">
                                 </span>
@@ -58,7 +72,9 @@
 
                         <div>
                             <div>
-                                <p :class="[anuncio.sexo === 'Macho' ? 'macho' : 'femea']">{{anuncio.sexo}}</p>
+                                <p :class="[anuncio.sexo === 'Macho' ? 'macho' : 'femea']">
+                                    {{anuncio.sexo}}
+                                </p>
                                 <span>
                                     <img src="../assets/sexo.png" alt="Calendario">
                                 </span>
@@ -74,6 +90,12 @@
                         </div>
                     </div>
                 </router-link>
+
+                <div class="favoritar">
+                    <p @click="favoritar(index, anuncio)">
+                        <font-awesome-icon icon="heart" size="2x"/>
+                    </p>
+                </div>
             </div>
         </div>
 
@@ -90,11 +112,14 @@
 import PorqueAdotar from '../components/PorqueAdotar.vue'
 import { getMydatas } from '@/help.js'
 import Loading from '../components/Loading'
+import firebase from 'firebase'
+import ModalSuccess from '../components/ModalSuccess.vue'
 
 export default {
 
     components: {
         PorqueAdotar,
+        ModalSuccess,
         Loading
     },
 
@@ -106,7 +131,9 @@ export default {
             anuncios: [],
             backup_anuncios: [],
             loading: true,
-            isActive: true
+            isActive: true,
+            success: true,
+            mensagem: "",
         }
     },
 
@@ -153,9 +180,62 @@ export default {
                 )
                 
             } else {
-                this.anuncios = this.anuncios.filter(anuncio => anuncio[filter] === this[value])
+                this.anuncios = this.anuncios.filter(
+                    anuncio => anuncio[filter] === this[value]
+                )
             }
-        }
+        },
+
+        async favoritar(index, anuncio) {
+            const username = sessionStorage.getItem('displayName')
+            const favorito = document.querySelectorAll('.favoritar')
+
+            var id = "id" + Math.random().toString(16).slice(2)
+
+            const favoriteExist = await this.verifyIfExistFavorite(username, anuncio.categoria, anuncio.id)
+
+            if(favoriteExist === 0) {
+                firebase.database()
+                .ref(username)
+                .child(`favorites/${anuncio.categoria}`)
+                .update({
+                    [id]: anuncio["id"]
+                })
+                .then(() => {
+                    this.mensagem = `${anuncio.nome} foi adicionado aos favoritos`
+                    this.success = true
+                    favorito[index].style.color = 'red'
+
+                    setTimeout(() => this.mensagem = '', 1000)
+                })
+            } else {
+                this.mensagem = `${anuncio.nome} já esta nos favoritos`
+                this.success = false
+
+                setTimeout(() => this.mensagem = '', 1000)
+            }
+        },
+        
+        async verifyIfExistFavorite(username, categoria, id) {
+            let favoriteExist = 0
+
+            await firebase.database()
+            .ref(username)
+            .child(`favorites/${categoria}`)
+            .once("value", snapshot => {
+                if(!snapshot.exists()) {
+                    return favoriteExist
+                }
+
+                Object.keys(snapshot.val()).forEach((key) => {
+                    if(snapshot.val()[key] === id) {
+                        favoriteExist += 1
+                    }
+                })
+            })
+
+            return favoriteExist
+        },
     },
 
     mounted() {
@@ -283,7 +363,7 @@ export default {
     border: none;
     color: #fff;
     font-size: 16px;
-    margin-bottom: 30px;
+    margin-bottom: 60px;
 }
 
 .clear-filter {
@@ -301,6 +381,13 @@ export default {
 .clear-filter span {
     color: red;
     font-weight: bold;
+}
+
+.favoritar {
+    text-align: center;
+    padding: 10px;
+    border-top: 1px solid #000;
+    cursor: pointer;
 }
 
 @media (max-width: 1040px) {
