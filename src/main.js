@@ -13,7 +13,8 @@ import { faDog,
     faThumbsDown, 
     faAngleLeft, 
     faAngleRight,
-    faHeart
+    faHeart,
+    faFilter
 } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 import * as firebase from 'firebase';
@@ -29,7 +30,7 @@ new Vue({
 }).$mount('#app')
 
 library.add([
-  faDog, faCat, faHeart, faKiwiBird, faMars, faVenus, faThumbsUp, faThumbsDown, faAngleLeft, faAngleRight
+  faDog, faCat, faHeart, faKiwiBird, faMars, faVenus, faThumbsUp, faThumbsDown, faAngleLeft, faAngleRight, faFilter
 ])
 
 Vue.component('font-awesome-icon', FontAwesomeIcon)

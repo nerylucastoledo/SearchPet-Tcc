@@ -123,6 +123,11 @@ input:focus {
     color: #fff;
 }
 
+.loading {
+  display: block;
+  margin: 0 auto;
+}
+
 /* CONTENT TOP FORM */
 
 .new-user {
