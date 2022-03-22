@@ -12,26 +12,26 @@ export async function getMydatas(name_filter = '', value = '') {
 
 
         listKey.forEach(key => {
-        firebase.database()
-        .ref('/Anuncios')
-        .child(key)
-        .once("value", snapshot => {
-            Object.keys(snapshot.val()).forEach((key2) => {
             firebase.database()
-                .ref('/Anuncios')
-                .child(`${key}/${key2}`)
-                .once("value", item => {
-                    if(name_filter && value) {
-                        if(item.val()[name_filter] === value) {
+            .ref('/Anuncios')
+            .child(key)
+            .once("value", snapshot => {
+                Object.keys(snapshot.val()).forEach((key2) => {
+                firebase.database()
+                    .ref('/Anuncios')
+                    .child(`${key}/${key2}`)
+                    .once("value", item => {
+                        if(name_filter && value) {
+                            if(item.val()[name_filter] === value) {
+                                listAnuncios.push(item.val())
+                            }
+                        } else {
                             listAnuncios.push(item.val())
                         }
-                    } else {
-                        listAnuncios.push(item.val())
-                    }
-                }) 
-            })
+                    }) 
+                })
 
-        })
+            })
         })
     })
 

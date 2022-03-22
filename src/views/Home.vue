@@ -1,6 +1,5 @@
 <template>
     <main class="container content-principal">
-
         <div v-if="mensagem.length">
             <ModalSuccess 
                 :mensagem="mensagem" 

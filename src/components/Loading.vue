@@ -16,7 +16,7 @@
     animation: is-rotating 1s infinite;
     border: 6px solid #e5e5e5;
     border-radius: 50%;
-    border-top-color: #B9DD2A;
+    border-top-color: #36C9D2;
     height: 80px;
     width: 80px;
     margin: 60px auto 40px;

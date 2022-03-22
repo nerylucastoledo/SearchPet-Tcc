@@ -5,8 +5,7 @@
             <ModalSuccess :mensagem="mensagem" :success="success"></ModalSuccess>
         </div>
 
-        <form action="#" class="login">
-
+        <div class="login">
             <div class="new-user">
                 <p>Já possui conta?</p>
 
@@ -19,152 +18,164 @@
 
             <h1 class="titulo">Criar conta 🐶</h1>
 
-            <div>
-                <div>
-                    <label for="name">Nome da ONG</label>
-                    <input 
-                    type="text"
-                    id="name" 
-                    name="name"
-                    placeholder="Nome da Ong"
-                    required 
-                    v-model="form.name"
-                    >
-                </div>
+            <div class="type-account">
+                <label class="form-control">
+                    <input type="radio" checked name="radio" value="ONG" v-model="type_account"/>
+                    ONG
+                </label>
 
-                <div>
-                    <label for="username">Username</label>
-                    <input 
-                    type="text"
-                    id="username" 
-                    name="username"
-                    max="10"
-                    placeholder="Username"
-                    required 
-                    v-model="form.username"
-                    >
-                </div>
+                <label class="form-control">
+                    <input type="radio" name="radio" value="particular" v-model="type_account"/>
+                    Particular
+                </label>
             </div>
 
-            <div>
+            <form action="#" @submit.prevent="register">
                 <div>
-                    <label for="email">Seu email</label>
-                    <input 
-                    type="email"
-                    id="email" 
-                    name="email"
-                    placeholder="email"
-                    required 
-                    v-model="form.email"
-                    >
+                    <div>
+                        <label for="name">Nome</label>
+                        <input 
+                        type="text"
+                        id="name" 
+                        name="name"
+                        placeholder="Nome"
+                        required 
+                        v-model="form.name"
+                        >
+                    </div>
+
+                    <div>
+                        <label for="username">Username</label>
+                        <input 
+                            type="text"
+                            id="username" 
+                            name="username"
+                            max="10"
+                            min="4"
+                            placeholder="Username"
+                            required 
+                            v-model="form.username"
+                            @change="verifyUsername"
+                        >
+                    </div>
                 </div>
 
                 <div>
-                    <label for="password">Sua senha</label>
-                    <input 
-                    type="password"
-                    id="password" 
-                    name="password"
-                    placeholder="Sua senha"
-                    required 
-                    v-model="form.password"
-                    >
-                </div>
-            </div>
+                    <div>
+                        <label for="email">Seu email</label>
+                        <input 
+                        type="email"
+                        id="email" 
+                        name="email"
+                        placeholder="email"
+                        required 
+                        v-model="form.email"
+                        >
+                    </div>
 
-            <div>
-                <div>
-                    <label for="cep">Cep</label>
-                    <input 
-                    type="number"
-                    id="cep" 
-                    name="cep"
-                    placeholder="Cep"
-                    required 
-                    v-mask="'########'"
-                    v-model="form.cep"
-                    @keyup="addCep()"
-                    >
-                </div>
-                <div>
-                    <label for="city">Cidade</label>
-                    <input 
-                    class="read"
-                    type="text"
-                    id="city" 
-                    name="city"
-                    placeholder="Cidade"
-                    required 
-                    v-model="form.city"
-                    readonly
-                    >
-                </div>
-            </div>
-
-            <div>
-                <div>
-                    <label for="district">Bairro</label>
-                    <input 
-                    class="read"
-                    type="text"
-                    id="district" 
-                    name="district"
-                    placeholder="Bairro"
-                    required 
-                    v-model="form.district"
-                    readonly
-                    >
+                    <div>
+                        <label for="password">Sua senha</label>
+                        <input 
+                        type="password"
+                        id="password" 
+                        name="password"
+                        placeholder="Sua senha"
+                        required 
+                        autocomplete="off"
+                        v-model="form.password"
+                        >
+                    </div>
                 </div>
 
                 <div>
-                    <label for="street">Rua</label>
-                    <input 
-                    class="read"
-                    type="text"
-                    id="street" 
-                    name="street"
-                    placeholder="Rua"
-                    required 
-                    v-model="form.street"
-                    readonly
-                    >
+                    <div>
+                        <label for="cep">Cep</label>
+                        <input 
+                        type="number"
+                        id="cep" 
+                        name="cep"
+                        placeholder="Cep"
+                        required 
+                        v-mask="'########'"
+                        v-model="form.cep"
+                        @keyup="addCep()"
+                        >
+                    </div>
+                    <div>
+                        <label for="city">Cidade</label>
+                        <input 
+                        class="read"
+                        type="text"
+                        id="city" 
+                        name="city"
+                        placeholder="Cidade"
+                        required 
+                        v-model="form.city"
+                        readonly
+                        >
+                    </div>
                 </div>
-            </div>
 
-            <div>
                 <div>
-                    <label for="cellphone">Whatsapp</label>
-                    <input 
-                    id="cellphone" 
-                    name="cellphone"
-                    placeholder="Celular"
-                    required 
-                    v-mask="'(##) # ####-####'"
-                    v-model="form.cellphone"
-                    >
+                    <div>
+                        <label for="district">Bairro</label>
+                        <input 
+                        class="read"
+                        type="text"
+                        id="district" 
+                        name="district"
+                        placeholder="Bairro"
+                        required 
+                        v-model="form.district"
+                        readonly
+                        >
+                    </div>
+
+                    <div>
+                        <label for="street">Rua</label>
+                        <input 
+                        class="read"
+                        type="text"
+                        id="street" 
+                        name="street"
+                        placeholder="Rua"
+                        required 
+                        v-model="form.street"
+                        readonly
+                        >
+                    </div>
                 </div>
 
-                <div>
-                    <label for="image">Foto de perfil</label>
-                    <input 
-                    type="file" 
-                    @change="previewImage" 
-                    accept="image/*"
-                    >
-                </div>
-            </div>
+                <div v-if="type_account === 'ONG'">
+                    <div>
+                        <label for="cellphone">Whatsapp</label>
+                        <input 
+                        id="cellphone" 
+                        name="cellphone"
+                        placeholder="Celular"
+                        required 
+                        v-mask="'(##) # ####-####'"
+                        v-model="form.cellphone"
+                        >
+                    </div>
 
-            <button 
-                class="btn-form" 
-                type="submit" 
-                @click.prevent="register">
-                Cadastrar
-            </button>
-        
-            <p class="progress">Cadastro: {{uploadValue.toFixed()+"%"}}
-            <progress id="progress" :value="uploadValue" max="100" ></progress>  
-            </p>
-        </form>
+                    <div>
+                        <label for="image">Foto de perfil</label>
+                        <input 
+                        type="file" 
+                        ref="imageData"
+                        accept="image/*"
+                        >
+                    </div>
+                </div>
+
+                <button 
+                    class="btn-form" 
+                    type="submit">
+                    Cadastrar
+                </button>
+            </form>
+        </div>
     </div>
 </template>
 
@@ -193,12 +204,12 @@ export default {
                 email: "",
                 password: ""
             },
+            imageData: '',
+            type_account: '',
             success: true,
             mensagem: "",
-            imageData: null,
-            picture: null,
-            uploadValue: 0,
-            cepError: ''
+            cepError: '',
+            username_approved: null
         }
     },
 
@@ -222,67 +233,47 @@ export default {
             }
         },
 
-        previewImage(event) {
-            this.uploadValue=0;
-            this.picture=null;
-            this.imageData = event.target.files[0];
+        verifyUsername() {
+            var username = this.form.username
+
+            firebase.database()
+            .ref(username)
+            .once("value", snapshot => {
+                if(snapshot.exists()) {
+                    document.getElementById('username').style.border = '1px solid red'
+                    this.success = false
+                    this.mensagem =  'Username existente!'
+
+                    setTimeout(() => this.mensagem =  '', 2000);
+                } else {
+                    document.getElementById('username').style.border = 'none'
+                    this.username_approved = true
+                }
+            })
         },
 
         register() {
-            this.addPhotoAndSaveUrl()
+            if(this.type_account === 'ONG' && this.username_approved) {
+                this.addPhotoAndSaveUrl()
+
+            } else if(this.username_approved) {
+                this.insertDatOfPeople(this.form.username)
+            }
         },
 
         async addPhotoAndSaveUrl() {
-            this.picture = null;
-
-            const storageRef = firebase.storage().ref(`${this.imageData.name}`).put(this.imageData);
+            const file = this.$refs.imageData.files[0];
             
-            storageRef.on(`state_changed`, snapshot => {
-                this.uploadValue = (snapshot.bytesTransferred/snapshot.totalBytes)*100;
-                }, error => {
-                    this.mensagem = 'Imagem invalida';
-                    this.success = false
+            const storageRef = firebase.storage().ref(`${file.name}`).put(file);
+            
+            storageRef.on(`state_changed`, snapshot => {}, error => {}, () => {
+                    storageRef.snapshot.ref.getDownloadURL().then((url) => {
+                        this.form.imagem_produto = url
 
-                    setTimeout(() => {
-                        this.mensagem = ''
-                    }, 1000);
-                }, () => {
-                    this.uploadValue=100;
-                    storageRef.snapshot.ref.getDownloadURL().then((url)=>{
-                        this.picture = url;
-
-                        console.log(this.picture)
-                        
                         this.insertDatOfPeople(this.form.username)
-                    });
-
+                    })
                 }
             );
-        },
-
-        async createUser() {
-            console.log(this.form, 'e', this.picture)
-            await firebase.auth().createUserWithEmailAndPassword(this.form.email, this.form.password)
-            .then(data => {
-                firebase.auth().currentUser.updateProfile({
-                    displayName: this.form.username
-                })  
-                this.$store.dispatch("fetchUser", data)
-                this.mensagem = 'Usuario criado com sucesso!';
-                this.success = true
-
-                setTimeout(() => {
-                    this.$router.push({name: 'home'})
-                }, 1000);
-            })
-            .catch(() => {
-                this.mensagem = 'Não foi possível criar!';
-                this.success = false
-
-                setTimeout(() => {
-                    this.mensagem = ''
-                }, 1000);
-            });
         },
 
         insertDatOfPeople(username) {
@@ -293,32 +284,75 @@ export default {
                     this.success = false
                     this.mensagem =  'Username existente!'
 
-                    setTimeout(() => {
-                        this.mensagem =  ''
-                    }, 1000);
+                    setTimeout(() => this.mensagem =  '', 1000);
 
                 } else {
                     firebase.database()
                     .ref(`/${username}`)
                     .update({
-                        image: this.picture,
+                        image: this.form.imagem_produto,
                         nameOng: this.form.name,
                         cep: this.form.cep,
                         city: this.form.city,
                         district: this.form.district,
                         street: this.form.street,
                         whatsapp: this.form.cellphone,
-                    }).then(() => {
-                        this.createUser()
+                        type: this.type_account
                     })
+                    .then(() => this.createUser())
                 }
             })
+        },
+
+        async createUser() {
+            await firebase.auth().createUserWithEmailAndPassword(this.form.email, this.form.password)
+            .then(data => {
+                firebase.auth().currentUser.updateProfile({ displayName: this.form.username })  
+                this.$store.dispatch("fetchUser", data)
+                sessionStorage.setItem('displayName', this.form.username)
+                this.mensagem = 'Usuario criado com sucesso!';
+                this.success = true
+
+                setTimeout(() => this.$router.push({name: 'home'}), 1000);
+            })
+            .catch(() => {
+                this.mensagem = 'Não foi possível criar!';
+                this.success = false
+
+                setTimeout(() => this.mensagem = '', 1000);
+            });
         }
     },
 }
 </script>
 
 <style scoped>
+
+.type-account {
+    margin-bottom: 60px;
+}
+
+.form-control {
+  font-weight: bold;
+  display: grid;
+  grid-template-columns: 1em auto;
+  gap: 0.5em;
+  height: 0px;
+}
+
+input[type="radio"] {
+    appearance: none;
+    color: currentColor;
+    border: 0.15em solid currentColor;
+    transform: translateY(-0.075em);
+    display: grid;
+    padding: 13px 10px !important;
+    cursor: pointer;
+}
+
+input[type="radio"]:checked {
+    background-color: #36C9D2;
+}
 
 .login-form {
     margin-bottom: 60px;

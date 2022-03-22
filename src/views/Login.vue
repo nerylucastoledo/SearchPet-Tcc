@@ -9,7 +9,7 @@
                 >
             </div>
 
-            <form class="login">
+            <form class="login" @submit.prevent="login">
                 <div class="new-user">
                     <p>Você é novo por aqui?</p>
 
@@ -42,6 +42,7 @@
                     name="password" 
                     placeholder="password" 
                     v-model="form.password" 
+                    autocomplete="off"
                     required
                     >
                 </div>
@@ -55,8 +56,8 @@
 
                 <button 
                     class="btn-form" 
-                    type="submit" 
-                    @click.prevent="login">
+                    type="submit"
+                    >
                     Login
                 </button>
             </form>
@@ -88,7 +89,6 @@ export default {
                 this.$router.replace({ name: "home" });
             })
             .catch(error => {
-                console.log(error)
                 if(error.code === "auth/user-not-found") {
                     this.notFoundUser = 'Usuário não encontrado'
 

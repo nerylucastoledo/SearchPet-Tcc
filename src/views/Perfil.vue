@@ -4,7 +4,7 @@
         <h1 class="titulo">Editar Perfil</h1>
 
         <div class="perfil">
-            <div class="info-perfil">
+            <div class="info-perfil" v-if="form.imagem_produto">
                 <img :src="form.imagem_produto" alt="Foto da ONG">
 
                 <input 
@@ -192,29 +192,29 @@ export default {
     },
 
     created() {
-        const displayName = sessionStorage.getItem('displayName')
-
-        firebase.database()
-        .ref(displayName)
-        .once("value", snapshot => {
-            this.form = {
-                imagem_produto: snapshot.val()["image"],
-                name: snapshot.val()["nameOng"],
-                cep: snapshot.val()["cep"],
-                city: snapshot.val()["city"],
-                district: snapshot.val()["district"],
-                street: snapshot.val()["street"],
-                number_whatsapp: snapshot.val()["whatsapp"],
-            }
-        })
-    },
-
-    beforeCreate() {
         const logado = sessionStorage.getItem('login')
         
-        if(!logado)
+        if(!logado) {
             this.$router.replace({ name: "login" });
-    }
+            
+        } else {
+            const displayName = sessionStorage.getItem('displayName')
+
+            firebase.database()
+            .ref(displayName)
+            .once("value", snapshot => {
+                this.form = {
+                    imagem_produto: snapshot.val()["image"],
+                    name: snapshot.val()["nameOng"],
+                    cep: snapshot.val()["cep"],
+                    city: snapshot.val()["city"],
+                    district: snapshot.val()["district"],
+                    street: snapshot.val()["street"],
+                    number_whatsapp: snapshot.val()["whatsapp"],
+                }
+            })
+        }
+    },
 }
 </script>
 

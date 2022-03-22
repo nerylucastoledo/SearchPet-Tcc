@@ -1,6 +1,5 @@
 <template>
     <main class="container content-principal">
-
         <div class="meus-anuncios">
             <div class="side-meus-anuncios">
                 <img :src="image_ong" alt="Imagem da ONG">
@@ -17,7 +16,6 @@
             </div>
 
             <div v-if="!loading">
-
 
                 <div class="open-filter">
                     <font-awesome-icon @click="openFilter" id="filter" icon="filter" size="2x"/>
@@ -83,18 +81,20 @@
                     </div>
                 </div>
 
-                <div v-else-if="message_favorite.length" class="message">
-                    <h2 class="message favorite">{{message_favorite}}</h2>
+                <div v-else-if="message_favorite" class="message">
+                    <h2>🐶 Oops!</h2>
+
+                    <p>Você ainda não tem favoritos :(</p>
                 </div>
 
                 <div v-else>
-                    <h2 class="message">Nenhum anuncio para visualizar</h2>
+                    <h2 class="message">🐶 Oops! Nada para mostrar</h2>
+                </div>
 
-                    <div>
-                        <router-link to="/new-anuncio">
-                            <button class="btn-form">Novo Anuncio</button>
-                        </router-link>
-                    </div>
+                <div v-if="show_button">
+                    <router-link to="/new-anuncio">
+                        <button class="btn-form"> + Novo Anuncio</button>
+                    </router-link>
                 </div>
 
             </div>
@@ -127,7 +127,8 @@ export default {
             loading: true,
             name_ong: '',
             favorite: false,
-            message_favorite: ''
+            show_button: true,
+            message_favorite: false
         }
     },
 
@@ -152,9 +153,10 @@ export default {
         filterAnuncios(index, filter, value_filter) {
             this.addActiveRouterFIlter(index)
 
-            this.message_favorite = ''
+            this.message_favorite = false
             this.anuncios =  this.backup_anuncios
             this.favorite = false
+            this.show_button = true
 
             this.anuncios = this.anuncios.filter(data => data[filter] === value_filter)
         },
@@ -162,6 +164,7 @@ export default {
         async filterFavorites(index) {
             this.addActiveRouterFIlter(index)
 
+            this.show_button = false
             this.loading = true
             this.favorite = true
 
@@ -192,7 +195,8 @@ export default {
                 setTimeout(() => this.loading = false, 400);
 
             } else {
-                this.message_favorite = 'Nenhum favorito adicionado :('
+                this.message_favorite = true
+                setTimeout(() => this.loading = false, 400);
                 this.anuncios = []
 
             }
@@ -218,25 +222,24 @@ export default {
     },
 
     async mounted() {
-        document.title = 'Meus Anuncios'
-        document.querySelectorAll('.link-filter')[0].classList.add('ativo')
-
-        const username = await this.$store.state.user.data.displayName
-        const allAnuncios = await getMydatas('username', username)
-
-        this.anuncios = allAnuncios
-        this.backup_anuncios = allAnuncios
-
-        this.getPhotoAndNameOng()
-    },
-
-    beforeCreate() {
         const logado = sessionStorage.getItem('login')
         
         if(!logado) {
             this.$router.replace({ name: "login" });
+            
+        } else {
+            document.title = 'Meus Anuncios'
+            document.querySelectorAll('.link-filter')[0].classList.add('ativo')
+
+            const username = await this.$store.state.user.data.displayName
+            const allAnuncios = await getMydatas('username', username)
+
+            this.anuncios = allAnuncios
+            this.backup_anuncios = allAnuncios
+
+            this.getPhotoAndNameOng()
         }
-    }
+    },
 }
 </script>
 
@@ -298,6 +301,10 @@ export default {
     margin-top: 60px;
     text-align: center;
     color: #36C9D2;
+}
+
+.message h2 {
+    margin-bottom: 20px;
 }
 
 .open-filter {

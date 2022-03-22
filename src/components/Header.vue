@@ -28,6 +28,7 @@
 </template>
 
 <script>
+
 export default {
 
     methods: {
@@ -38,7 +39,7 @@ export default {
             menuBtn.classList.toggle('open');
             menu.classList.toggle('open-menu');
         }
-    }
+    },
 }
 </script>
 
