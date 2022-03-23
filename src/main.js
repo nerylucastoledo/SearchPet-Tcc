@@ -14,7 +14,8 @@ import { faDog,
     faAngleLeft, 
     faAngleRight,
     faHeart,
-    faFilter
+    faFilter,
+    faSignOutAlt
 } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 import * as firebase from 'firebase';
@@ -30,7 +31,7 @@ new Vue({
 }).$mount('#app')
 
 library.add([
-  faDog, faCat, faHeart, faKiwiBird, faMars, faVenus, faThumbsUp, faThumbsDown, faAngleLeft, faAngleRight, faFilter
+  faDog, faCat, faHeart, faKiwiBird, faMars, faVenus, faThumbsUp, faThumbsDown, faAngleLeft, faAngleRight, faFilter, faSignOutAlt,
 ])
 
 Vue.component('font-awesome-icon', FontAwesomeIcon)
@@ -51,6 +52,7 @@ firebase.initializeApp(firebaseConfig);
 firebase.auth().onAuthStateChanged(user => {
   if(user.email) {
     sessionStorage.setItem('login', true)
+    sessionStorage.setItem('displayName', user.displayName)
     store.dispatch("fetchUser", user);
   }
 });

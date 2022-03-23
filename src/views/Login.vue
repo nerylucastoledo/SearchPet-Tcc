@@ -86,6 +86,7 @@ export default {
             .then(() => {
                 this.$store.state.user.loggedIn = true
                 this.notFoundUser = ''
+                
                 this.$router.replace({ name: "home" });
             })
             .catch(error => {

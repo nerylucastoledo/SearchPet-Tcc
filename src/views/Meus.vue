@@ -2,17 +2,39 @@
     <main class="container content-principal">
         <div class="meus-anuncios">
             <div class="side-meus-anuncios">
-                <img :src="image_ong" alt="Imagem da ONG">
+                <img v-if="disponible === 'ONG'" :src="image_ong" alt="Imagem da ONG">
 
                 <span class="name">Olá, {{name_ong}}</span>
+                <p  
+                    v-if="disponible === 'ONG'"
+                    @click="filterAnuncios(0, '')" 
+                    class="link-filter"
+                    >
+                    Todos anuncios
+                </p>
 
-                <p @click="filterAnuncios(0, '')" class="link-filter">Todos anuncios</p>
+                <p 
+                    v-if="disponible === 'ONG'"
+                    @click="filterAnuncios(1, 'pausado', false)" 
+                    class="link-filter"
+                    >
+                    Anuncios ativos
+                </p>
 
-                <p @click="filterAnuncios(1, 'pausado', false)" class="link-filter">Anuncios ativos</p>
+                <p 
+                    v-if="disponible === 'ONG'"
+                    @click="filterAnuncios(2, 'pausado', true)" 
+                    class="link-filter"
+                    >
+                    Anuncios finalizados
+                </p>
 
-                <p @click="filterAnuncios(2, 'pausado', true)" class="link-filter">Anuncios finalizados</p>
-
-                <p @click="filterFavorites(3)" class="link-filter">Seus favoritos</p>
+                <p 
+                    @click="filterFavorites(3)" 
+                    class="link-filter"
+                    >
+                    Escolhidos por vocẽ
+                </p>
             </div>
 
             <div v-if="!loading">
@@ -128,51 +150,35 @@ export default {
             name_ong: '',
             favorite: false,
             show_button: true,
-            message_favorite: false
+            message_favorite: false,
+            disponible: '',
+            username: ''
         }
     },
 
     methods: {
-        openFilter() {
-            document.querySelector('.side-meus-anuncios').classList.toggle('open-modal')
-        },
-
-        async getPhotoAndNameOng() {
-            const userName = this.$store.state.user.data.displayName
-
-            const user = await this.getDataFromApi(userName)
-
-            if(user.val()["type"] === 'Ong') {
-                this.name_ong = user.val()["nameOng"]
-                this.image_ong = user.val()["image"]
-            }
-
-            setTimeout(() => this.loading = false, 500)
-        },
-
         filterAnuncios(index, filter, value_filter) {
-            this.addActiveRouterFIlter(index)
+            this.addActiveRouterFilter(index)
 
             this.message_favorite = false
-            this.anuncios =  this.backup_anuncios
             this.favorite = false
             this.show_button = true
 
+            this.anuncios =  this.backup_anuncios
             this.anuncios = this.anuncios.filter(data => data[filter] === value_filter)
         },
 
         async filterFavorites(index) {
-            this.addActiveRouterFIlter(index)
+            this.addActiveRouterFilter(index)
 
             this.show_button = false
             this.loading = true
             this.favorite = true
 
-            const username = this.$store.state.user.data.displayName
             var list_anuncios_filter = []
             this.anuncios = []
 
-            const favorites = await this.getDataFromApi(username, 'favorites')
+            const favorites = await this.getDataFromApi(this.username, 'favorites')
 
             if(favorites.val()) {
                 Object.keys(favorites.val()).forEach((key) => {
@@ -196,20 +202,22 @@ export default {
 
             } else {
                 this.message_favorite = true
-                setTimeout(() => this.loading = false, 400);
                 this.anuncios = []
-
+                setTimeout(() => this.loading = false, 400);
             }
         },
 
-        addActiveRouterFIlter(index) {
+        addActiveRouterFilter(index) {
             document.querySelector('.side-meus-anuncios').classList.toggle('open-modal')
 
             const activeButton = document.querySelectorAll('.link-filter')
 
             activeButton.forEach(element => element.classList.remove('ativo'))
-
             activeButton[index].classList.add('ativo')
+        },
+
+        openFilter() {
+            document.querySelector('.side-meus-anuncios').classList.toggle('open-modal')
         },
 
         async getDataFromApi(ref, child = '') {
@@ -218,28 +226,47 @@ export default {
                                     .once("value", snapshot => snapshot.exists() ? snapshot.val() : null)
 
             return resultApi
-        }
+        },
+
+        async getPhotoAndNameOng() {
+            const user = await this.getDataFromApi(this.username)
+
+            this.name_ong = user.val()["nameOng"]
+            this.image_ong = user.val()["image"]
+
+            setTimeout(() => this.loading = false, 500)
+        },
     },
 
     async mounted() {
-        const logado = sessionStorage.getItem('login')
-        
-        if(!logado) {
-            this.$router.replace({ name: "login" });
-            
+        await firebase.database()
+        .ref(this.username)
+        .once("value", snapshot => this.disponible = snapshot.val()["type"])
+
+        if(this.disponible === 'particular') {
+            this.filterFavorites(0)
+
         } else {
-            document.title = 'Meus Anuncios'
             document.querySelectorAll('.link-filter')[0].classList.add('ativo')
 
-            const username = await this.$store.state.user.data.displayName
-            const allAnuncios = await getMydatas('username', username)
-
+            const allAnuncios = await getMydatas('username', this.username)
             this.anuncios = allAnuncios
             this.backup_anuncios = allAnuncios
-
-            this.getPhotoAndNameOng()
         }
+
+        this.getPhotoAndNameOng()
     },
+
+    beforeCreate() {
+        document.title = 'Meus'
+
+        const logado = sessionStorage.getItem('login')
+
+        if(!logado) {
+           
+            this.$router.replace({ name: "login" })
+        }
+    }
 }
 </script>
 
@@ -263,7 +290,7 @@ export default {
     padding: 40px;
     box-shadow: 0px 7px 7px rgba(0, 0, 0, 0.25);
     border-radius: 10px;
-    max-height: 360px;
+    height: 100%;
     text-align: initial;
     margin-right: 30px;
     width: 345px !important;

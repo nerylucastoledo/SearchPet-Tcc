@@ -22,6 +22,9 @@
                 <li @click="openMenu">
                     <router-link to="/perfil">Perfil</router-link>
                 </li>
+                <li @click="singOut" class="sign-out">
+                    <font-awesome-icon icon="sign-out-alt" size="2x"/>
+                </li>
             </ul>
         </nav>
     </header>
@@ -38,6 +41,14 @@ export default {
 
             menuBtn.classList.toggle('open');
             menu.classList.toggle('open-menu');
+        },
+
+        singOut() {
+            sessionStorage.clear()
+            localStorage.clear()
+
+            this.$store.dispatch('signOut')
+            this.$router.replace({ name: "login" });
         }
     },
 }
@@ -67,6 +78,7 @@ export default {
 
 .menu {
     display: flex;
+    align-items: center;
 }
 
 .menu a {
@@ -92,7 +104,11 @@ export default {
     font-weight: bold;
 }
 
-@media (max-width: 773px) {
+.sign-out {
+    color: #36C9D2;
+}
+
+@media (max-width: 798px) {
     .menu {
         display: none;
         padding: 0px;
@@ -187,6 +203,10 @@ export default {
 
     .menu-btn.open .menu-btn__burger::after {
         transform: rotate(-45deg) translate(35px, 35px);
+    }
+
+    .sign-out {
+        color: #fff;
     }
 }
 

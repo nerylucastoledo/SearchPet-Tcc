@@ -21,12 +21,13 @@ export default {
     Footer
   },
 
-  beforeCreate() {
+  mounted() {
     const logado = sessionStorage.getItem('login')
     
     if(!logado) {
       this.$router.replace({ name: "login" });
     }
+
   }
 }
 </script>

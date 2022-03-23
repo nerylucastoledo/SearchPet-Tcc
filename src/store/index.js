@@ -9,6 +9,7 @@ export default new Vuex.Store({
       loggedIn: false,
       data: null
     },
+    type_account: null
   },
 
   getters: {
@@ -22,7 +23,15 @@ export default new Vuex.Store({
     SET_USER(state, data) {
       state.user.data = data;
     },
+    
+    SET_TYPE_ACCOUNT(state, value) {
+      state.type_account = value
+    },
 
+    SIGN_OUT(state) {
+      state.user = {}
+      state.type_account = null
+    }
   },
 
   actions: {
@@ -40,6 +49,14 @@ export default new Vuex.Store({
         
       }
     },
+
+    typeAccount({ commit }, type) {
+      commit('SET_TYPE_ACCOUNT', type)
+    },
+
+    signOut({ commit }) {
+      commit('SIGN_OUT')
+    }
   },
   
   modules: {

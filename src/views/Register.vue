@@ -243,6 +243,7 @@ export default {
                     document.getElementById('username').style.border = '1px solid red'
                     this.success = false
                     this.mensagem =  'Username existente!'
+                    this.username_approved = false
 
                     setTimeout(() => this.mensagem =  '', 2000);
                 } else {
@@ -257,7 +258,7 @@ export default {
                 this.addPhotoAndSaveUrl()
 
             } else if(this.username_approved) {
-                this.insertDatOfPeople(this.form.username)
+                this.createUser()
             }
         },
 
@@ -269,8 +270,8 @@ export default {
             storageRef.on(`state_changed`, snapshot => {}, error => {}, () => {
                     storageRef.snapshot.ref.getDownloadURL().then((url) => {
                         this.form.imagem_produto = url
-
-                        this.insertDatOfPeople(this.form.username)
+                        
+                        this.createUser()
                     })
                 }
             );
@@ -299,7 +300,7 @@ export default {
                         whatsapp: this.form.cellphone,
                         type: this.type_account
                     })
-                    .then(() => this.createUser())
+                    .then(() => this.$router.push({name: 'home'}), 1000)
                 }
             })
         },
@@ -308,12 +309,10 @@ export default {
             await firebase.auth().createUserWithEmailAndPassword(this.form.email, this.form.password)
             .then(data => {
                 firebase.auth().currentUser.updateProfile({ displayName: this.form.username })  
-                this.$store.dispatch("fetchUser", data)
-                sessionStorage.setItem('displayName', this.form.username)
                 this.mensagem = 'Usuario criado com sucesso!';
                 this.success = true
 
-                setTimeout(() => this.$router.push({name: 'home'}), 1000);
+                this.insertDatOfPeople(this.form.username)
             })
             .catch(() => {
                 this.mensagem = 'Não foi possível criar!';

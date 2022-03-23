@@ -157,7 +157,7 @@ export default {
     methods: {
         async getDatas() {
             this.anuncios = await getMydatas()
-            this.backup_anuncios = await getMydatas()
+            this.backup_anuncios = this.anuncios
 
             setTimeout(() => this.loading = false, 500);
         },
@@ -238,12 +238,10 @@ export default {
     },
 
     mounted() {
-        setTimeout(() => this.getDatas(), 600);
-    },
+        setTimeout(() => this.getDatas(), 1000);
 
-    beforeCreate() {
         const logado = sessionStorage.getItem('login')
-        
+
         if(!logado) {
             this.$router.replace({ name: "login" });
         }
