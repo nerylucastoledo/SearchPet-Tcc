@@ -22,7 +22,7 @@
                 <li @click="openMenu">
                     <router-link to="/perfil">Perfil</router-link>
                 </li>
-                <li @click="singOut" class="sign-out">
+                <li @click="singOut" class="sign-out" v-if="user.loggedIn">
                     <font-awesome-icon icon="sign-out-alt" size="2x"/>
                 </li>
             </ul>
@@ -32,7 +32,21 @@
 
 <script>
 
+import { mapGetters } from "vuex";
+
 export default {
+
+    computed: {
+        ...mapGetters({
+            user: "user"
+        })
+    },
+
+    watch: {
+        user() {
+            return user
+        }
+    },
 
     methods: {
         openMenu() {
@@ -106,6 +120,7 @@ export default {
 
 .sign-out {
     color: #36C9D2;
+    cursor: pointer;
 }
 
 @media (max-width: 798px) {

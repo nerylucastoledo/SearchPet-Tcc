@@ -26,7 +26,7 @@
             </div>
         </div>
 
-        <h1 v-if="idForm === -1" class="titulo">Qual a espécie do seu pet?</h1>
+        <h1 v-if="idForm === -1" class="titulo especie">Qual a espécie do seu pet?</h1>
 
         <div v-if="idForm === -1" class="animal-category">
             <div @click="animalSelected('Cachorro', 0)">
@@ -49,7 +49,7 @@
         </div>
 
         <form class="name-animal form-geral hide-now">
-            <h1 class="titulo">Oba! Mais um {{animal}} chegando na nossa matilha!</h1>
+            <h1 class="titulo">Oba! Mais um {{anuncio.type}} chegando na nossa matilha!</h1>
 
             <p>Qual o nome do seu bichinho?</p>
 
@@ -94,8 +94,8 @@
 
             <select v-model="anuncio.categoria">
                 <option disabled value="">Categoria</option>
-                <option value="Adocao">Adoção</option>
-                <option value="Perdido">Perdido</option>
+                <option value="Adocao">Para adoção</option>
+                <option value="Perdido">Ela esta perdida</option>
             </select>
         </form>
 
@@ -148,11 +148,11 @@
         </form>
 
         <form class="peso-animal form-geral hide-now">
-            <h1 v-if="anuncio.idade < 13" class="titulo">
-                Um filhote, que lindo!
+            <h1 v-if="tempo === 'Meses'" class="titulo">
+                É novinho(a) ainda, que lindo(a)!
             </h1>
             <h1 v-else class="titulo">
-                Um adulto, que bacana!
+                Já é adulto(a), que bacana!
             </h1>
 
             <p>Qual o peso do(a) {{anuncio.nome}}?</p>
@@ -230,9 +230,9 @@ export default {
                 idade: "",
                 castrado: "",
                 categoria: "",
-                imagem: ''
+                imagem: '',
+                type: '',
             },
-            animal: '',
             idForm: -1,
             idadeSelected: '',
             tempo: '',
@@ -252,10 +252,22 @@ export default {
     },
 
     methods: {
+        backForm() {
+            this.idForm -= 1
+
+            this.showForm()
+        },
+
+        nextForm() {
+            this.idForm += 1
+
+            this.showForm()
+        },
+
         animalSelected(animalSelected, id) {
             this.effectSelectDiv('#animal', '.animal', id)
 
-            this.animal = animalSelected
+            this.anuncio.type = animalSelected
         },
 
         sexoAnimal(sexoSelected, id) {
@@ -279,18 +291,6 @@ export default {
 
             icon[idSelected].style.border = '2px solid #36C9D2'
             paragraph[idSelected].style.color = '#36C9D2'
-        },
-
-        backForm() {
-            this.idForm -= 1
-
-            this.showForm()
-        },
-
-        nextForm() {
-            this.idForm += 1
-
-            this.showForm()
         },
 
         showForm() {
@@ -332,17 +332,12 @@ export default {
         },
 
         async addPhotoAndSaveUrl() {
-            this.picture = null;
-
-            const storageRef = firebase.storage()
-                                        .ref(`${this.imageData.name}`)
-                                        .put(this.imageData);
+            const storageRef = firebase.storage().ref(`${this.imageData.name}`).put(this.imageData);
             
             storageRef.on(`state_changed`, () => {
-                storageRef.snapshot.ref.
-                getDownloadURL()
+                storageRef.snapshot.ref.getDownloadURL()
                 .then((url) => {
-                    this.picture = url;
+                    this.anuncio.imagem = url;
 
                     this.create()
                 });
@@ -357,19 +352,16 @@ export default {
             .child(this.anuncio.categoria)
             .update({
                 [id]: {
-                    castrado: this.anuncio.castrado,
-                    categoria: this.anuncio.categoria,
+                    ...this.anuncio,
+                    idade: `${this.idadeSelected.toString()} ${this.tempo}`,
+                    peso: `${this.anuncio.peso} Kg`,
                     cidade: this.dataUser.city,
                     id: id,
-                    idade: `${this.idadeSelected.toString()} ${this.tempo}`,
-                    imagem: this.picture,
                     local: this.dataUser.district,
-                    nome: this.anuncio.nome,
                     pausado: false,
-                    peso: `${this.anuncio.peso} Kg`,
-                    sexo: this.anuncio.sexo,
                     telefone: this.dataUser.whatsapp, 
                     username: this.$store.state.user.data.displayName,
+                    logo_ong: this.dataUser.image
                 }
             })
             .then(() => {
@@ -401,6 +393,9 @@ export default {
 
 <style scoped>
 
+.especie {
+    color: #000;
+}
 
 .input-form {
     max-width: 300px;

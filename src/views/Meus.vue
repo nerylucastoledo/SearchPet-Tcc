@@ -152,7 +152,7 @@ export default {
             show_button: true,
             message_favorite: false,
             disponible: '',
-            username: ''
+            username: this.$store.state.user.data.displayName
         }
     },
 
@@ -242,7 +242,7 @@ export default {
         await firebase.database()
         .ref(this.username)
         .once("value", snapshot => this.disponible = snapshot.val()["type"])
-
+        
         if(this.disponible === 'particular') {
             this.filterFavorites(0)
 
@@ -291,7 +291,7 @@ export default {
     box-shadow: 0px 7px 7px rgba(0, 0, 0, 0.25);
     border-radius: 10px;
     height: 100%;
-    text-align: initial;
+    text-align: center;
     margin-right: 30px;
     width: 345px !important;
 }
@@ -367,7 +367,9 @@ export default {
 
     .side-meus-anuncios {
         display: none;
+        text-align: initial;
         position: absolute;
+        max-height: 180px;
         max-width: 100% !important;
         width: 50% !important;
         margin-top: 0px;

@@ -41,7 +41,11 @@
                     <div class="image-and-name">
                         <img :src="anuncio.imagem" alt="Imagem de um animal">
 
-                        <h1>{{anuncio.nome}}</h1>
+                        <div class="logo-and-name">
+                            <h1>{{anuncio.nome}}</h1>
+
+                            <img :src="anuncio.logo_ong" alt="Logo da ONG">
+                        </div>
                     </div>
 
                     <div id="category" 
@@ -385,6 +389,19 @@ export default {
     padding: 10px;
     border-top: 1px solid #000;
     cursor: pointer;
+}
+
+.logo-and-name {
+    position: relative;
+}
+
+.logo-and-name img {
+    width: 40px;
+    height: 40px;
+    top: 5px;
+    right: 30px;
+    border-radius: 20px;
+    position: absolute;
 }
 
 @media (max-width: 1040px) {

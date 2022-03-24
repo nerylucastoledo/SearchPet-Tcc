@@ -40,7 +40,7 @@
                         name="name"
                         placeholder="Nome"
                         required 
-                        v-model="form.name"
+                        v-model="form.nameOng"
                         >
                     </div>
 
@@ -50,12 +50,12 @@
                             type="text"
                             id="username" 
                             name="username"
-                            max="10"
-                            min="4"
+                            maxlength="10"
+                            minlength="4"
                             placeholder="Username"
                             required 
-                            v-model="form.username"
-                            @change="verifyUsername"
+                            v-model="username"
+                            @change="verifyUsername(username)"
                         >
                     </div>
                 </div>
@@ -69,7 +69,7 @@
                         name="email"
                         placeholder="email"
                         required 
-                        v-model="form.email"
+                        v-model="email"
                         >
                     </div>
 
@@ -82,7 +82,7 @@
                         placeholder="Sua senha"
                         required 
                         autocomplete="off"
-                        v-model="form.password"
+                        v-model="password"
                         >
                     </div>
                 </div>
@@ -98,7 +98,9 @@
                         required 
                         v-mask="'########'"
                         v-model="form.cep"
-                        @keyup="addCep()"
+                        minlength="7"
+                        maxlength="8"
+                        @keyup="verifyCep(form.cep)"
                         >
                     </div>
                     <div>
@@ -148,14 +150,14 @@
 
                 <div v-if="type_account === 'ONG'">
                     <div>
-                        <label for="cellphone">Whatsapp</label>
+                        <label for="whatsapp">Whatsapp</label>
                         <input 
-                        id="cellphone" 
-                        name="cellphone"
+                        id="whatsapp" 
+                        name="whatsapp"
                         placeholder="Celular"
                         required 
                         v-mask="'(##) # ####-####'"
-                        v-model="form.cellphone"
+                        v-model="form.whatsapp"
                         >
                     </div>
 
@@ -193,17 +195,17 @@ export default {
     data() {
         return {
             form: {
-                imagem_produto: null,
-                name: "",
-                username: "",
+                image: null,
+                nameOng: "",
                 cep: "",
                 city: "",
                 district: "",
                 street: "",
-                cellphone: "",
-                email: "",
-                password: ""
+                whatsapp: "",
             },
+            username: "",
+            email: "",
+            password: "",
             imageData: '',
             type_account: '',
             success: true,
@@ -214,8 +216,7 @@ export default {
     },
 
     methods: {
-        addCep() {
-            var cepDiditado = this.form.cep
+        verifyCep(cepDiditado) {
             var tamanhoMaxCep = 8
 
             if(cepDiditado.length === tamanhoMaxCep) {
@@ -230,22 +231,20 @@ export default {
                 })
             } else {
                 document.getElementById('cep').style.border = '1px solid red'
+
             }
         },
 
-        verifyUsername() {
-            var username = this.form.username
-
+        verifyUsername(username) {
             firebase.database()
             .ref(username)
             .once("value", snapshot => {
                 if(snapshot.exists()) {
                     document.getElementById('username').style.border = '1px solid red'
-                    this.success = false
-                    this.mensagem =  'Username existente!'
+
+                    this.showMessage('Username existente!', false, 2000)
                     this.username_approved = false
 
-                    setTimeout(() => this.mensagem =  '', 2000);
                 } else {
                     document.getElementById('username').style.border = 'none'
                     this.username_approved = true
@@ -269,7 +268,7 @@ export default {
             
             storageRef.on(`state_changed`, snapshot => {}, error => {}, () => {
                     storageRef.snapshot.ref.getDownloadURL().then((url) => {
-                        this.form.imagem_produto = url
+                        this.form.image = url
                         
                         this.createUser()
                     })
@@ -277,49 +276,44 @@ export default {
             );
         },
 
-        insertDatOfPeople(username) {
-            firebase.database()
+        async insertDatOfPeople(username) {
+            await firebase.database()
             .ref(`/${username}`)
             .once("value", snapshot => {
                 if(snapshot.exists()) {
-                    this.success = false
-                    this.mensagem =  'Username existente!'
-
-                    setTimeout(() => this.mensagem =  '', 1000);
+                    this.showMessage('Username existente!', false, 1000)
 
                 } else {
                     firebase.database()
                     .ref(`/${username}`)
                     .update({
-                        image: this.form.imagem_produto,
-                        nameOng: this.form.name,
-                        cep: this.form.cep,
-                        city: this.form.city,
-                        district: this.form.district,
-                        street: this.form.street,
-                        whatsapp: this.form.cellphone,
+                        ...this.form,
                         type: this.type_account
                     })
-                    .then(() => this.$router.push({name: 'home'}), 1000)
+                    .then(() => this.$router.push({name: 'home'}), 4000)
                 }
             })
         },
 
         async createUser() {
-            await firebase.auth().createUserWithEmailAndPassword(this.form.email, this.form.password)
-            .then(data => {
-                firebase.auth().currentUser.updateProfile({ displayName: this.form.username })  
-                this.mensagem = 'Usuario criado com sucesso!';
-                this.success = true
+            await firebase.auth().createUserWithEmailAndPassword(this.email, this.password)
+            .then(() => {
+                firebase.auth().currentUser.updateProfile({ displayName: this.username })  
 
-                this.insertDatOfPeople(this.form.username)
+                this.showMessage('Usuario criado com sucesso!', true, 2000)
+
+                this.insertDatOfPeople(this.username)
             })
             .catch(() => {
-                this.mensagem = 'Não foi possível criar!';
-                this.success = false
-
-                setTimeout(() => this.mensagem = '', 1000);
+                this.showMessage('Não foi possível criar!', false, 1000)
             });
+        },
+
+        showMessage(message, boolean, time) {
+            this.mensagem = message
+            this.success = boolean
+
+            setTimeout(() => this.mensagem = '', time)
         }
     },
 }

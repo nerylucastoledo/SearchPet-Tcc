@@ -218,7 +218,7 @@ export default {
 }
 </script>
 
-<style scoped>
+<style>
 
 .perfil {
     margin: 60px 0;

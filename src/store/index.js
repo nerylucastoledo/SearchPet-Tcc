@@ -13,8 +13,11 @@ export default new Vuex.Store({
   },
 
   getters: {
+    user(state){
+      return state.user
+    }
   },
-
+  
   mutations: {
     SET_LOGGED_IN(state, value) {
       state.user.loggedIn = value;
@@ -29,7 +32,10 @@ export default new Vuex.Store({
     },
 
     SIGN_OUT(state) {
-      state.user = {}
+      state.user = {
+        loggedIn: false,
+        data: null
+      }
       state.type_account = null
     }
   },

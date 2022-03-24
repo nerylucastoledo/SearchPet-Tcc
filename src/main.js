@@ -52,7 +52,9 @@ firebase.initializeApp(firebaseConfig);
 firebase.auth().onAuthStateChanged(user => {
   if(user.email) {
     sessionStorage.setItem('login', true)
-    sessionStorage.setItem('displayName', user.displayName)
+    setTimeout(() => {
+      sessionStorage.setItem('displayName', user.displayName)
+    }, 500);
     store.dispatch("fetchUser", user);
   }
 });

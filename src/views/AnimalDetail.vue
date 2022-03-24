@@ -1,7 +1,6 @@
 <template>
     <div class="container">
         <h1 class="titulo">{{anuncio.nome}}</h1>
-
         <div>
             <div class="detail-animal">
                 <img 

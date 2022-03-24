@@ -1,5 +1,5 @@
 <template>
-    <div class="login-form">
+    <div class="container anuncio-edit">
         <h1 class="titulo">Anuncio {{anuncio.nome}}</h1>
 
         <div v-if="mensagem.length">
@@ -9,10 +9,10 @@
             </ModalSuccess>
         </div>
 
-        <form class="login">
+        <div class="image-animal">
             <img 
                 v-if="!preview" 
-                :src="anuncio.imagem" 
+                :src="imagem" 
                 alt=""
             >
             <img 
@@ -20,73 +20,93 @@
                 id="img_preview" 
                 :src="preview"
             >
-
-            <input 
+            <input
+                id="new-image"
                 type="file" 
                 accept="image/*"
                 @change="previewImage"
             >
+        </div>
+
+        <form class="form-perfil">
+            <div>
+                <div>
+                    <label for="name">Nome dele(a)</label>
+                    <input 
+                        type="text" 
+                        id="name" 
+                        name="name" 
+                        placeholder="Nome" 
+                        v-model="anuncio.nome" 
+                        required
+                    >
+                </div>
+
+                <div>
+                    <label for="peso">Peso em KG</label>
+                    <input 
+                        type="number" 
+                        id="peso" 
+                        name="peso" 
+                        placeholder="Peso" 
+                        v-model="anuncio.peso" 
+                        required
+                    >
+                </div>
+            </div>   
 
             <div>
-                <input 
-                    type="text" 
-                    id="name" 
-                    name="name" 
-                    placeholder="Nome" 
-                    v-model="anuncio.nome" 
-                    required
-                >
+                <div>
+                    <label for="idade">Idade dele(a)</label>
+                    <input 
+                        type="text" 
+                        id="idade" 
+                        name="idade" 
+                        placeholder="idade" 
+                        v-model="anuncio.idade" 
+                        required
+                    >
+                </div>
 
-                <input 
-                    type="text" 
-                    id="peso" 
-                    name="peso" 
-                    placeholder="Peso" 
-                    v-model="anuncio.peso" 
-                    required
-                >
-            </div>           
+                <div>
+                    <label for="peso">Sexo</label>
+                    <select v-model="anuncio.sexo" class="filter-selected">
+                        <option disabled value="">Sexo</option>
+
+                        <option value="Macho">Macho</option>
+
+                        <option value="Femea">Fêmea</option>
+                    </select>
+                </div>
+            </div> 
 
             <div>
-                <input 
-                    type="text" 
-                    id="idade" 
-                    name="idade" 
-                    placeholder="idade" 
-                    v-model="anuncio.idade" 
-                    required
-                >
+                <div>
+                    <label for="idade">Categoria</label>
+                    <select v-model="anuncio.categoria" aria-readonly="" class="filter-selected">
+                        <option disabled value="">Categoria</option>
 
-                <select v-model="anuncio.sexo" class="filter-selected">
-                    <option disabled value="">Sexo</option>
+                        <option value="Adocao">Para adoção</option>
 
-                    <option value="Macho">Macho</option>
+                        <option value="Perdido">Esta perdido</option>
+                    </select>
+                </div>
 
-                    <option value="Femea">Fêmea</option>
-                </select>
-            </div>    
-        
-            <div>
-                <select v-model="anuncio.categoria" aria-readonly="" class="filter-selected">
-                    <option disabled value="">Categoria</option>
+                <div>
+                    <label for="peso">Castrado</label>
+                    <select v-model="castrado" class="filter-selected">
+                        <option disabled value="">Castrado</option>
 
-                    <option value="Adocao">Adoção</option>
+                        <option value="Sim">Sim</option>
 
-                    <option value="Perdido">Perdid</option>
-                </select>
+                        <option value="Nao">Não</option>
+                    </select>
+                </div>
+            </div> 
 
-                <select v-model="anuncio.castrado" class="filter-selected">
-                    <option disabled value="">Castrado</option>
+            <button class="btn-form btn-confirm" type="submit" @click.prevent="updatePerfil">Salvar</button>
 
-                    <option value="Sim">Sim</option>
-
-                    <option value="Nao">Não</option>
-                </select>
-            </div>
-
-            <button class="btn-form" type="submit" @click.prevent="updatePerfil">Salvar</button>
-
-            <router-link to="/">
+            <router-link to="/meus">
                 <button class="btn-form btn-cancel" type="submit">Cancelar</button>
             </router-link>
         </form>
@@ -107,14 +127,16 @@ export default {
     data() {
         return {
             anuncio: {
-                nome: "",
+                type: '',
+                sexo: '',
                 peso: '',
-                sexo: "",
-                idade: "",
-                castrado: "",
-                categoria: "",
-                imagem: ''
+                pausado: '',
+                nome: '',
+                idade: '',
+                categoria: '',
             },
+            imagem_animal: '',
+            castrado: '',
             imageData: null,
             picture: null,
             preview: null,
@@ -156,14 +178,12 @@ export default {
         async addPhotoAndSaveUrl() {
             this.picture = null;
 
-            const storageRef = firebase
-                                .storage()
-                                .ref(`${this.imageData.name}`)
-                                .put(this.imageData);
+            const storageRef = firebase.storage().ref(`${this.imageData.name}`).put(this.imageData);
             
             storageRef.on(`state_changed`, snapshot => {}, error => {}, () => {
                     storageRef.snapshot.ref.getDownloadURL().then((url)=>{
                         this.picture = url;
+
                         this.updateAnuncio()
                     });
                 }
@@ -174,19 +194,15 @@ export default {
             const id = this.$route.params.id
             const anuncio = this.$route.params.anuncio
 
-            const new_image = this.picture ? this.picture : this.anuncio.imagem
-            const castramento = this.anuncio.castrado === 'Sim' ? true : false
+            const new_image = this.picture ? this.picture : this.imagem
+            const castramento = this.castrado === 'Sim' ? true : false
 
             firebase.database()
             .ref('/Anuncios/' + anuncio)
             .child(id)
             .update({
-               nome: this.anuncio.nome,
-               sexo: this.anuncio.sexo,
+                ...this.anuncio,
                imagem: new_image,
-               peso: this.anuncio.peso,
-               idade: this.anuncio.idade,
-               categoria: this.anuncio.categoria,
                castrado: castramento
              })
             .then(() => {
@@ -194,28 +210,27 @@ export default {
                 this.success = true
 
                 setTimeout(() => this.mensagem = '', 1000)
-                setTimeout(() => {
-                    this.$router.replace({ name: "home" })
-                }, 1500);
+                setTimeout(() => this.$router.replace({ name: "home" }), 1500);
             })
         }
     },
 
     mounted() {
-        const id = this.$route.params.id
         const anuncio = this.$route.params.anuncio
+        const id_anuncio = this.$route.params.id
 
         firebase.database().ref('/Anuncios/' + anuncio)
-        .child(id)
+        .child(id_anuncio)
         .once("value", snapshot => {
-            this.anuncio.nome = snapshot.val()["nome"]
-            this.anuncio.peso = snapshot.val()["peso"]
-            this.anuncio.idade = snapshot.val()["idade"]
-            this.anuncio.imagem = snapshot.val()["imagem"]
+            this.anuncio.type = snapshot.val()["type"]
             this.anuncio.sexo = snapshot.val()["sexo"]
+            this.anuncio.peso = parseInt(snapshot.val()["peso"])
+            this.anuncio.pausado = snapshot.val()["pausado"]
+            this.anuncio.nome = snapshot.val()["nome"]
+            this.imagem = snapshot.val()["imagem"]
+            this.anuncio.idade = snapshot.val()["idade"]
             this.anuncio.categoria = snapshot.val()["categoria"]
-
-            this.anuncio.castrado = snapshot.val()["castrado"] ? 'Sim' : 'Nao'
+            this.castrado = snapshot.val()["castrado"] ? 'Sim' : 'Nao'
         })
     },
 
@@ -231,51 +246,53 @@ export default {
 
 <style scoped>
 
-.login {
+.anuncio-edit {
+    padding: 0 30px;
+    box-shadow: 0px 7px 7px rgba(0, 0, 0, 0.25);
+    border-radius: 10px;
     margin-bottom: 60px;
-    box-shadow: none;
+    padding-bottom: 60px;
 }
 
-.login img {
-    margin-top: -40px;
-    width: 500px;
+select {
+    background-color: #fff;
+    box-shadow: 0px 7px 7px rgba(0, 0, 0, 0.25);
+    color: #000 !important;
+    border-radius: 10px;
+    width: 97%;
+    height: 50px;
+    border: none;
+    color: #fff;
+    font-size: 18px;
+    padding-left: 10px;
+}
+
+.image-animal {
+    margin: 60px 0;
+}
+
+.image-animal img{
+    border-radius: 20px;
+    display: block;
+    margin: 0 auto;
+    text-align: center;
     max-width: 500px;
     height: 300px;
-    max-height: 300px;
-    border-radius: 10px;
     object-fit: cover;
-    margin-bottom: 40px;
 }
 
-.login div {
-    display: flex;
-    align-items: center;
-    flex: 1;
-    flex-wrap: wrap;
-    justify-content: space-around;
-}
-
-input {
-    width: 250px;
-}
-
-.login div div span{
-    left: 240px;
-}
-
-.filter-selected {
+#new-image {
     display: block;
-    margin: 0 auto 30px;
-    padding: 15px 0;
-    width: 265px;
-    box-shadow: 0px 7px 7px rgba(0, 0, 0, 0.25);
-    border: none;
-    border-radius: 10px;
-    padding-left: 15px;
-    color: #000;
-    font-size: 16px;
-    background-color: #fff;
-    font-size: 18px;
+    margin: 40px auto 0;
+    text-align: center;
+}
+
+.form-perfil input  {
+    width: 95%;
+}
+
+.btn-confirm {
+    margin-top: 60px;
 }
 
 .btn-cancel {
