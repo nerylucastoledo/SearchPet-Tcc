@@ -26,6 +26,7 @@ export default {
     top: 10px;
     right: 25%;
     left: 25%;
+    z-index: 100;
 }
 
 

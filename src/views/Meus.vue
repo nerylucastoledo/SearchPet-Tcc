@@ -46,6 +46,15 @@
                 <div class="cards" v-if="anuncios.length">
                     <div v-for="anuncio in anuncios" :key="anuncio.nome+1">
                         <router-link :to=" !favorite ? `/anuncio/${anuncio.categoria}/${anuncio.id}` : `/animal/${anuncio.categoria}/${anuncio.id}`">
+
+                            <p
+                                v-if="favorite"
+                                class="fechar"
+                                @click="removeFavorite(anuncio)"
+                                >
+                                X
+                            </p>
+
                             <div class="image-and-name">
                                 <img :src="anuncio.imagem" alt="Imagem de um animal">
 
@@ -207,6 +216,20 @@ export default {
             }
         },
 
+        removeFavorite(anuncio) {
+            const username = sessionStorage.getItem('displayName')
+            firebase.database()
+            .ref(username)
+            .child('favorites/' + anuncio.categoria)
+            .remove(() => {
+                this.loading = true
+                setTimeout(() => {
+                    this.loading = false
+                    this.filterFavorites(3)
+                }, 1000);
+            })
+        },
+
         addActiveRouterFilter(index) {
             document.querySelector('.side-meus-anuncios').classList.toggle('open-modal')
 
@@ -276,6 +299,10 @@ export default {
     padding: 0px !important;
 }
 
+.cards > div {
+    position: relative;
+}
+
 .meus-anuncios {
     display: flex;
     padding: 0 30px;
@@ -336,6 +363,19 @@ export default {
 
 .open-filter {
     display: none;
+}
+
+.fechar {
+    position: absolute;
+    top: 0px;
+    right: 0px;
+    font-size: 16px;
+    color: #fff;
+    background-color: red;
+    padding: 2px 5px;
+    cursor: pointer;
+    border-radius: 50%;
+    z-index: 4;
 }
 
 @media (max-width: 1355px) {

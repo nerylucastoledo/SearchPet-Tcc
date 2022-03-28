@@ -1,38 +1,56 @@
 <template>
     <div class="container">
         <h1 class="titulo">{{anuncio.nome}}</h1>
-        <div>
-            <div class="detail-animal">
-                <img 
-                    id="foto-animal"
-                    v-if="anuncio.imagem" 
-                    :src="anuncio.imagem" 
-                    alt="Imagem de um animal"
-                >
 
+        <div class="perfil-animal">
+            <img 
+                v-if="anuncio.imagem" 
+                :src="anuncio.imagem" 
+                alt="Imagem de um animal"
+            >
+
+            <div class="info-animal">
                 <div>
-                    <div>
-                        <h2>Idade</h2>
+                    <div class="box-info">
+                        <div>
+                            <h2>Idade</h2>
+
+                           <img src="../assets/idade.png" alt="Calendario">
+                        </div>
 
                         <span>{{anuncio.idade}}</span>
                     </div>
 
-                    <div>
-                        <h2>Sexo</h2>
+                    <div class="box-info">
+                        <div>
+                            <h2>Sexo</h2>
 
-                        <span>{{anuncio.sexo}}</span>
+                            <img src="../assets/sexo.png" alt="Logo Sexo">
+                        </div>
+
+                        <p :class="[anuncio.sexo === 'Macho' ? 'macho' : 'femea']">
+                            {{anuncio.sexo}}
+                        </p>
                     </div>
                 </div>
 
                 <div>
-                    <div>
-                        <h2>Peso</h2>
+                    <div class="box-info">
+                        <div>
+                            <h2>Peso</h2>
 
-                        <span>{{anuncio.peso}}</span>
+                            <img src="../assets/peso.png" alt="Logo peso">
+                        </div>
+
+                        <span>{{anuncio.peso}} Kg</span>
                     </div>
 
-                    <div>
-                        <h2>Castrado</h2>
+                    <div class="box-info">
+                        <div>
+                            <h2>Castrado</h2>
+
+                            <img src="../assets/castrado.png" alt="Logo pata">
+                        </div>
 
                         <span v-if="anuncio.castrado === false">Não castrado</span>
                         <span v-else>Castrado</span>
@@ -40,36 +58,42 @@
                 </div>
             </div>
         </div>
+        
+        {{anuncio}}
 
-        <h2 class="titulo">Você pode me adotar 🐶</h2>
-
-        <div class="local-animal">
-            <div>
-                <p>
-                    Meu dono: 
-                    <strong>{{dono.nameOng}}</strong>
-                </p>
-
-                <p>
-                    Telefone: 
-                    <strong>{{dono.whatsapp}}</strong>
-                </p>
-            </div>
+        <div v-if="!anuncio.pausado">
+            <h2 v-if="anuncio.categoria === 'Adocao'" class="titulo">Você pode me adotar 🐶</h2>
+            <h2 v-else class="titulo">Ajude a me encontrar 🐶</h2>
 
             <div>
-                <p>
-                    Endereço: 
-                    <strong>{{dono.street}}</strong>
-                </p>
+                <div>
+                    <p>
+                        Minha ONG:
 
-                <p>
-                    Bairro 
-                    <strong>{{dono.district}}</strong>
-                </p>
+                        <strong>{{dono.nameOng}}</strong>
+                    </p>
+
+                    <p>
+                        Ligue para:
+                        <strong>{{dono.whatsapp}}</strong>
+                    </p>
+                </div>
+
+                <div>
+                    <p>
+                        Endereço: 
+                        <strong>{{dono.street}}</strong>
+                    </p>
+
+                    <p>
+                        Bairro 
+                        <strong>{{dono.district}}</strong>
+                    </p>
+                </div>
             </div>
         </div>
 
-        <a target= "_blank" :href="whatsapp">
+        <a v-if="!anuncio.pausado" target= "_blank" :href="whatsapp">
             <button class="button-whatsapp">
                 <span>Me chame</span>
 
@@ -147,58 +171,64 @@ export default {
 <style scoped>
 
 .container {
-    padding: 0 20px;
+    padding: 0 230px;
 }
 
-#foto-animal {
+.perfil-animal {
+    margin-top: 60px;
+}
+
+.perfil-animal img {
     border-radius: 10px;
-    width: 500px;
-    height: 350px;
+    width: 50%;
+    max-height: 400px;
     object-fit: cover;
 }
 
-.detail-animal {
+.perfil-animal {
     display: flex;
-    justify-content: space-between;
-    margin-top: 60px;
-    text-align: center;
 }
 
-.detail-animal div div {
-    background-color: #fff;
-    box-shadow: 0px 7px 7px rgba(0, 0, 0, 0.25);
-    margin-bottom: 60px;
-    padding: 30px 30px;
-    width: 150px;
-    border-radius: 10px;
+.perfil-animal > .info-animal {
+    display: flex;
+    width: 50%;
 }
 
-.detail-animal span {
-    font-weight: bold;
-    font-size: 18px;
-}
-
-.detail-animal h2 {
-    color: #36C9D2;
-    font-weight: bold;
-    margin-bottom: 20px;
-}
-
-.local-animal {
-    background-color: #fff;
-    box-shadow: 0px 7px 7px rgba(0, 0, 0, 0.25);
-    align-items: center;
-    justify-content: space-around;
-    padding: 30px 0 0;
-    font-size: 24px;
-    margin-top: 40px;
-    text-align: center;
-}
-
-.local-animal p{
-    margin-bottom: 30px;
+.info-animal > div {
     width: 100%;
-    max-width: 100%;
+    margin-left: 30px;
+}
+
+.info-animal > div > div {
+    box-shadow: 0px 7px 7px rgba(0, 0, 0, 0.25);
+    margin-bottom: 30px;
+    border-radius: 10px;
+    padding: 20px;
+    text-align: center;
+}
+.box-info img {
+    width: 30px;
+    height: 30px;
+    position: absolute;
+    left: 0px;
+    top: 0px;
+}
+
+.box-info p, .box-info span {
+    font-weight: bold;
+}
+
+.box-info h2 {
+    font-weight: normal;
+}
+
+.box-info > div {
+    position: relative;
+    justify-content: center;
+}
+
+.box-info h2 {
+    margin-bottom: 20px;
 }
 
 .button-whatsapp {

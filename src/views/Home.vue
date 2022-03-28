@@ -44,7 +44,7 @@
                         <div class="logo-and-name">
                             <h1>{{anuncio.nome}}</h1>
 
-                            <img :src="anuncio.logo_ong" alt="Logo da ONG">
+                            <img v-if="anuncio.logo_ong" :src="anuncio.logo_ong" alt="Logo da ONG">
                         </div>
                     </div>
 
@@ -68,7 +68,7 @@
                                 <p v-else>Castrado</p>
 
                                 <span>
-                                    <img src="../assets/castrado.png" alt="Calendario">
+                                    <img src="../assets/castrado.png" alt="Logo pata">
                                 </span>
                             </div>
                         </div>

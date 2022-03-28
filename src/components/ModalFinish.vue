@@ -71,7 +71,7 @@ export default {
                 pausado: true,
                 nome_finalizado: this.form.nome_novo_dono,
                 contato_finalizado: this.form.contato,
-                data_finalizdo: this.form.data_acocao
+                data_finalizado: this.form.data_acocao
             })
             .then(() => {
                 this.mensagem = `Que bacanaa :)! Mais um ${this.anuncio.type} ajudado! Parabéns`
