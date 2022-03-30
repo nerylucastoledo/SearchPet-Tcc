@@ -45,15 +45,15 @@
 
                 <div class="cards" v-if="anuncios.length">
                     <div v-for="anuncio in anuncios" :key="anuncio.nome+1">
-                        <router-link :to=" !favorite ? `/anuncio/${anuncio.categoria}/${anuncio.id}` : `/animal/${anuncio.categoria}/${anuncio.id}`">
+                         <p
+                            v-if="favorite"
+                            class="fechar"
+                            @click="removeFavorite(anuncio)"
+                            >
+                            X
+                        </p>
 
-                            <p
-                                v-if="favorite"
-                                class="fechar"
-                                @click="removeFavorite(anuncio)"
-                                >
-                                X
-                            </p>
+                        <router-link :to=" !favorite ? `/anuncio/${anuncio.categoria}/${anuncio.id}` : `/animal/${anuncio.categoria}/${anuncio.id}`">
 
                             <div class="image-and-name">
                                 <img :src="anuncio.imagem" alt="Imagem de um animal">

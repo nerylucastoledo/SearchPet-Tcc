@@ -1,7 +1,14 @@
 <template>
 
     <div class=" container login-form">
-        <form action="#" class="login">
+
+        <div class="email-enviado" v-if="emailSending">
+            <p>E-mail enviado! Verifique seu e-mail e spam.</p>
+
+            <router-link to="/login" class="btn-ok">Tela de Login</router-link>
+        </div>
+
+        <form v-else action="#" class="login" @submit.prevent="recoverPasssword">
             <div class="new-user">
                 <p>Já possui conta?</p>
 
@@ -11,6 +18,8 @@
             </div>
 
             <h1 class="titulo">Resetar senha</h1>
+
+            <p class="erro-usuario" v-if="error">{{error}}</p>
 
             <div>
                 <label for="email">E-mail</label>
@@ -26,8 +35,7 @@
 
             <button 
                 class="btn-form" 
-                type="submit" 
-                @click.prevent="recoverPasssword()">
+                type="submit">
                 Recuperar
             </button>
         </form>
@@ -36,17 +44,28 @@
 
 <script>
 
+import firebase from "firebase";
+
 export default {
 
     data() {
         return {
-            email: ''
+            email: '',
+            error: null,
+            emailSending: false,
         }
     },
 
     methods: {
         recoverPasssword() {
-            console.log('cliquei')
+            this.error = null;
+            firebase.auth()
+            .sendPasswordResetEmail(this.email)
+            .then(() => this.emailSending = true)
+            .catch(() => {
+                this.emailSending = false;
+                this.error = "Email não encontrado.";
+            }); 
         }
     },
 }
@@ -82,12 +101,6 @@ export default {
     text-align: center;
 }
 
-.progress {
-    font-weight: bold;
-    text-align: center;
-    margin-top: 30px;
-}
-
 .new-user {
     justify-content: center !important;
     margin-bottom: 60px;
@@ -104,6 +117,32 @@ export default {
     background-color: #36C9D2;
     text-align: center;
     width: 150px;
+}
+
+.email-enviado {
+  text-align: center;
+  color: green;
+  font-weight: bold;
+  margin-top: 60px;
+}
+
+.email-enviado p {
+  margin-bottom: 40px;
+}
+
+.btn-ok {
+    padding: 10px;
+    text-align: center;
+    background-color: #4BB543;
+    border-radius: 10px;
+    color: #fff;
+}
+
+.erro-usuario {
+    color: red;
+    text-align: center;
+    margin-top: -30px;
+    margin-bottom: 30px;
 }
 
 @media (max-width: 745px) {
