@@ -7,33 +7,7 @@
             </ModalSuccess>
         </div>
 
-        <div class="filter-home">
-            <select v-model="city" class="filter-selected">
-                <option disabled value="">Selecione a Cidade</option>
-                <option 
-                    v-for="cidade of citys" 
-                    :key="cidade" 
-                    :value="cidade"
-                    >
-                    {{cidade}}
-                </option>
-            </select>
-
-            <select v-model="type" class="filter-selected">
-                <option disabled value="">Selecione a Categoria</option>
-                <option value="Adocao">Adoção</option>
-                <option value="Perdido">Perdidos</option>
-            </select>
-        </div>
-
-        <p 
-            class="clear-filter" 
-            v-if="type || city" 
-            @click="clearFiler"
-            >
-            Limpar filtro
-            <span>X</span>
-        </p>
+        <FilterData :citys="citys"></FilterData>
 
         <div class="cards" v-if="!loading">
             <div v-for="anuncio, index in anuncios" :key="anuncio.imagen">
@@ -112,27 +86,30 @@
 
 <script>
 
-import PorqueAdotar from '../components/PorqueAdotar.vue'
 import { getMydatas } from '@/help.js'
-import Loading from '../components/Loading'
 import firebase from 'firebase'
+
+import PorqueAdotar from '../components/PorqueAdotar.vue'
+import Loading from '../components/Loading'
 import ModalSuccess from '../components/ModalSuccess.vue'
+import FilterData from '../components/FilterData.vue'
 
 export default {
 
     components: {
         PorqueAdotar,
         ModalSuccess,
+        FilterData,
         Loading
     },
 
     data() {
         return {
-            city: "",
             citys: [],
-            type: "",
             anuncios: [],
             backup_anuncios: [],
+            filter_city: '',
+            filter_type: '',
             loading: true,
             isActive: true,
             success: true,
@@ -148,14 +125,6 @@ export default {
                 }
             })
         },
-
-        city() {
-            this.filter('cidade', 'city')
-        },
-
-        type() {
-            this.filter('categoria', 'type')
-        }
     },
 
     methods: {
@@ -164,29 +133,6 @@ export default {
             this.backup_anuncios = this.anuncios
 
             setTimeout(() => this.loading = false, 500);
-        },
-
-        clearFiler() {
-            this.type = ''
-            this.city = ''
-        },
-
-        filter(filter, value) {
-            this.anuncios = this.backup_anuncios
-
-            if(this.city === '' && this.type === '') {
-                this.anuncios = this.backup_anuncios
-
-            } else if(this.city && this.type){
-                this.anuncios = this.anuncios.filter(
-                    anuncio => anuncio.cidade === this.city && anuncio.categoria === this.type
-                )
-                
-            } else {
-                this.anuncios = this.anuncios.filter(
-                    anuncio => anuncio[filter] === this[value]
-                )
-            }
         },
 
         async favoritar(index, anuncio) {
@@ -243,12 +189,36 @@ export default {
 
     mounted() {
         setTimeout(() => this.getDatas(), 1000);
-
         const logado = sessionStorage.getItem('login')
-
         if(!logado) {
             this.$router.replace({ name: "login" });
         }
+
+        this.$root.$on('filterPageHome', (filter) => {
+            this.anuncios = this.backup_anuncios
+            var filter_now = ''
+
+            if(filter === 'limpar') {
+                this.filter_city = ''
+                this.filter_type = ''
+                
+            } else if(filter.cidade) {
+                this.filter_city = filter.cidade
+                filter_now = 'cidade'
+
+            } else if (filter.categoria) {
+                this.filter_type = filter.categoria
+                filter_now = 'categoria'
+            }
+
+            if(this.filter_city && this.filter_type){
+                this.anuncios = this.anuncios.filter(
+                    anuncio => anuncio.cidade === this.filter_city && anuncio.categoria === this.filter_type
+                )
+            } else {
+                this.anuncios = this.anuncios.filter(anuncio => anuncio[filter_now] === filter[filter_now])
+            }
+        })
     },
 }
 </script>
@@ -350,23 +320,6 @@ export default {
     color: #d254e2;
 }
 
-.filter-home {
-    display: flex;
-    align-items: center;
-    justify-content: space-around;
-}
-
-.filter-home select {
-    background-color: #36C9D2;
-    border-radius: 10px;
-    width: 45%;
-    height: 50px;
-    border: none;
-    color: #fff;
-    font-size: 16px;
-    margin-bottom: 60px;
-}
-
 .clear-filter {
     cursor: pointer;
     padding: 10px;
@@ -429,10 +382,6 @@ export default {
         margin: 0 auto;
         width: 100%;
     }
-
-    .filter-home {
-        padding: 0 30px;
-    }
 }
 
 @media (max-width: 405px) {
@@ -442,14 +391,6 @@ export default {
 
     .image-and-name img {
         height: 200px;
-    }
-
-    .filter-home {
-        display: block !important;
-    }
-
-    .filter-home select {
-        width: 100%;
     }
 }
 
