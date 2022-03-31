@@ -161,7 +161,8 @@ export default {
             show_button: true,
             message_favorite: false,
             disponible: '',
-            username: this.$store.state.user.data.displayName
+            username: this.$store.state.user.data.displayName,
+            list_favorites: []
         }
     },
 
@@ -192,7 +193,7 @@ export default {
             if(favorites.val()) {
                 Object.keys(favorites.val()).forEach((key) => {
                     Object.keys(favorites.val()[key]).forEach((idFavorite) => {
-                        
+                        this.list_favorites.push(idFavorite)
                         const idAnunciosFavoritos = favorites.val()[key][idFavorite]
 
                         firebase.database().ref('Anuncios').child(key)
@@ -216,11 +217,25 @@ export default {
             }
         },
 
-        removeFavorite(anuncio) {
+        async removeFavorite(anuncio) {
             const username = sessionStorage.getItem('displayName')
-            firebase.database()
+
+            await firebase.database()
             .ref(username)
-            .child('favorites/' + anuncio.categoria)
+            .child(`favorites/${anuncio.categoria}`)
+            .once("value", snapshot => {
+                Object.keys(snapshot.val()).forEach((key) => {
+                    if(snapshot.val()[key] === anuncio.id) {
+                        this.delete(anuncio, username, key)
+                    }
+                })
+            })
+        },
+
+        async delete(anuncio, username, remove_anuncio) {
+            await firebase.database()
+            .ref(`${username}/favorites/${anuncio.categoria}`)
+            .child(remove_anuncio)
             .remove(() => {
                 this.loading = true
                 setTimeout(() => {
