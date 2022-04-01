@@ -216,6 +216,69 @@ export default {
     },
 
     methods: {
+        register() {
+            if(this.type_account === 'ONG' && this.username_approved) {
+                this.addPhotoAndSaveUrl()
+            }
+            
+            if(this.username_approved) {
+                this.createUser()
+            }
+        },
+
+        async addPhotoAndSaveUrl() {
+            const file = this.$refs.imageData.files[0];
+            
+            const storageRef = firebase.storage().ref(`${file.name}`).put(file);
+            
+            storageRef.on(`state_changed`, snapshot => {}, error => {}, () => {
+                    storageRef.snapshot.ref.getDownloadURL().then((url) => {
+                        this.form.image = url
+                        this.createUser()
+                    })
+                }
+            );
+        },
+
+        async createUser() {
+            await firebase.auth().createUserWithEmailAndPassword(this.email, this.password)
+            .then(() => {
+                firebase.auth().currentUser.updateProfile({ 
+                    displayName: this.username 
+                })  
+
+                this.showMessage('Usuario criado com sucesso!', true, 2000)
+                this.insertDatOfPeople(this.username)
+            })
+            .catch(() => this.showMessage('Não foi possível criar!', false, 1000))
+        },
+
+        async insertDatOfPeople(username) {
+            await firebase.database()
+            .ref(`/${username}`)
+            .once("value", snapshot => {
+                if(snapshot.exists()) {
+                    this.showMessage('Username existente!', false, 1000)
+                    return
+                }
+
+                firebase.database()
+                .ref(`/${username}`)
+                .update({
+                    ...this.form,
+                    type: this.type_account
+                })
+                .then(() => this.$router.push({name: 'home'}), 4000)
+            })
+        },
+
+        showMessage(message, boolean, time) {
+            this.mensagem = message
+            this.success = boolean
+
+            setTimeout(() => this.mensagem = '', time)
+        },
+
         verifyCep(cepDiditado) {
             var tamanhoMaxCep = 8
 
@@ -229,10 +292,11 @@ export default {
 
                     document.getElementById('cep').style.border = 'none'
                 })
-            } else {
-                document.getElementById('cep').style.border = '1px solid red'
 
+                return
             }
+                
+            document.getElementById('cep').style.border = '1px solid red'
         },
 
         verifyUsername(username) {
@@ -241,79 +305,15 @@ export default {
             .once("value", snapshot => {
                 if(snapshot.exists()) {
                     document.getElementById('username').style.border = '1px solid red'
-
                     this.showMessage('Username existente!', false, 2000)
                     this.username_approved = false
 
-                } else {
-                    document.getElementById('username').style.border = 'none'
-                    this.username_approved = true
+                    return
                 }
+
+                document.getElementById('username').style.border = 'none'
+                this.username_approved = true
             })
-        },
-
-        register() {
-            if(this.type_account === 'ONG' && this.username_approved) {
-                this.addPhotoAndSaveUrl()
-
-            } else if(this.username_approved) {
-                this.createUser()
-            }
-        },
-
-        async addPhotoAndSaveUrl() {
-            const file = this.$refs.imageData.files[0];
-            
-            const storageRef = firebase.storage().ref(`${file.name}`).put(file);
-            
-            storageRef.on(`state_changed`, snapshot => {}, error => {}, () => {
-                    storageRef.snapshot.ref.getDownloadURL().then((url) => {
-                        this.form.image = url
-                        
-                        this.createUser()
-                    })
-                }
-            );
-        },
-
-        async insertDatOfPeople(username) {
-            await firebase.database()
-            .ref(`/${username}`)
-            .once("value", snapshot => {
-                if(snapshot.exists()) {
-                    this.showMessage('Username existente!', false, 1000)
-
-                } else {
-                    firebase.database()
-                    .ref(`/${username}`)
-                    .update({
-                        ...this.form,
-                        type: this.type_account
-                    })
-                    .then(() => this.$router.push({name: 'home'}), 4000)
-                }
-            })
-        },
-
-        async createUser() {
-            await firebase.auth().createUserWithEmailAndPassword(this.email, this.password)
-            .then(() => {
-                firebase.auth().currentUser.updateProfile({ displayName: this.username })  
-
-                this.showMessage('Usuario criado com sucesso!', true, 2000)
-
-                this.insertDatOfPeople(this.username)
-            })
-            .catch(() => {
-                this.showMessage('Não foi possível criar!', false, 1000)
-            });
-        },
-
-        showMessage(message, boolean, time) {
-            this.mensagem = message
-            this.success = boolean
-
-            setTimeout(() => this.mensagem = '', time)
         }
     },
 }

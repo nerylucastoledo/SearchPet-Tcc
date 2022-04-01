@@ -23,7 +23,8 @@
                     </div>
 
                     <div id="category" 
-                        :class="[anuncio.categoria === 'Adocao' ? 'adocao' : 'perdido']">
+                        :class="[anuncio.categoria === 'Adocao' ? 'adocao' : 'perdido']"
+                        >
                         <p>{{anuncio.categoria}}</p>
                     </div>
 
@@ -52,6 +53,7 @@
                                 <p :class="[anuncio.sexo === 'Macho' ? 'macho' : 'femea']">
                                     {{anuncio.sexo}}
                                 </p>
+                                
                                 <span>
                                     <img src="../assets/sexo.png" alt="Calendario">
                                 </span>
@@ -60,7 +62,7 @@
                             <div>
                                 <p class="castrado">{{anuncio.peso}}</p>
                                 
-                                 <span>
+                                <span>
                                     <img src="../assets/peso.png" alt="Calendario">
                                 </span>
                             </div>
@@ -143,7 +145,7 @@ export default {
 
             const favoriteExist = await this.verifyIfExistFavorite(username, anuncio.categoria, anuncio.id)
 
-            if(favoriteExist === 0) {
+            if(!favoriteExist) {
                 firebase.database()
                 .ref(username)
                 .child(`favorites/${anuncio.categoria}`)
@@ -157,16 +159,18 @@ export default {
 
                     setTimeout(() => this.mensagem = '', 1000)
                 })
-            } else {
-                this.mensagem = `${anuncio.nome} já esta nos favoritos`
-                this.success = false
 
-                setTimeout(() => this.mensagem = '', 1000)
+                return
             }
+
+            this.mensagem = `${anuncio.nome} já esta nos favoritos`
+            this.success = false
+
+            setTimeout(() => this.mensagem = '', 1000)
         },
         
         async verifyIfExistFavorite(username, categoria, id) {
-            let favoriteExist = 0
+            var favoriteExist = false
 
             await firebase.database()
             .ref(username)
@@ -178,7 +182,7 @@ export default {
 
                 Object.keys(snapshot.val()).forEach((key) => {
                     if(snapshot.val()[key] === id) {
-                        favoriteExist += 1
+                        favoriteExist = true
                     }
                 })
             })
@@ -188,11 +192,14 @@ export default {
     },
 
     mounted() {
-        setTimeout(() => this.getDatas(), 1000);
         const logado = sessionStorage.getItem('login')
+        
         if(!logado) {
             this.$router.replace({ name: "login" });
+            return
         }
+
+        setTimeout(() => this.getDatas(), 300);
 
         this.$root.$on('filterPageHome', (filter) => {
             this.anuncios = this.backup_anuncios
@@ -201,12 +208,14 @@ export default {
             if(filter === 'limpar') {
                 this.filter_city = ''
                 this.filter_type = ''
-                
-            } else if(filter.cidade) {
+            } 
+            
+            if(filter.cidade) {
                 this.filter_city = filter.cidade
                 filter_now = 'cidade'
+            }
 
-            } else if (filter.categoria) {
+            if (filter.categoria) {
                 this.filter_type = filter.categoria
                 filter_now = 'categoria'
             }
@@ -215,9 +224,9 @@ export default {
                 this.anuncios = this.anuncios.filter(
                     anuncio => anuncio.cidade === this.filter_city && anuncio.categoria === this.filter_type
                 )
-            } else {
-                this.anuncios = this.anuncios.filter(anuncio => anuncio[filter_now] === filter[filter_now])
-            }
+            } 
+                
+            this.anuncios = this.anuncios.filter(anuncio => anuncio[filter_now] === filter[filter_now])
         })
     },
 }

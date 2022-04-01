@@ -171,23 +171,15 @@ export default {
 
         async uploadPerfil() {
             const displayName = sessionStorage.getItem('displayName')
+            const imagem = this.picture ? this.picture : this.form.imagem_produto
 
             firebase.database()
             .ref(displayName)
             .update({
-               cep: this.form.cep,
-               city: this.form.city,
-               district: this.form.district,
-               image: this.picture,
-               nameOng: this.form.name,
-               street: this.form.street,
-               whatsapp: this.form.number_whatsapp
+                ...this.form,
+                image: imagem,
             })
-            .then(() => {
-                setTimeout(() => this.$router.push(
-                    {name: 'home'}
-                ), 1000);
-            })
+            .then(() => setTimeout(() => this.$router.push({name: 'home'}), 1000))
         }
     },
 
@@ -196,24 +188,24 @@ export default {
         
         if(!logado) {
             this.$router.replace({ name: "login" });
-            
-        } else {
-            const displayName = sessionStorage.getItem('displayName')
-
-            firebase.database()
-            .ref(displayName)
-            .once("value", snapshot => {
-                this.form = {
-                    imagem_produto: snapshot.val()["image"],
-                    name: snapshot.val()["nameOng"],
-                    cep: snapshot.val()["cep"],
-                    city: snapshot.val()["city"],
-                    district: snapshot.val()["district"],
-                    street: snapshot.val()["street"],
-                    number_whatsapp: snapshot.val()["whatsapp"],
-                }
-            })
+            return
         }
+            
+        const displayName = sessionStorage.getItem('displayName')
+
+        firebase.database()
+        .ref(displayName)
+        .once("value", snapshot => {
+            this.form = {
+                imagem_produto: snapshot.val()["image"],
+                name: snapshot.val()["nameOng"],
+                cep: snapshot.val()["cep"],
+                city: snapshot.val()["city"],
+                district: snapshot.val()["district"],
+                street: snapshot.val()["street"],
+                number_whatsapp: snapshot.val()["whatsapp"],
+            }
+        })
     },
 }
 </script>

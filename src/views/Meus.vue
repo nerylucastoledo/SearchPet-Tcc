@@ -2,11 +2,11 @@
     <main class="container content-principal">
         <div class="meus-anuncios">
             <div class="side-meus-anuncios">
-                <img v-if="disponible === 'ONG'" :src="image_ong" alt="Imagem da ONG">
+                <img v-if="type_account === 'ONG'" :src="image_ong" alt="Imagem da ONG">
 
                 <span class="name">Olá, {{name_ong}}</span>
                 <p  
-                    v-if="disponible === 'ONG'"
+                    v-if="type_account === 'ONG'"
                     @click="filterAnuncios(0, '')" 
                     class="link-filter"
                     >
@@ -14,7 +14,7 @@
                 </p>
 
                 <p 
-                    v-if="disponible === 'ONG'"
+                    v-if="type_account === 'ONG'"
                     @click="filterAnuncios(1, 'pausado', false)" 
                     class="link-filter"
                     >
@@ -22,7 +22,7 @@
                 </p>
 
                 <p 
-                    v-if="disponible === 'ONG'"
+                    v-if="type_account === 'ONG'"
                     @click="filterAnuncios(2, 'pausado', true)" 
                     class="link-filter"
                     >
@@ -48,7 +48,7 @@
                          <p
                             v-if="favorite"
                             class="fechar"
-                            @click="removeFavorite(anuncio)"
+                            @click="searchForId(anuncio)"
                             >
                             X
                         </p>
@@ -160,7 +160,7 @@ export default {
             favorite: false,
             show_button: true,
             message_favorite: false,
-            disponible: '',
+            type_account: '',
             username: this.$store.state.user.data.displayName,
             list_favorites: []
         }
@@ -207,17 +207,17 @@ export default {
                     })
                 })
                 this.anuncios = list_anuncios_filter
+                setTimeout(() => this.loading = false, 300);
 
-                setTimeout(() => this.loading = false, 400);
-
-            } else {
-                this.message_favorite = true
-                this.anuncios = []
-                setTimeout(() => this.loading = false, 400);
+                return
             }
+            
+            this.message_favorite = true
+            this.anuncios = []
+            setTimeout(() => this.loading = false, 300);
         },
 
-        async removeFavorite(anuncio) {
+        async searchForId(anuncio) {
             const username = sessionStorage.getItem('displayName')
 
             await firebase.database()
@@ -240,8 +240,14 @@ export default {
                 this.loading = true
                 setTimeout(() => {
                     this.loading = false
+
+                    if(this.type_account === 'particular') {
+                        this.filterFavorites(0)
+                        return
+                    }
+                    
                     this.filterFavorites(3)
-                }, 1000);
+                }, 500);
             })
         },
 
@@ -258,39 +264,40 @@ export default {
             document.querySelector('.side-meus-anuncios').classList.toggle('open-modal')
         },
 
-        async getDataFromApi(ref, child = '') {
-            const resultApi = await firebase.database()
-                                    .ref(`${ref}/${child}`)
-                                    .once("value", snapshot => snapshot.exists() ? snapshot.val() : null)
-
-            return resultApi
-        },
-
         async getPhotoAndNameOng() {
             const user = await this.getDataFromApi(this.username)
-
             this.name_ong = user.val()["nameOng"]
             this.image_ong = user.val()["image"]
 
             setTimeout(() => this.loading = false, 500)
         },
+
+        async getDataFromApi(ref, child = '') {
+            return await firebase.database()
+                .ref(`${ref}/${child}`)
+                .once("value", snapshot => snapshot.exists() ? snapshot.val() : null)
+        },
+
+        async getTypeAccount() {
+            await firebase.database()
+            .ref(this.username)
+            .once("value", snapshot => this.type_account = snapshot.val()["type"])
+        }
     },
 
     async mounted() {
-        await firebase.database()
-        .ref(this.username)
-        .once("value", snapshot => this.disponible = snapshot.val()["type"])
+        await this.getTypeAccount()
         
-        if(this.disponible === 'particular') {
+        if(this.type_account === 'particular') {
             this.filterFavorites(0)
-
-        } else {
-            document.querySelectorAll('.link-filter')[0].classList.add('ativo')
-
-            const allAnuncios = await getMydatas('username', this.username)
-            this.anuncios = allAnuncios
-            this.backup_anuncios = allAnuncios
+            return
         }
+
+        document.querySelectorAll('.link-filter')[0].classList.add('ativo')
+
+        const allAnuncios = await getMydatas('username', this.username)
+        this.anuncios = allAnuncios
+        this.backup_anuncios = allAnuncios
 
         this.getPhotoAndNameOng()
     },
@@ -299,11 +306,7 @@ export default {
         document.title = 'Meus'
 
         const logado = sessionStorage.getItem('login')
-
-        if(!logado) {
-           
-            this.$router.replace({ name: "login" })
-        }
+        !logado && this.$router.replace({ name: "login" });
     }
 }
 </script>
