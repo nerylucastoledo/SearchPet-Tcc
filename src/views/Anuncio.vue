@@ -49,6 +49,7 @@
                 type="file" 
                 accept="image/*"
                 @change="previewImage"
+                :disabled="anuncio.pausado"
             >
         </div>
 
@@ -63,6 +64,8 @@
                         placeholder="Nome" 
                         v-model="anuncio.nome" 
                         required
+                        :readonly="anuncio.pausado"
+                        :class="{ readonly: anuncio.pausado }"
                     >
                 </div>
 
@@ -75,6 +78,8 @@
                         placeholder="Peso" 
                         v-model="anuncio.peso" 
                         required
+                        readonly="anuncio.pausado"
+                        :class="{ readonly: anuncio.pausado }"
                     >
                 </div>
             </div>   
@@ -89,12 +94,19 @@
                         placeholder="idade" 
                         v-model="anuncio.idade" 
                         required
+                        readonly="anuncio.pausado"
+                        :class="{ readonly: anuncio.pausado }"
                     >
                 </div>
 
                 <div>
                     <label for="peso">Sexo</label>
-                    <select v-model="anuncio.sexo" class="filter-selected">
+                    <select 
+                        v-model="anuncio.sexo" 
+                        :disabled="anuncio.pausado" 
+                        :class="{ readonly: anuncio.pausado }"
+                        class="filter-selected"
+                        >
                         <option disabled value="">Sexo</option>
                         <option value="Macho">Macho</option>
                         <option value="Femea">Fêmea</option>
@@ -105,7 +117,12 @@
             <div>
                 <div>
                     <label for="idade">Categoria</label>
-                    <select v-model="anuncio.categoria" class="filter-selected">
+                    <select 
+                        v-model="anuncio.categoria" 
+                        :disabled="anuncio.pausado" 
+                        :class="{ readonly: anuncio.pausado }"
+                        class="filter-selected"
+                        >
                         <option disabled value="">Categoria</option>
                         <option value="Adocao">Para adoção</option>
                         <option value="Perdido">Esta perdido</option>
@@ -114,7 +131,12 @@
 
                 <div>
                     <label for="peso">Castrado</label>
-                    <select v-model="anuncio.castrado" class="filter-selected">
+                    <select 
+                        v-model="anuncio.castrado" 
+                        :disabled="anuncio.pausado" 
+                        :class="{ readonly: anuncio.pausado }"
+                        class="filter-selected"
+                        >
                         <option disabled value="">Castrado</option>
                         <option :value=true>Sim</option>
                         <option :value=false>Não</option>
@@ -122,10 +144,23 @@
                 </div>
             </div> 
 
-            <button class="btn-form btn-confirm" type="submit" @click.prevent="updatePerfil">Salvar</button>
+            <button 
+                class="btn-form btn-confirm" 
+                type="submit" 
+                v-if="!anuncio.pausado"
+                @click.prevent="updatePerfil"
+                >
+                Salvar
+            </button>
 
             <router-link to="/meus">
-                <button class="btn-form btn-cancel" type="submit">Cancelar</button>
+                <button 
+                    class="btn-form btn-cancel" 
+                    type="submit"
+                    v-if="!anuncio.pausado"
+                    >
+                    Cancelar
+                </button>
             </router-link>
         </form>
     </div>
@@ -381,6 +416,10 @@ select {
     cursor: pointer;
     border-radius: 50%;
     z-index: 2;
+}
+
+.readonly {
+    background-color: #D1CDC8;
 }
 
 </style>

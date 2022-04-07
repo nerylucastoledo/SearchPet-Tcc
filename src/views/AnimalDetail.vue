@@ -59,8 +59,6 @@
             </div>
         </div>
         
-        {{anuncio}}
-
         <div v-if="!anuncio.pausado">
             <h2 v-if="anuncio.categoria === 'Adocao'" class="titulo">Você pode me adotar 🐶</h2>
             <h2 v-else class="titulo">Ajude a me encontrar 🐶</h2>
@@ -89,6 +87,27 @@
                         Bairro 
                         <strong>{{dono.district}}</strong>
                     </p>
+                </div>
+            </div>
+        </div>
+
+        <div v-else>
+            <div v-if="anuncio.categoria === 'Adocao'" class="info-adocao">
+                <h1 class="titulo">Informações da adoção</h1>
+
+                <div>
+                    <h2>Nome:</h2>
+                    <span>{{anuncio.nome_finalizado}}</span>
+                </div>
+
+                <div>
+                    <h2>Data da adoção</h2>
+                    <span>{{anuncio.data_finalizdo}}</span>
+                </div>
+
+                <div>
+                    <h2>Número da pessoa:</h2>
+                    <span>{{anuncio.contato_finalizado}}</span>
                 </div>
             </div>
         </div>
@@ -255,5 +274,6 @@ export default {
     transform: scale(1.1);
     transition: .3s;
 }
+
 
 </style>

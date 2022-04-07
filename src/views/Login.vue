@@ -26,10 +26,9 @@
                     <label for="email">E-mail 🐶</label>
                     <input 
                         type="email" 
-                        id="email" 
-                        name="email" 
+                        id="email"
+                        v-model="form.email"
                         placeholder="e-mail" 
-                        v-model="form.email" 
                         required
                     >
                 </div>
@@ -37,13 +36,12 @@
                 <div>
                     <label for="password">Senha 🐿️</label>
                     <input 
-                    type="password" 
-                    id="password" 
-                    name="password" 
-                    placeholder="password" 
-                    v-model="form.password" 
-                    autocomplete="off"
-                    required
+                        type="password" 
+                        id="password" 
+                        autocomplete="off"
+                        v-model="form.password" 
+                        placeholder="password" 
+                        required
                     >
                 </div>
 
