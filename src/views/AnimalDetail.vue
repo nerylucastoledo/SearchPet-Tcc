@@ -3,11 +3,29 @@
         <h1 class="titulo">{{anuncio.nome}}</h1>
 
         <div class="perfil-animal">
-            <img 
-                v-if="anuncio.imagem" 
-                :src="anuncio.imagem" 
-                alt="Imagem de um animal"
-            >
+            <div class="image-animal">
+                <img 
+                    v-if="anuncio.imagem" 
+                    :src="anuncio.imagem" 
+                    :class="{ finalizado: anuncio.pausado }"
+                    alt="Imagem de um animal"
+                >
+
+                <span 
+                    v-if="anuncio.pausado && anuncio.categoria === 'Adocao'"
+                    class="anuncio-finalizado"
+                    >
+                    Adotado 🐶
+                </span>
+
+                <span 
+                    v-else-if="anuncio.pausado"
+                    class="anuncio-finalizado"
+                    >
+                    Encontrado 🐶
+                </span>
+
+            </div>
 
             <div class="info-animal">
                 <div>
@@ -63,51 +81,30 @@
             <h2 v-if="anuncio.categoria === 'Adocao'" class="titulo">Você pode me adotar 🐶</h2>
             <h2 v-else class="titulo">Ajude a me encontrar 🐶</h2>
 
-            <div>
+            <div class="info-contato">
                 <div>
                     <p>
                         Minha ONG:
 
-                        <strong>{{dono.nameOng}}</strong>
+                        <strong style="color: #36C9D2">{{dono.nameOng}}</strong>
                     </p>
 
                     <p>
                         Ligue para:
-                        <strong>{{dono.whatsapp}}</strong>
+                        <strong style="color: #36C9D2">{{dono.whatsapp}}</strong>
                     </p>
                 </div>
 
                 <div>
                     <p>
                         Endereço: 
-                        <strong>{{dono.street}}</strong>
+                        <strong style="color: #36C9D2">{{dono.street}}</strong>
                     </p>
 
                     <p>
                         Bairro 
-                        <strong>{{dono.district}}</strong>
+                        <strong style="color: #36C9D2">{{dono.district}}</strong>
                     </p>
-                </div>
-            </div>
-        </div>
-
-        <div v-else>
-            <div v-if="anuncio.categoria === 'Adocao'" class="info-adocao">
-                <h1 class="titulo">Informações da adoção</h1>
-
-                <div>
-                    <h2>Nome:</h2>
-                    <span>{{anuncio.nome_finalizado}}</span>
-                </div>
-
-                <div>
-                    <h2>Data da adoção</h2>
-                    <span>{{anuncio.data_finalizdo}}</span>
-                </div>
-
-                <div>
-                    <h2>Número da pessoa:</h2>
-                    <span>{{anuncio.contato_finalizado}}</span>
                 </div>
             </div>
         </div>
@@ -213,6 +210,31 @@ export default {
     width: 50%;
 }
 
+.image-animal {
+    position: relative;
+}
+
+.image-animal img{
+    width: 666px;
+    object-fit: cover;
+}
+
+.finalizado {
+    filter: brightness(.50);
+}
+
+.anuncio-finalizado {
+    position: absolute;
+    margin-left: auto;
+    margin-right: auto;
+    left: 0;
+    right: 0;
+    bottom: 40px;
+    color: #fff;
+    font-size: 32px;
+    text-align: center;
+}
+
 .info-animal > div {
     width: 100%;
     margin-left: 30px;
@@ -250,6 +272,20 @@ export default {
     margin-bottom: 20px;
 }
 
+.info-contato {
+    box-shadow: 0px 7px 7px rgba(0, 0, 0, 0.25);
+    padding: 10px 20px 40px;
+    border-radius: 10px;
+    display: flex;
+    justify-content: space-around;
+    font-size: 24px;
+    margin-top: 30px;
+}
+
+.info-contato div p {
+    margin-top: 30px !important;
+}
+
 .button-whatsapp {
     background-color: #25D366;
     display: block;
@@ -274,6 +310,4 @@ export default {
     transform: scale(1.1);
     transition: .3s;
 }
-
-
 </style>

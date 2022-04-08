@@ -54,9 +54,26 @@
                         </p>
 
                         <router-link :to=" !favorite ? `/anuncio/${anuncio.categoria}/${anuncio.id}` : `/animal/${anuncio.categoria}/${anuncio.id}`">
-
                             <div class="image-and-name">
-                                <img :src="anuncio.imagem" alt="Imagem de um animal">
+                                <img 
+                                    :src="anuncio.imagem" 
+                                    alt="Imagem de um animal"
+                                    :class="{ finalizado: anuncio.pausado }"
+                                >
+                                
+                                <span 
+                                    v-if="anuncio.pausado && anuncio.categoria === 'Adocao'"
+                                    class="anuncio-finalizado"
+                                    >
+                                    Adotado 🐶
+                                </span>
+
+                                <span 
+                                    v-else-if="anuncio.pausado"
+                                    class="anuncio-finalizado"
+                                    >
+                                    Encontrado 🐶
+                                </span>
 
                                 <h1>{{anuncio.nome}}</h1>
                             </div>
@@ -394,6 +411,26 @@ export default {
     cursor: pointer;
     border-radius: 50%;
     z-index: 4;
+}
+
+.image-and-name {
+    position: relative;
+}
+
+.finalizado {
+    filter: brightness(.50);
+}
+
+.anuncio-finalizado {
+    position: absolute;
+    margin-left: auto;
+    margin-right: auto;
+    left: 0;
+    right: 0;
+    bottom: 80px;
+    color: #fff;
+    font-size: 32px;
+    text-align: center;
 }
 
 @media (max-width: 1355px) {

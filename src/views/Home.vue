@@ -9,72 +9,78 @@
 
         <FilterData :citys="citys"></FilterData>
 
-        <div class="cards" v-if="!loading">
-            <div v-for="anuncio, index in anuncios" :key="anuncio.imagen">
-                <router-link :to="`/animal/${anuncio.categoria}/${anuncio.id}`">
-                    <div class="image-and-name">
-                        <img :src="anuncio.imagem" alt="Imagem de um animal">
+        <div v-if="!loading">
+            <div v-if="anuncios.length" class="cards">
+                <div v-for="anuncio, index in anuncios" :key="anuncio.imagen">
+                    <router-link :to="`/animal/${anuncio.categoria}/${anuncio.id}`">
+                        <div class="image-and-name">
+                            <img :src="anuncio.imagem" alt="Imagem de um animal">
 
-                        <div class="logo-and-name">
-                            <h1>{{anuncio.nome}}</h1>
+                            <div class="logo-and-name">
+                                <h1>{{anuncio.nome}}</h1>
 
-                            <img v-if="anuncio.logo_ong" :src="anuncio.logo_ong" alt="Logo da ONG">
-                        </div>
-                    </div>
-
-                    <div id="category" 
-                        :class="[anuncio.categoria === 'Adocao' ? 'adocao' : 'perdido']"
-                        >
-                        <p>{{anuncio.categoria}}</p>
-                    </div>
-
-                    <div class="dados">
-                        <div>
-                            <div>
-                                <p class="castrado">{{anuncio.idade}}</p>
-
-                                <span>
-                                    <img src="../assets/idade.png" alt="Calendario">
-                                </span>
-                            </div>
-
-                            <div>
-                                <p v-if="anuncio.castrado === false">Não castrado</p>
-                                <p v-else>Castrado</p>
-
-                                <span>
-                                    <img src="../assets/castrado.png" alt="Logo pata">
-                                </span>
+                                <img v-if="anuncio.logo_ong" :src="anuncio.logo_ong" alt="Logo da ONG">
                             </div>
                         </div>
 
-                        <div>
+                        <div id="category" 
+                            :class="[anuncio.categoria === 'Adocao' ? 'adocao' : 'perdido']"
+                            >
+                            <p>{{anuncio.categoria}}</p>
+                        </div>
+
+                        <div class="dados">
                             <div>
-                                <p :class="[anuncio.sexo === 'Macho' ? 'macho' : 'femea']">
-                                    {{anuncio.sexo}}
-                                </p>
-                                
-                                <span>
-                                    <img src="../assets/sexo.png" alt="Calendario">
-                                </span>
+                                <div>
+                                    <p class="castrado">{{anuncio.idade}}</p>
+
+                                    <span>
+                                        <img src="../assets/idade.png" alt="Calendario">
+                                    </span>
+                                </div>
+
+                                <div>
+                                    <p v-if="anuncio.castrado === false">Não castrado</p>
+                                    <p v-else>Castrado</p>
+
+                                    <span>
+                                        <img src="../assets/castrado.png" alt="Logo pata">
+                                    </span>
+                                </div>
                             </div>
 
                             <div>
-                                <p class="castrado">{{anuncio.peso}}</p>
-                                
-                                <span>
-                                    <img src="../assets/peso.png" alt="Calendario">
-                                </span>
+                                <div>
+                                    <p :class="[anuncio.sexo === 'Macho' ? 'macho' : 'femea']">
+                                        {{anuncio.sexo}}
+                                    </p>
+                                    
+                                    <span>
+                                        <img src="../assets/sexo.png" alt="Calendario">
+                                    </span>
+                                </div>
+
+                                <div>
+                                    <p class="castrado">{{anuncio.peso}}</p>
+                                    
+                                    <span>
+                                        <img src="../assets/peso.png" alt="Calendario">
+                                    </span>
+                                </div>
                             </div>
                         </div>
-                    </div>
-                </router-link>
+                    </router-link>
 
-                <div class="favoritar">
-                    <p @click="favoritar(index, anuncio)">
-                        <font-awesome-icon icon="heart" size="2x"/>
-                    </p>
+                    <div class="favoritar">
+                        <p @click="favoritar(index, anuncio)">
+                            <font-awesome-icon icon="heart" size="2x"/>
+                        </p>
+                    </div>
                 </div>
+            </div>
+
+            <div v-else>
+                <h1 class="not-found-anuncio">Ooops! Nenhum anúncio encontrado :(</h1>
             </div>
         </div>
 
@@ -131,10 +137,10 @@ export default {
 
     methods: {
         async getDatas() {
-            this.anuncios = await getMydatas()
+            this.anuncios = await getMydatas('pausado', false)
             this.backup_anuncios = this.anuncios
 
-            setTimeout(() => this.loading = false, 500);
+            setTimeout(() => this.loading = false, 1000);
         },
 
         async favoritar(index, anuncio) {
@@ -238,6 +244,11 @@ export default {
     margin-top: 60px;
 }
 
+.not-found-anuncio {
+    text-align: center;
+    font-size: 2rem;
+}
+
 .cards {
     display: grid;
     grid-template-columns: 1fr 1fr 1fr;
@@ -339,6 +350,7 @@ export default {
     border-radius: 15px;
     margin-right: 40px;
     box-shadow: 0px 7px 7px rgba(0, 0, 0, 0.25);
+    margin-top: -30px;
 }
 
 .clear-filter span {
@@ -400,6 +412,10 @@ export default {
 
     .image-and-name img {
         height: 200px;
+    }
+
+    .logo-and-name img {
+        height: 40px;
     }
 }
 

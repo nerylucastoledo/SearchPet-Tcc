@@ -36,7 +36,7 @@
     display: flex;
     flex-wrap: wrap;
     align-items: center;
-    justify-content: space-between;
+    justify-content: space-around;
 }
 
 .porque-adotar div img {
@@ -46,6 +46,16 @@
 .porque-adotar div p {
     max-width: 300px;
     margin-left: 20px;
+}
+
+@media (max-width: 523px) {
+    .porque-adotar {
+        margin-bottom: 30px;
+    }
+
+    .porque-adotar div div {
+        margin-bottom: 30px;
+    }
 }
 
 </style>
