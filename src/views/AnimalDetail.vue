@@ -78,8 +78,7 @@
         </div>
         
         <div v-if="!anuncio.pausado">
-            <h2 v-if="anuncio.categoria === 'Adocao'" class="titulo">Você pode me adotar 🐶</h2>
-            <h2 v-else class="titulo">Ajude a me encontrar 🐶</h2>
+            <h2 class="titulo">Entre em contato 🐶</h2>
 
             <div class="info-contato">
                 <div>
@@ -102,14 +101,17 @@
                     </p>
 
                     <p>
-                        Bairro 
+                        Bairro: 
                         <strong style="color: #36C9D2">{{dono.district}}</strong>
                     </p>
                 </div>
             </div>
         </div>
 
-        <a v-if="!anuncio.pausado" target= "_blank" :href="whatsapp">
+        <a  v-if="!anuncio.pausado" 
+            target = "_blank" 
+            :href="whatsapp"
+            >
             <button class="button-whatsapp">
                 <span>Me chame</span>
 
@@ -154,8 +156,11 @@ export default {
             .ref(userName)
             .once("value", snapshot => {
                 this.dono = snapshot.val()
-
-                this.whatsapp = `https://api.whatsapp.com/send?phone=55${this.dono.whatsapp}&amp;text=Entrei%20pelo%20site.%20Esta%20podendo%20falar%20agora?%20`
+                var numero = this.dono.whatsapp.replace("(", "")
+                                                .replace(")", "")
+                                                .replaceAll(" ", "")
+                                                .replace("-", "")
+                this.whatsapp = `https://api.whatsapp.com/send?phone=55${numero}&amp;text=Ola,%20gostaria%20de%20falar%20sobre%20o%20anúncio%20da(o)%20${this.anuncio.nome}."`
             })
         }
     },
@@ -174,7 +179,7 @@ export default {
     },
 
     beforeCreate() {
-        const logado = sessionStorage.getItem('login')
+        const logado = localStorage.getItem('login')
         
         if(!logado) {
             this.$router.replace({ name: "login" });
@@ -187,7 +192,7 @@ export default {
 <style scoped>
 
 .container {
-    padding: 0 230px;
+    padding: 0 30px;
 }
 
 .perfil-animal {
@@ -202,12 +207,13 @@ export default {
 }
 
 .perfil-animal {
-    display: flex;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
 }
 
 .perfil-animal > .info-animal {
     display: flex;
-    width: 50%;
+    justify-content: space-between;
 }
 
 .image-animal {
@@ -310,4 +316,70 @@ export default {
     transform: scale(1.1);
     transition: .3s;
 }
+
+@media (max-width: 1245px) {
+    .perfil-animal > .info-animal {
+        display: block;
+        width: 95%;
+    }
+
+    .info-animal > div > div {
+        width: 80%;
+    }
+}
+
+@media (max-width: 994px) {
+    .perfil-animal {
+        display: block;
+    }
+
+    .image-animal img {
+        width: 80%;
+        display: block;
+        margin: 0 auto 30px;
+        object-fit: cover;
+    }
+
+    .info-animal > div {
+        margin-left: 0px;
+    }
+
+    .info-animal > div > div {
+        width: 85%;
+    }
+
+    .perfil-animal > .info-animal {
+        display: flex;
+        width: 100%;
+    }
+
+    .info-contato {
+        display: block;
+        text-align: center;
+    }
+}
+
+@media (max-width: 660px) {
+    .image-animal img {
+        width: 100%;
+    }
+
+    .perfil-animal > .info-animal {
+        display: block;
+        width: 100%;
+    }
+
+    .info-animal > div > div {
+        width: unset;
+    }
+
+    .info-contato {
+        text-align: initial;
+    }
+
+    .button-whatsapp {
+        width: 100%;
+    }
+}
+
 </style>

@@ -31,7 +31,7 @@ export default new Vuex.Store({
       state.type_account = value
     },
 
-    SIGN_OUT(state) {
+    LOGOUT(state) {
       state.user = {
         loggedIn: false,
         data: null
@@ -60,9 +60,9 @@ export default new Vuex.Store({
       commit('SET_TYPE_ACCOUNT', type)
     },
 
-    signOut({ commit }) {
-      commit('SIGN_OUT')
-    }
+    logout({ commit }) {
+      commit('LOGOUT')
+    },
   },
   
   modules: {

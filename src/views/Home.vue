@@ -144,7 +144,7 @@ export default {
         },
 
         async favoritar(index, anuncio) {
-            const username = sessionStorage.getItem('displayName')
+            const username = localStorage.getItem('displayName')
             const favorito = document.querySelectorAll('.favoritar')
 
             var id = "id" + Math.random().toString(16).slice(2)
@@ -198,7 +198,7 @@ export default {
     },
 
     mounted() {
-        const logado = sessionStorage.getItem('login')
+        const logado = localStorage.getItem('login')
         
         if(!logado) {
             this.$router.replace({ name: "login" });
@@ -402,6 +402,10 @@ export default {
         max-width: 300px;
         margin: 0 auto;
         width: 100%;
+    }
+
+    .not-found-anuncio {
+        font-size: 24px;
     }
 }
 

@@ -101,11 +101,13 @@ export default {
 }
 
 .form-perfil input {
-    width: 100%;
+    width: 95%;
 }
 
 .btn-form {
     margin-top: 0px;
+    max-width: 300px;
+    width: 100%;
 }
 
 </style>

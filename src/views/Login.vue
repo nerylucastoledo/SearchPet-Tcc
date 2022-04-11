@@ -82,10 +82,8 @@ export default {
         login() {
             firebase.auth().signInWithEmailAndPassword(this.form.email, this.form.password)
             .then(() => {
-                this.$store.state.user.loggedIn = true
                 this.notFoundUser = ''
-                
-                this.$router.replace({ name: "home" });
+                this.$router.replace({ name: "home" })
             })
             .catch(error => {
                 if(error.code === "auth/user-not-found") {
@@ -93,9 +91,8 @@ export default {
 
                 } else if (error.code === "auth/wrong-password") {
                     this.notFoundUser = 'Senha invalida'
-
                 }
-            });
+            })
         }
     },
 }

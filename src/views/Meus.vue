@@ -235,7 +235,7 @@ export default {
         },
 
         async searchForId(anuncio) {
-            const username = sessionStorage.getItem('displayName')
+            const username = localStorage.getItem('displayName')
 
             await firebase.database()
             .ref(username)
@@ -322,7 +322,7 @@ export default {
     beforeCreate() {
         document.title = 'Meus'
 
-        const logado = sessionStorage.getItem('login')
+        const logado = localStorage.getItem('login')
         !logado && this.$router.replace({ name: "login" });
     }
 }

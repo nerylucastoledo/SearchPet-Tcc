@@ -16,7 +16,7 @@
                     v-else @click="finish"
                     class="btn-finish" 
                     >
-                    Foi encontrado ✓
+                    Finalizar busca ✓
                 </button>
             </div>
         </div>
@@ -78,7 +78,7 @@
                         placeholder="Peso" 
                         v-model="anuncio.peso" 
                         required
-                        readonly="anuncio.pausado"
+                        :readonly="anuncio.pausado"
                         :class="{ readonly: anuncio.pausado }"
                     >
                 </div>
@@ -94,7 +94,7 @@
                         placeholder="idade" 
                         v-model="anuncio.idade" 
                         required
-                        readonly="anuncio.pausado"
+                        :readonly="anuncio.pausado"
                         :class="{ readonly: anuncio.pausado }"
                     >
                 </div>
@@ -115,7 +115,7 @@
             </div> 
 
             <div>
-                <div>
+                <div class="form-select">
                     <label for="idade">Categoria</label>
                     <select 
                         v-model="anuncio.categoria" 
@@ -129,7 +129,7 @@
                     </select>
                 </div>
 
-                <div>
+                <div class="form-select">
                     <label for="peso">Castrado</label>
                     <select 
                         v-model="anuncio.castrado" 
@@ -294,7 +294,7 @@ export default {
     },
 
     beforeCreate() {
-        const logado = sessionStorage.getItem('login')
+        const logado = localStorage.getItem('login')
         
         if(!logado) {
             this.$router.replace({ name: "login" });
@@ -384,6 +384,7 @@ select {
     right: 0;
     bottom: 0;
     z-index: 2;
+    padding: 0 30px;
 }
 
 .formulario::before {
@@ -420,6 +421,32 @@ select {
 
 .readonly {
     background-color: #D1CDC8;
+}
+
+@media (max-width: 845px) {
+    .form-select {
+        margin-top: 30px;
+    }
+}
+
+@media (max-width: 940px) {
+    .btn-finish {
+        top: 0px;
+    }
+
+    .image-animal img {
+        width: 100%;
+        display: block;
+    }
+}
+
+@media (max-width: 530px) {
+    .btn-finish {
+        position: unset;
+        margin: 40px auto 0;
+        display: block;
+
+    }
 }
 
 </style>

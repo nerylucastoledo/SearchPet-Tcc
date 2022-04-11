@@ -377,7 +377,7 @@ export default {
     },
 
     beforeCreate() {
-        const logado = sessionStorage.getItem('login')
+        const logado = localStorage.getItem('login')
         const userName = this.$store.state.user.data.displayName
         
         firebase.database()

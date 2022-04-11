@@ -22,7 +22,7 @@
                 <li @click="openMenu">
                     <router-link to="/perfil">Perfil</router-link>
                 </li>
-                <li @click="singOut" class="sign-out" v-if="user.loggedIn">
+                <li @click="singOut" class="sign-out" v-if="user">
                     <font-awesome-icon icon="sign-out-alt" size="2x"/>
                 </li>
             </ul>
@@ -32,20 +32,14 @@
 
 <script>
 
-import { mapGetters } from "vuex";
+import firebase from 'firebase';
 
 export default {
 
     computed: {
-        ...mapGetters({
-            user: "user"
-        })
-    },
-
-    watch: {
         user() {
-            return user
-        }
+            return this.$store.state.user.loggedIn
+        },
     },
 
     methods: {
@@ -58,11 +52,12 @@ export default {
         },
 
         singOut() {
-            sessionStorage.clear()
-            localStorage.clear()
-
-            this.$store.dispatch('signOut')
-            this.$router.replace({ name: "login" });
+            firebase.auth().signOut()
+            .then(() => {
+                this.$store.dispatch('logout')
+                localStorage.clear()
+                this.$router.replace({ name: "login" });
+            });
         }
     },
 }

@@ -170,7 +170,7 @@ export default {
         },
 
         async uploadPerfil() {
-            const displayName = sessionStorage.getItem('displayName')
+            const displayName = localStorage.getItem('displayName')
             const imagem = this.picture ? this.picture : this.form.imagem_produto
 
             firebase.database()
@@ -184,14 +184,14 @@ export default {
     },
 
     created() {
-        const logado = sessionStorage.getItem('login')
+        const logado = localStorage.getItem('login')
         
         if(!logado) {
             this.$router.replace({ name: "login" });
             return
         }
             
-        const displayName = sessionStorage.getItem('displayName')
+        const displayName = localStorage.getItem('displayName')
 
         firebase.database()
         .ref(displayName)
