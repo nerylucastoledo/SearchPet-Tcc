@@ -33,7 +33,7 @@
                         <div>
                             <h2>Idade</h2>
 
-                           <img src="../assets/idade.png" alt="Calendario">
+                            <img src="../assets/idade.png" alt="Calendario">
                         </div>
 
                         <span>{{anuncio.idade}}</span>
@@ -60,7 +60,7 @@
                             <img src="../assets/peso.png" alt="Logo peso">
                         </div>
 
-                        <span>{{anuncio.peso}} Kg</span>
+                        <span>{{anuncio.peso}}</span>
                     </div>
 
                     <div class="box-info">
@@ -84,7 +84,6 @@
                 <div>
                     <p>
                         Minha ONG:
-
                         <strong style="color: #36C9D2">{{dono.nameOng}}</strong>
                     </p>
 
@@ -96,7 +95,7 @@
 
                 <div>
                     <p>
-                        Endereço: 
+                        Rua: 
                         <strong style="color: #36C9D2">{{dono.street}}</strong>
                     </p>
 
@@ -149,19 +148,25 @@ export default {
     },
 
     methods: {
-        getDono() {
+        pegarNumeroDono() {
             const userName = this.$store.state.user.data.displayName
 
             firebase.database()
             .ref(userName)
             .once("value", snapshot => {
                 this.dono = snapshot.val()
-                var numero = this.dono.whatsapp.replace("(", "")
-                                                .replace(")", "")
-                                                .replaceAll(" ", "")
-                                                .replace("-", "")
+                var numero = this.formatarNumero(this.dono.whatsapp)
                 this.whatsapp = `https://api.whatsapp.com/send?phone=55${numero}&amp;text=Ola,%20gostaria%20de%20falar%20sobre%20o%20anúncio%20da(o)%20${this.anuncio.nome}."`
             })
+        },
+
+        formatarNumero(numero) {
+            var numeroFormatado = numero.replace("(", "")
+                                        .replace(")", "")
+                                        .replace("-", "")
+                                        .replaceAll(" ", "")
+
+            return numeroFormatado
         }
     },
 
@@ -173,14 +178,12 @@ export default {
         .child(id)
         .once("value", snapshot => {
             this.anuncio = snapshot.val()
-
-            this.getDono()
+            this.pegarNumeroDono()
         })
     },
 
     beforeCreate() {
         const logado = localStorage.getItem('login')
-        
         if(!logado) {
             this.$router.replace({ name: "login" });
         }

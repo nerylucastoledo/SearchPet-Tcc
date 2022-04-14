@@ -11,19 +11,27 @@
 
         <div v-if="!loading">
             <div v-if="anuncios.length" class="cards">
-                <div v-for="anuncio, index in anuncios" :key="anuncio.imagen">
+                <div 
+                    v-for="anuncio, index in anuncios" 
+                    :key="anuncio.id"
+                    >
                     <router-link :to="`/animal/${anuncio.categoria}/${anuncio.id}`">
-                        <div class="image-and-name">
+                        <div class="box-imagem-nome">
                             <img :src="anuncio.imagem" alt="Imagem de um animal">
 
-                            <div class="logo-and-name">
+                            <div class="box-nome-logo">
                                 <h1>{{anuncio.nome}}</h1>
 
-                                <img v-if="anuncio.logo_ong" :src="anuncio.logo_ong" alt="Logo da ONG">
+                                <img 
+                                    v-if="anuncio.logo_ong" 
+                                    :src="anuncio.logo_ong" 
+                                    alt="Logo da ONG"
+                                >
                             </div>
                         </div>
 
-                        <div id="category" 
+                        <div 
+                            id="category" 
                             :class="[anuncio.categoria === 'Adocao' ? 'adocao' : 'perdido']"
                             >
                             <p>{{anuncio.categoria}}</p>
@@ -32,10 +40,10 @@
                         <div class="dados">
                             <div>
                                 <div>
-                                    <p class="castrado">{{anuncio.idade}}</p>
+                                    <p>{{anuncio.idade}}</p>
 
                                     <span>
-                                        <img src="../assets/idade.png" alt="Calendario">
+                                        <img src="../assets/idade.png" alt="Icon Calendario">
                                     </span>
                                 </div>
 
@@ -56,15 +64,15 @@
                                     </p>
                                     
                                     <span>
-                                        <img src="../assets/sexo.png" alt="Calendario">
+                                        <img src="../assets/sexo.png" alt="Icon Sexo">
                                     </span>
                                 </div>
 
                                 <div>
-                                    <p class="castrado">{{anuncio.peso}}</p>
+                                    <p>{{anuncio.peso}}</p>
                                     
                                     <span>
-                                        <img src="../assets/peso.png" alt="Calendario">
+                                        <img src="../assets/peso.png" alt="Icon KG">
                                     </span>
                                 </div>
                             </div>
@@ -113,13 +121,12 @@ export default {
 
     data() {
         return {
-            citys: [],
             anuncios: [],
-            backup_anuncios: [],
-            filter_city: '',
-            filter_type: '',
+            backupAnuncios: [],
+            citys: [],
+            filterCity: '',
+            filterType: '',
             loading: true,
-            isActive: true,
             success: true,
             mensagem: "",
         }
@@ -136,20 +143,19 @@ export default {
     },
 
     methods: {
-        async getDatas() {
+        async buscarTodosAnuncios() {
             this.anuncios = await getMydatas('pausado', false)
-            this.backup_anuncios = this.anuncios
+            this.backupAnuncios = this.anuncios
 
-            setTimeout(() => this.loading = false, 1000);
+            setTimeout(() => this.loading = false, 1000)
         },
 
         async favoritar(index, anuncio) {
             const username = localStorage.getItem('displayName')
             const favorito = document.querySelectorAll('.favoritar')
-
             var id = "id" + Math.random().toString(16).slice(2)
 
-            const favoriteExist = await this.verifyIfExistFavorite(username, anuncio.categoria, anuncio.id)
+            const favoriteExist = await this.verificarFavoritosCadastrados(username, anuncio.categoria, anuncio.id)
 
             if(!favoriteExist) {
                 firebase.database()
@@ -171,13 +177,12 @@ export default {
 
             this.mensagem = `${anuncio.nome} já esta nos favoritos`
             this.success = false
-
             setTimeout(() => this.mensagem = '', 1000)
         },
         
-        async verifyIfExistFavorite(username, categoria, id) {
+        async verificarFavoritosCadastrados(username, categoria, id) {
             var favoriteExist = false
-
+            
             await firebase.database()
             .ref(username)
             .child(`favorites/${categoria}`)
@@ -187,6 +192,7 @@ export default {
                 }
 
                 Object.keys(snapshot.val()).forEach((key) => {
+                    console.log(key)
                     if(snapshot.val()[key] === id) {
                         favoriteExist = true
                     }
@@ -199,40 +205,38 @@ export default {
 
     mounted() {
         const logado = localStorage.getItem('login')
-        
         if(!logado) {
-            this.$router.replace({ name: "login" });
-            return
+            this.$router.replace({ name: "login" })
         }
 
-        setTimeout(() => this.getDatas(), 300);
+        setTimeout(() => this.buscarTodosAnuncios(), 300)
 
         this.$root.$on('filterPageHome', (filter) => {
-            this.anuncios = this.backup_anuncios
-            var filter_now = ''
+            this.anuncios = this.backupAnuncios
+            var filterNow = ''
 
             if(filter === 'limpar') {
-                this.filter_city = ''
-                this.filter_type = ''
+                this.filterCity = ''
+                this.filterType = ''
             } 
             
             if(filter.cidade) {
-                this.filter_city = filter.cidade
-                filter_now = 'cidade'
+                this.filterCity = filter.cidade
+                filterNow = 'cidade'
             }
 
             if (filter.categoria) {
-                this.filter_type = filter.categoria
-                filter_now = 'categoria'
+                this.filterType = filter.categoria
+                filterNow = 'categoria'
             }
 
-            if(this.filter_city && this.filter_type){
+            if(this.filterCity && this.filterType){
                 this.anuncios = this.anuncios.filter(
-                    anuncio => anuncio.cidade === this.filter_city && anuncio.categoria === this.filter_type
+                    anuncio => anuncio.cidade === this.filterCity && anuncio.categoria === this.filterType
                 )
             } 
                 
-            this.anuncios = this.anuncios.filter(anuncio => anuncio[filter_now] === filter[filter_now])
+            this.anuncios = this.anuncios.filter(anuncio => anuncio[filterNow] === filter[filterNow])
         })
     },
 }
@@ -262,12 +266,12 @@ export default {
     border-radius: 10px;
 }
 
-.image-and-name {
+.box-imagem-nome {
     position: relative;
     background-color: #fff;
 }
 
-.image-and-name img {
+.box-imagem-nome img {
     width: 100%;
     height: 300px;
     display: block;
@@ -275,7 +279,7 @@ export default {
     border-radius: 10px 10px 0 0;
 }
 
-.image-and-name h1 {
+.box-imagem-nome h1 {
     bottom: 20px;
     left: 10px;
     color: #36C9D2;
@@ -365,11 +369,11 @@ export default {
     cursor: pointer;
 }
 
-.logo-and-name {
+.box-nome-logo {
     position: relative;
 }
 
-.logo-and-name img {
+.box-nome-logo img {
     width: 40px;
     height: 40px;
     top: 5px;
@@ -414,11 +418,11 @@ export default {
         display: block;
     }
 
-    .image-and-name img {
+    .box-imagem-nome img {
         height: 200px;
     }
 
-    .logo-and-name img {
+    .box-nome-logo img {
         height: 40px;
     }
 }

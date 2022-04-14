@@ -1,7 +1,6 @@
 <template>
 
-    <div class=" container login-form">
-
+    <div class="container login-form">
         <div class="email-enviado" v-if="emailSending">
             <p>E-mail enviado! Verifique seu e-mail e spam.</p>
 
@@ -62,10 +61,7 @@ export default {
             firebase.auth()
             .sendPasswordResetEmail(this.email)
             .then(() => this.emailSending = true)
-            .catch(() => {
-                this.emailSending = false;
-                this.error = "Email não encontrado.";
-            }); 
+            .catch(() => this.error = "Email não encontrado.")
         }
     },
 }

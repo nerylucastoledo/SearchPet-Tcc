@@ -3,10 +3,7 @@
     <div class="form-geral">
         <div class="container login-form">
             <div class="login-img">
-                <img 
-                    src="../assets/logo.png" 
-                    alt=""
-                >
+                <img src="../assets/logo.png" alt="Logo da Empresa">
             </div>
 
             <form class="login" @submit.prevent="login">
@@ -81,10 +78,7 @@ export default {
     methods: {
         login() {
             firebase.auth().signInWithEmailAndPassword(this.form.email, this.form.password)
-            .then(() => {
-                this.notFoundUser = ''
-                this.$router.replace({ name: "home" })
-            })
+            .then(() => this.$router.replace({ name: "home" }))
             .catch(error => {
                 if(error.code === "auth/user-not-found") {
                     this.notFoundUser = 'Usuário não encontrado'

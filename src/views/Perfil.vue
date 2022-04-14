@@ -1,22 +1,32 @@
 <template>
 
     <div class="container">
+
+        <div v-if="mensagem.length">
+            <ModalSuccess 
+                :mensagem="mensagem" 
+                :success="success"
+                >
+            </ModalSuccess>
+        </div>
+
         <h1 class="titulo">Editar Perfil</h1>
 
         <div class="perfil">
-            <div class="info-perfil" v-if="form.imagem_produto">
-                <img :src="form.imagem_produto" alt="Foto da ONG">
+            <div class="info-perfil" v-if="imagemBanco">
+                <img :src="imagemBanco" alt="Foto da ONG">
 
                 <input 
-                    id="imagem_produto" 
+                    id="newImagem" 
                     type="file" 
-                    name="imagem_produto" 
-                    autocomplete="imagem_produto" 
+                    name="newImagem" 
+                    autocomplete="newImagem" 
                     required 
-                    ref="imagem_produto">
+                    ref="newImagem"
+                >
             </div>
 
-            <form class="form-perfil">
+            <form class="form-perfil" @submit.prevent="atualizarPerfil">
                 <div>
                     <div>
                         <label for="name">Nome da Ong</label>
@@ -26,7 +36,7 @@
                             name="name"
                             placeholder="Nome da ong"
                             required 
-                            v-model="form.name"
+                            v-model="form.nameOng"
                         >
                     </div>
 
@@ -63,13 +73,11 @@
                         <label for="district">Bairro</label>
                         <input 
                             id="district" 
-                            class="read-only"
                             name="district" 
                             required 
                             autofocus 
                             v-model="form.district"
                             placeholder="Digite o bairro"
-                            readonly
                         >
                     </div>
                 </div>  
@@ -79,12 +87,10 @@
                         <label for="street">Rua</label>
                         <input 
                             id="street" 
-                            class="read-only"
                             name="street"
                             placeholder="Digite a rua"
                             required 
                             v-model="form.street"
-                            readonly
                         >
                     </div>
 
@@ -95,14 +101,14 @@
                             name="cellphone" 
                             required 
                             autofocus 
-                            v-model="form.number_whatsapp"
+                            v-model="form.whatsapp"
                             v-mask="'(##) # ####-####'"
                             placeholder="(xx) x xxxx-xxxx"
                         >
                     </div>
                 </div>   
 
-                <button class="btn-form" type="submit" @click.prevent="saveImageAndCallUpdate">Salvar</button>
+                <button class="btn-form" type="submit">Salvar</button>
             </form>
         </div>
     </div>
@@ -111,21 +117,29 @@
 <script>
 
 import firebase from 'firebase'
+import ModalSuccess from '../components/ModalSuccess.vue'
 
 export default {
+
+    components: {
+        ModalSuccess,
+    },
+
     data() {
         return {
             form: {
-                imagem_produto: null,
-                name: "",
+                nameOng: "",
                 cep: "",
                 city: "",
                 district: "",
                 street: "",
-                number_whatsapp: "",
+                whatsapp: "",
             },
-            imagem_produto: '',
-            picture: ''
+            imagemBanco: null,
+            newImagem: '',
+            picture: '',
+            success: true,
+            mensagem: "",
         }
     },
 
@@ -144,34 +158,40 @@ export default {
 
                     document.getElementById('cep').style.border = 'none'
                 })
-
-            } else {
-                document.getElementById('cep').style.border = '1px solid red'
+                return
             }
+                
+            document.getElementById('cep').style.border = '1px solid red'
         },
 
-        async saveImageAndCallUpdate() {
-            const file = this.$refs.imagem_produto.files[0];
-            this.picture = null;
+        atualizarPerfil() {
+            const file = this.$refs.newImagem.files[0];
 
-            const storageRef = firebase.storage()
-                                        .ref(`${file.name}`)
-                                        .put(file);
-            
+            if(file) {
+                this.salvarNovaImagem(file)
+                return
+            }
+
+            console.log('entrei')
+
+            this.atualizarDados()
+        },
+
+        async salvarNovaImagem(imagem) {
+            const storageRef = firebase.storage().ref(`${imagem.name}`).put(imagem)
             storageRef.on(`state_changed`, () => {
                 storageRef.snapshot.ref
                 .getDownloadURL()
                 .then((url) => {
                     this.picture = url;
-
-                    this.uploadPerfil()
-                });
-            });
+                    this.atualizarDados()
+                })
+            })
         },
 
-        async uploadPerfil() {
+        async atualizarDados() {
             const displayName = localStorage.getItem('displayName')
-            const imagem = this.picture ? this.picture : this.form.imagem_produto
+            const imagem = this.picture ? this.picture : this.imagemBanco
 
             firebase.database()
             .ref(displayName)
@@ -179,13 +199,20 @@ export default {
                 ...this.form,
                 image: imagem,
             })
-            .then(() => setTimeout(() => this.$router.push({name: 'home'}), 1000))
+            .then(() => {
+                this.success = true
+                this.mensagem = 'Perfil atualizado com sucesso!'
+                setTimeout(() => this.$router.push({name: 'home'}), 1500)
+            })
+            .catch(() => {
+                this.success = false
+                this.mensagem = 'Não foi possível atualizar!'
+            })
         }
     },
 
     created() {
         const logado = localStorage.getItem('login')
-        
         if(!logado) {
             this.$router.replace({ name: "login" });
             return
@@ -196,14 +223,14 @@ export default {
         firebase.database()
         .ref(displayName)
         .once("value", snapshot => {
+            this.imagemBanco = snapshot.val()["image"],
             this.form = {
-                imagem_produto: snapshot.val()["image"],
-                name: snapshot.val()["nameOng"],
+                nameOng: snapshot.val()["nameOng"],
                 cep: snapshot.val()["cep"],
                 city: snapshot.val()["city"],
                 district: snapshot.val()["district"],
                 street: snapshot.val()["street"],
-                number_whatsapp: snapshot.val()["whatsapp"],
+                whatsapp: snapshot.val()["whatsapp"],
             }
         })
     },

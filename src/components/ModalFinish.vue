@@ -8,12 +8,12 @@
         </div>
 
         <p class="fechar" @click="fecharModalFormulario">X</p>
-        <form action="" class="form-perfil" @submit.prevent="finishAnuncio(form)">
+        <form action="" class="form-perfil" @submit.prevent="finishAnuncio">
             <label for="">Quem adotou?</label>
-            <input type="text" name="quem_adotou" placeholder="Nome" v-model="form.nome_novo_dono" required>
+            <input type="text" name="quem_adotou" placeholder="Nome" v-model="form.nome_finalizado" required>
 
             <label for="">Quando?</label>
-            <input type="date" name="date_adocao" v-model="form.data_acocao" required>
+            <input type="date" name="date_adocao" v-model="form.data_finalizado" required>
 
             <label for="">Contato da pessoa</label>
             <input 
@@ -22,7 +22,7 @@
                 name="number_whatsapp"
                 placeholder="(XX)X-XXXX-XXXX"
                 required 
-                v-model="form.contato"
+                v-model="form.contato_finalizado"
             >
 
             <div>
@@ -49,9 +49,10 @@ export default {
     data() {
         return {
             form: {
-                nome_novo_dono: "",
-                data_acocao: "",
-                contato: "",
+                pausado: true,
+                nome_finalizado: "",
+                data_finalizado: "",
+                contato_finalizado: "",
             },
             mensagem: "",
             success: true,
@@ -63,16 +64,11 @@ export default {
             document.querySelector('.formulario').style.display = 'none'
         },
 
-        finishAnuncio(form) {
+        finishAnuncio() {
             firebase.database()
             .ref('/Anuncios/' + this.anuncio.categoria)
             .child(this.anuncio.id)
-            .update({
-                pausado: true,
-                nome_finalizado: this.form.nome_novo_dono,
-                contato_finalizado: this.form.contato,
-                data_finalizado: this.form.data_acocao
-            })
+            .update({...this.form})
             .then(() => {
                 this.mensagem = `Que bacanaa :)! Mais um ${this.anuncio.type} ajudado! Parabéns`
                 this.success = true

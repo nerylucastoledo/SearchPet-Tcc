@@ -54,6 +54,7 @@ export default {
         singOut() {
             firebase.auth().signOut()
             .then(() => {
+                this.openMenu()
                 this.$store.dispatch('logout')
                 localStorage.clear()
                 this.$router.replace({ name: "login" });

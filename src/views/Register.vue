@@ -20,17 +20,17 @@
 
             <div class="type-account">
                 <label class="form-control">
-                    <input type="radio" checked name="radio" value="ONG" v-model="type_account"/>
+                    <input type="radio" checked name="radio" value="ONG" v-model="typeAccount"/>
                     ONG
                 </label>
 
                 <label class="form-control">
-                    <input type="radio" name="radio" value="particular" v-model="type_account"/>
+                    <input type="radio" name="radio" value="particular" v-model="typeAccount"/>
                     Particular
                 </label>
             </div>
 
-            <form action="#" @submit.prevent="register">
+            <form action="#" @submit.prevent="registrarCadastro">
                 <div>
                     <div>
                         <label for="name">Nome</label>
@@ -55,7 +55,7 @@
                             placeholder="Username"
                             required 
                             v-model="username"
-                            @change="verifyUsername(username)"
+                            @change="validarUsername(username)"
                         >
                     </div>
                 </div>
@@ -100,7 +100,7 @@
                         v-model="form.cep"
                         minlength="7"
                         maxlength="8"
-                        @keyup="verifyCep(form.cep)"
+                        @keyup="validarCep(form.cep)"
                         >
                     </div>
                     <div>
@@ -122,33 +122,29 @@
                     <div>
                         <label for="district">Bairro</label>
                         <input 
-                        class="read"
-                        type="text"
-                        id="district" 
-                        name="district"
-                        placeholder="Bairro"
-                        required 
-                        v-model="form.district"
-                        readonly
+                            type="text"
+                            id="district" 
+                            name="district"
+                            placeholder="Bairro"
+                            required 
+                            v-model="form.district"
                         >
                     </div>
 
                     <div>
                         <label for="street">Rua</label>
                         <input 
-                        class="read"
-                        type="text"
-                        id="street" 
-                        name="street"
-                        placeholder="Rua"
-                        required 
-                        v-model="form.street"
-                        readonly
+                            type="text"
+                            id="street" 
+                            name="street"
+                            placeholder="Rua"
+                            required 
+                            v-model="form.street"
                         >
                     </div>
                 </div>
 
-                <div v-if="type_account === 'ONG'">
+                <div v-if="typeAccount === 'ONG'">
                     <div>
                         <label for="whatsapp">Whatsapp</label>
                         <input 
@@ -207,58 +203,57 @@ export default {
             email: "",
             password: "",
             imageData: '',
-            type_account: '',
+            typeAccount: '',
             success: true,
             mensagem: "",
             cepError: '',
-            username_approved: null
+            usernameApproved: null
         }
     },
 
     methods: {
-        register() {
-            if(this.type_account === 'ONG' && this.username_approved) {
-                this.addPhotoAndSaveUrl()
+        registrarCadastro() {
+            if(this.typeAccount === 'ONG' && this.usernameApproved) {
+                this.adicionarFoto()
             }
             
-            if(this.username_approved) {
-                this.createUser()
+            if(this.usernameApproved) {
+                this.criarUsuario()
             }
         },
 
-        async addPhotoAndSaveUrl() {
+        async adicionarFoto() {
             const file = this.$refs.imageData.files[0];
             
             const storageRef = firebase.storage().ref(`${file.name}`).put(file);
-            
             storageRef.on(`state_changed`, snapshot => {}, error => {}, () => {
                     storageRef.snapshot.ref.getDownloadURL().then((url) => {
                         this.form.image = url
-                        this.createUser()
+                        this.criarUsuario()
                     })
                 }
             );
         },
 
-        async createUser() {
+        async criarUsuario() {
             await firebase.auth().createUserWithEmailAndPassword(this.email, this.password)
             .then(() => {
                 firebase.auth().currentUser.updateProfile({ 
                     displayName: this.username 
                 })  
 
-                this.showMessage('Usuario criado com sucesso!', true, 2000)
-                this.insertDatOfPeople(this.username)
+                this.mostrarMensagem('Usuario criado com sucesso!', true, 2000)
+                this.inserirOsDadosDaPessoa(this.username)
             })
-            .catch(() => this.showMessage('Não foi possível criar!', false, 1000))
+            .catch(() => this.mostrarMensagem('Não foi possível criar!', false, 1000))
         },
 
-        async insertDatOfPeople(username) {
+        async inserirOsDadosDaPessoa(username) {
             await firebase.database()
             .ref(`/${username}`)
             .once("value", snapshot => {
                 if(snapshot.exists()) {
-                    this.showMessage('Username existente!', false, 1000)
+                    this.mostrarMensagem('Username existente!', false, 1000)
                     return
                 }
 
@@ -266,20 +261,20 @@ export default {
                 .ref(`/${username}`)
                 .update({
                     ...this.form,
-                    type: this.type_account
+                    type: this.typeAccount
                 })
                 .then(() => this.$router.push({name: 'home'}), 4000)
             })
         },
 
-        showMessage(message, boolean, time) {
+        mostrarMensagem(message, boolean, time) {
             this.mensagem = message
             this.success = boolean
 
             setTimeout(() => this.mensagem = '', time)
         },
 
-        verifyCep(cepDiditado) {
+        validarCep(cepDiditado) {
             var tamanhoMaxCep = 8
 
             if(cepDiditado.length === tamanhoMaxCep) {
@@ -299,23 +294,27 @@ export default {
             document.getElementById('cep').style.border = '1px solid red'
         },
 
-        verifyUsername(username) {
+        validarUsername(username) {
             firebase.database()
             .ref(username)
             .once("value", snapshot => {
                 if(snapshot.exists()) {
                     document.getElementById('username').style.border = '1px solid red'
-                    this.showMessage('Username existente!', false, 2000)
-                    this.username_approved = false
+                    this.mostrarMensagem('Username existente!', false, 2000)
+                    this.usernameApproved = false
 
                     return
                 }
 
                 document.getElementById('username').style.border = 'none'
-                this.username_approved = true
+                this.usernameApproved = true
             })
         }
     },
+
+    mounted() {
+        this.typeAccount = 'ONG'
+    }
 }
 </script>
 

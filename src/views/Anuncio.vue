@@ -7,13 +7,13 @@
                 <button 
                     v-if="anuncio.categoria === 'Adocao'" 
                     class="btn-finish" 
-                    @click="finish(anuncio)"
+                    @click="finalizarAnuncio(anuncio)"
                     >
                     Finalizar adoção ✓
                 </button>
 
                 <button 
-                    v-else @click="finish"
+                    v-else @click="finalizarAnuncio"
                     class="btn-finish" 
                     >
                     Finalizar busca ✓
@@ -36,7 +36,7 @@
         <div class="image-animal">
             <img 
                 v-if="!preview" 
-                :src="imagem_animal" 
+                :src="imagemAnimal" 
                 alt=""
             >
             <img 
@@ -48,7 +48,7 @@
                 id="new-image"
                 type="file" 
                 accept="image/*"
-                @change="previewImage"
+                @change="previewDaImagem"
                 :disabled="anuncio.pausado"
             >
         </div>
@@ -65,7 +65,7 @@
                         v-model="anuncio.nome" 
                         required
                         :readonly="anuncio.pausado"
-                        :class="{ readonly: anuncio.pausado }"
+                        :class="{readonly: anuncio.pausado}"
                     >
                 </div>
 
@@ -79,7 +79,7 @@
                         v-model="anuncio.peso" 
                         required
                         :readonly="anuncio.pausado"
-                        :class="{ readonly: anuncio.pausado }"
+                        :class="{readonly: anuncio.pausado}"
                     >
                 </div>
             </div>   
@@ -95,7 +95,7 @@
                         v-model="anuncio.idade" 
                         required
                         :readonly="anuncio.pausado"
-                        :class="{ readonly: anuncio.pausado }"
+                        :class="{readonly: anuncio.pausado}"
                     >
                 </div>
 
@@ -104,7 +104,7 @@
                     <select 
                         v-model="anuncio.sexo" 
                         :disabled="anuncio.pausado" 
-                        :class="{ readonly: anuncio.pausado }"
+                        :class="{readonly: anuncio.pausado}"
                         class="filter-selected"
                         >
                         <option disabled value="">Sexo</option>
@@ -119,8 +119,8 @@
                     <label for="idade">Categoria</label>
                     <select 
                         v-model="anuncio.categoria" 
-                        :disabled="anuncio.pausado" 
-                        :class="{ readonly: anuncio.pausado }"
+                        disabled
+                        :class="{readonly: anuncio.pausado}"
                         class="filter-selected"
                         >
                         <option disabled value="">Categoria</option>
@@ -134,7 +134,7 @@
                     <select 
                         v-model="anuncio.castrado" 
                         :disabled="anuncio.pausado" 
-                        :class="{ readonly: anuncio.pausado }"
+                        :class="{readonly: anuncio.pausado}"
                         class="filter-selected"
                         >
                         <option disabled value="">Castrado</option>
@@ -148,7 +148,7 @@
                 class="btn-form btn-confirm" 
                 type="submit" 
                 v-if="!anuncio.pausado"
-                @click.prevent="updatePerfil"
+                @click.prevent="atualizar"
                 >
                 Salvar
             </button>
@@ -193,7 +193,7 @@ export default {
                 id: "",
                 castrado: ""
             },
-            imagem_animal: '',
+            imagemAnimal: '',
             imageData: null,
             picture: null,
             preview: null,
@@ -212,44 +212,43 @@ export default {
     },
 
     methods: {
-        previewImage(event) {
+        previewDaImagem(event) {
             this.picture = null
             this.imageData = event.target.files[0]
-            const fileReader = new FileReader()
             
+            const fileReader = new FileReader()
             fileReader.onloadend = () => this.preview = fileReader.result
-
             fileReader.readAsDataURL(this.imageData)
         },
 
-        async updatePerfil() {
+        async atualizar() {
             if(this.imageData) {
-                await this.addPhotoAndSaveUrl()
+                await this.salvarFoto()
 
             } else {
-                this.updateAnuncio()
+                this.atualizarAnuncio()
             }
         },
 
-        async addPhotoAndSaveUrl() {
+        async salvarFoto() {
             this.picture = null
 
-            const storageRef = firebase.storage().ref(`${this.imageData.name}`).put(this.imageData)
+            const storageRef = firebase.storage()
+                                .ref(`${this.imageData.name}`)
+                                .put(this.imageData)
             
             storageRef.on(`state_changed`, snapshot => {}, error => {}, () => {
                     storageRef.snapshot.ref.getDownloadURL().then(url => {
                         this.picture = url;
-
-                        this.updateAnuncio()
+                        this.atualizarAnuncio()
                     })
                 }
             )
         },
 
-        async updateAnuncio() {
+        async atualizarAnuncio() {
             const [id, anuncio] = [this.$route.params.id, this.$route.params.anuncio]
-
-            const new_image = this.picture ? this.picture : this.imagem_animal
+            const new_image = this.picture ? this.picture : this.imagemAnimal
 
             firebase.database()
             .ref('/Anuncios/' + anuncio)
@@ -263,11 +262,11 @@ export default {
                 this.success = true
 
                 setTimeout(() => this.mensagem = '', 1000)
-                setTimeout(() => this.$router.replace({ name: "home" }), 1500);
+                setTimeout(() => this.$router.replace({ name: "home" }), 1500)
             })
         },
 
-        finish() {
+        finalizarAnuncio() {
             window.scrollTo({ top: 0, behavior: "smooth" })
             document.querySelector('.formulario').style.display = 'block'
         }
@@ -275,17 +274,17 @@ export default {
 
     mounted() {
         const anuncio = this.$route.params.anuncio
-        const id_anuncio = this.$route.params.id
+        const idAnuncio = this.$route.params.id
 
         firebase.database().ref('/Anuncios/' + anuncio)
-        .child(id_anuncio)
+        .child(idAnuncio)
         .once("value", snapshot => {
             this.anuncio.type = snapshot.val()["type"]
             this.anuncio.sexo = snapshot.val()["sexo"]
             this.anuncio.peso = parseInt(snapshot.val()["peso"])
             this.anuncio.pausado = snapshot.val()["pausado"]
             this.anuncio.nome = snapshot.val()["nome"]
-            this.imagem_animal = snapshot.val()["imagem"]
+            this.imagemAnimal = snapshot.val()["imagem"]
             this.anuncio.idade = snapshot.val()["idade"]
             this.anuncio.categoria = snapshot.val()["categoria"]
             this.anuncio.castrado = snapshot.val()["castrado"]
@@ -295,7 +294,6 @@ export default {
 
     beforeCreate() {
         const logado = localStorage.getItem('login')
-        
         if(!logado) {
             this.$router.replace({ name: "login" });
         }

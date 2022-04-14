@@ -2,35 +2,37 @@
     <main class="container content-principal">
         <div class="meus-anuncios">
             <div class="side-meus-anuncios">
-                <img v-if="type_account === 'ONG'" :src="image_ong" alt="Imagem da ONG">
+                <img v-if="tipoConta === 'ONG'" :src="imagemOng" alt="Imagem da ONG">
 
-                <span class="name">Olá, {{name_ong}}</span>
-                <p  
-                    v-if="type_account === 'ONG'"
-                    @click="filterAnuncios(0, '')" 
-                    class="link-filter"
-                    >
-                    Todos anuncios
-                </p>
+                <span class="name">Olá, {{nomeOng}}</span>
+                
+                <div v-if="tipoConta === 'ONG'">
+                    <p  
+                        v-if="tipoConta === 'ONG'"
+                        @click="filtrarMeusAnuncios(0, '')" 
+                        class="link-filter"
+                        >
+                        Todos anuncios
+                    </p>
 
+                    <p 
+                        v-if="tipoConta === 'ONG'"
+                        @click="filtrarMeusAnuncios(1, 'pausado', false)" 
+                        class="link-filter"
+                        >
+                        Anuncios ativos
+                    </p>
+
+                    <p 
+                        v-if="tipoConta === 'ONG'"
+                        @click="filtrarMeusAnuncios(2, 'pausado', true)" 
+                        class="link-filter"
+                        >
+                        Anuncios finalizados
+                    </p>
+                </div>
                 <p 
-                    v-if="type_account === 'ONG'"
-                    @click="filterAnuncios(1, 'pausado', false)" 
-                    class="link-filter"
-                    >
-                    Anuncios ativos
-                </p>
-
-                <p 
-                    v-if="type_account === 'ONG'"
-                    @click="filterAnuncios(2, 'pausado', true)" 
-                    class="link-filter"
-                    >
-                    Anuncios finalizados
-                </p>
-
-                <p 
-                    @click="filterFavorites(3)" 
+                    @click="filtrarAnunciosFavoritos(3)" 
                     class="link-filter"
                     >
                     Escolhidos por vocẽ
@@ -38,9 +40,13 @@
             </div>
 
             <div v-if="!loading">
-
                 <div class="open-filter">
-                    <font-awesome-icon @click="openFilter" id="filter" icon="filter" size="2x"/>
+                    <font-awesome-icon 
+                        @click="abrirMenuFiltros" 
+                        id="filter" 
+                        icon="filter" 
+                        size="2x"
+                    />
                 </div>
 
                 <div class="cards" v-if="anuncios.length">
@@ -48,17 +54,17 @@
                          <p
                             v-if="favorite"
                             class="fechar"
-                            @click="searchForId(anuncio)"
+                            @click="procurarAnuncioPeloId(anuncio)"
                             >
                             X
                         </p>
 
                         <router-link :to=" !favorite ? `/anuncio/${anuncio.categoria}/${anuncio.id}` : `/animal/${anuncio.categoria}/${anuncio.id}`">
-                            <div class="image-and-name">
+                            <div class="box-imagem-nome">
                                 <img 
                                     :src="anuncio.imagem" 
                                     alt="Imagem de um animal"
-                                    :class="{ finalizado: anuncio.pausado }"
+                                    :class="{finalizado: anuncio.pausado}"
                                 >
                                 
                                 <span 
@@ -129,7 +135,7 @@
                     </div>
                 </div>
 
-                <div v-else-if="message_favorite" class="message">
+                <div v-else-if="mensagemFavoritada" class="message">
                     <h2>🐶 Oops!</h2>
 
                     <p>Você ainda não tem favoritos :(</p>
@@ -139,7 +145,7 @@
                     <h2 class="message">🐶 Oops! Nada para mostrar</h2>
                 </div>
 
-                <div v-if="show_button">
+                <div v-if="botaoInserirAnuncios">
                     <router-link to="/new-anuncio">
                         <button class="btn-form"> + Novo Anuncio</button>
                     </router-link>
@@ -168,73 +174,70 @@ export default {
 
     data() {
         return {
-            my_anuncios: [],
-            image_ong: null,
             anuncios: [],
-            backup_anuncios: [],
+            backupAnuncios: [],
+            imagemOng: null,
             loading: true,
-            name_ong: '',
+            nomeOng: '',
             favorite: false,
-            show_button: true,
-            message_favorite: false,
-            type_account: '',
+            botaoInserirAnuncios: true,
+            mensagemFavoritada: false,
+            tipoConta: '',
             username: this.$store.state.user.data.displayName,
-            list_favorites: []
+            listaDeFavoritos: []
         }
     },
 
     methods: {
-        filterAnuncios(index, filter, value_filter) {
-            this.addActiveRouterFilter(index)
+        filtrarMeusAnuncios(index, filtro, valor) {
+            this.mudarCorDoFiltro(index)
 
-            this.message_favorite = false
+            this.mensagemFavoritada = false
             this.favorite = false
-            this.show_button = true
+            this.botaoInserirAnuncios = true
 
-            this.anuncios =  this.backup_anuncios
-            this.anuncios = this.anuncios.filter(data => data[filter] === value_filter)
+            this.anuncios =  this.backupAnuncios
+            this.anuncios = this.anuncios.filter(data => data[filtro] === valor)
         },
 
-        async filterFavorites(index) {
-            this.addActiveRouterFilter(index)
+        async filtrarAnunciosFavoritos(index) {
+            this.mudarCorDoFiltro(index)
 
-            this.show_button = false
+            this.botaoInserirAnuncios = false
             this.loading = true
             this.favorite = true
-
-            var list_anuncios_filter = []
             this.anuncios = []
 
-            const favorites = await this.getDataFromApi(this.username, 'favorites')
+            var listaFavoritos = []
+            const favorites = await this.pegarDadosDoBanco(this.username, 'favorites')
 
             if(favorites.val()) {
                 Object.keys(favorites.val()).forEach((key) => {
                     Object.keys(favorites.val()[key]).forEach((idFavorite) => {
-                        this.list_favorites.push(idFavorite)
+                        this.listaDeFavoritos.push(idFavorite)
                         const idAnunciosFavoritos = favorites.val()[key][idFavorite]
 
                         firebase.database().ref('Anuncios').child(key)
                         .once("value", anuncios => {
                             Object.keys(anuncios.val()).forEach((idAnuncios) => {
                                 if(idAnuncios === idAnunciosFavoritos) {
-                                    list_anuncios_filter.push(anuncios.val()[idAnuncios])
+                                    listaFavoritos.push(anuncios.val()[idAnuncios])
                                 }
                             })
                         })
                     })
                 })
-                this.anuncios = list_anuncios_filter
+                this.anuncios = listaFavoritos
                 setTimeout(() => this.loading = false, 300);
-
                 return
             }
             
-            this.message_favorite = true
+            this.mensagemFavoritada = true
             this.anuncios = []
             setTimeout(() => this.loading = false, 300);
         },
 
-        async searchForId(anuncio) {
+        async procurarAnuncioPeloId(anuncio) {
             const username = localStorage.getItem('displayName')
 
             await firebase.database()
@@ -243,32 +246,32 @@ export default {
             .once("value", snapshot => {
                 Object.keys(snapshot.val()).forEach((key) => {
                     if(snapshot.val()[key] === anuncio.id) {
-                        this.delete(anuncio, username, key)
+                        this.deletarAnuncio(anuncio, username, key)
                     }
                 })
             })
         },
 
-        async delete(anuncio, username, remove_anuncio) {
+        async deletarAnuncio(anuncio, username, anuncioParaRemover) {
             await firebase.database()
             .ref(`${username}/favorites/${anuncio.categoria}`)
-            .child(remove_anuncio)
+            .child(anuncioParaRemover)
             .remove(() => {
                 this.loading = true
                 setTimeout(() => {
                     this.loading = false
 
-                    if(this.type_account === 'particular') {
-                        this.filterFavorites(0)
+                    if(this.tipoConta === 'particular') {
+                        this.filtrarAnunciosFavoritos(0)
                         return
                     }
                     
-                    this.filterFavorites(3)
+                    this.filtrarAnunciosFavoritos(3)
                 }, 500);
             })
         },
 
-        addActiveRouterFilter(index) {
+        mudarCorDoFiltro(index) {
             document.querySelector('.side-meus-anuncios').classList.toggle('open-modal')
 
             const activeButton = document.querySelectorAll('.link-filter')
@@ -277,53 +280,53 @@ export default {
             activeButton[index].classList.add('ativo')
         },
 
-        openFilter() {
+        abrirMenuFiltros() {
             document.querySelector('.side-meus-anuncios').classList.toggle('open-modal')
         },
 
-        async getPhotoAndNameOng() {
-            const user = await this.getDataFromApi(this.username)
-            this.name_ong = user.val()["nameOng"]
-            this.image_ong = user.val()["image"]
+        async pegarFotoNomeOng() {
+            const fotoNome = await this.pegarDadosDoBanco(this.username)
+            this.nomeOng = fotoNome.val()["nameOng"]
+            this.imagemOng = fotoNome.val()["image"]
 
             setTimeout(() => this.loading = false, 500)
         },
 
-        async getDataFromApi(ref, child = '') {
+        async pegarDadosDoBanco(ref, child = '') {
             return await firebase.database()
                 .ref(`${ref}/${child}`)
                 .once("value", snapshot => snapshot.exists() ? snapshot.val() : null)
         },
 
-        async getTypeAccount() {
+        async pegarTipoDeConta() {
             await firebase.database()
             .ref(this.username)
-            .once("value", snapshot => this.type_account = snapshot.val()["type"])
+            .once("value", snapshot => this.tipoConta = snapshot.val()["type"])
         }
     },
 
     async mounted() {
-        await this.getTypeAccount()
-        
-        if(this.type_account === 'particular') {
-            this.filterFavorites(0)
+        await this.pegarTipoDeConta()
+        if(this.tipoConta === 'particular') {
+            this.filtrarAnunciosFavoritos(0)
             return
         }
 
         document.querySelectorAll('.link-filter')[0].classList.add('ativo')
 
-        const allAnuncios = await getMydatas('username', this.username)
-        this.anuncios = allAnuncios
-        this.backup_anuncios = allAnuncios
+        const todosAnunciosDaConta = await getMydatas('username', this.username)
+        this.anuncios = todosAnunciosDaConta
+        this.backupAnuncios = todosAnunciosDaConta
 
-        this.getPhotoAndNameOng()
+        this.pegarFotoNomeOng()
     },
 
     beforeCreate() {
         document.title = 'Meus'
-
         const logado = localStorage.getItem('login')
-        !logado && this.$router.replace({ name: "login" });
+        if(!logado) {
+            this.$router.replace({ name: "login" })
+        }
     }
 }
 </script>
@@ -384,6 +387,7 @@ export default {
     max-width: 200px;
     height: 150px;
     border-radius: 10px;
+    object-fit: cover;
 }
 
 .message {
