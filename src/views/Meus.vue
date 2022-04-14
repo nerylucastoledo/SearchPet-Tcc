@@ -421,10 +421,6 @@ export default {
     position: relative;
 }
 
-.finalizado {
-    filter: brightness(.50);
-}
-
 .anuncio-finalizado {
     position: absolute;
     margin-left: auto;

@@ -17,7 +17,10 @@
                     >
                     <router-link :to="`/animal/${anuncio.categoria}/${anuncio.id}`">
                         <div class="box-imagem-nome">
-                            <img :src="anuncio.imagem" alt="Imagem de um animal">
+                            <img 
+                                :src="anuncio.imagem" 
+                                :class="{ finalizado: anuncio.pausado }"
+                                alt="Imagem de um animal">
 
                             <div class="box-nome-logo">
                                 <h1>{{anuncio.nome}}</h1>
@@ -28,6 +31,20 @@
                                     alt="Logo da ONG"
                                 >
                             </div>
+
+                            <span 
+                                v-if="anuncio.pausado && anuncio.categoria === 'Adocao'"
+                                class="anuncio-finalizado"
+                                >
+                                Adotado 🐶
+                            </span>
+
+                            <span 
+                                v-else-if="anuncio.pausado"
+                                class="anuncio-finalizado"
+                                >
+                                Encontrado 🐶
+                            </span>
                         </div>
 
                         <div 
@@ -144,7 +161,7 @@ export default {
 
     methods: {
         async buscarTodosAnuncios() {
-            this.anuncios = await getMydatas('pausado', false)
+            this.anuncios = await getMydatas()
             this.backupAnuncios = this.anuncios
 
             setTimeout(() => this.loading = false, 1000)
@@ -277,6 +294,18 @@ export default {
     display: block;
     object-fit: cover;
     border-radius: 10px 10px 0 0;
+}
+
+.anuncio-finalizado {
+    position: absolute;
+    margin-left: auto;
+    margin-right: auto;
+    left: 0;
+    right: 0;
+    bottom: 80px;
+    color: #fff;
+    font-size: 32px;
+    text-align: center;
 }
 
 .box-imagem-nome h1 {

@@ -423,6 +423,10 @@ input[type="radio"]:checked {
         display: block;
     }
 
+    .login .type-account {
+        display: flex !important;
+    }
+
     .login input{
         width: 100%;
     }
@@ -456,13 +460,36 @@ input[type="radio"]:checked {
 }
 
 @media (max-width: 500px) {
+    .login {
+        padding: 50px 0px
+    }
+
     .login img {
         display: block;
         max-width: 100%;
+        padding: 0 10px;
     }
 
     .btn-form {
-        max-width: 100%;
+        text-align: center;
+        width: 70%;
+    }
+
+    .login div, .login .type-account {
+        padding: 0 10px;
+        margin-right: 10px;
+    }
+
+    .login .type-account {
+        margin-bottom: 30px;
+    }
+
+    .form-control {
+        font-weight: bold;
+        display: grid;
+        grid-template-columns: 30px auto;
+        gap: 0.5em;
+        height: 60px;
     }
 }
 

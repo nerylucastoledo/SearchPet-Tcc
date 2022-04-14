@@ -17,11 +17,17 @@
                 <option value="Adocao">Adoção</option>
                 <option value="Perdido">Perdidos</option>
             </select>
+
+            <select v-model="pausado" class="filter-selected">
+                <option disabled value="">Tipo de anuncio</option>
+                <option value="false">Ativos</option>
+                <option value="true">FInalizados</option>
+            </select>
         </div>
 
         <p 
             class="clear-filter" 
-            v-if="type || city" 
+            v-if="type || city || pausado" 
             @click="clearFiler"
             >
             Limpar filtro
@@ -37,7 +43,8 @@ export default {
     data() {
         return {
             city: "",
-            type: ""
+            type: "",
+            pausado: ""
         }
     },
 
@@ -52,6 +59,12 @@ export default {
             this.$root.$emit('filterPageHome', {
                 'categoria': this.type
             })
+        },
+
+        pausado() {
+            this.$root.$emit('filterPageHome', {
+                'pausado': this.pausado
+            })
         }
     },
 
@@ -60,6 +73,7 @@ export default {
             this.$root.$emit('filterPageHome', 'limpar')
             this.city = ''
             this.type = ''
+            this.pausado = ''
         },
     }
 }

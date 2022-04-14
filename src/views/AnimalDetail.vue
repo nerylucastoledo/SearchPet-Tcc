@@ -228,10 +228,6 @@ export default {
     object-fit: cover;
 }
 
-.finalizado {
-    filter: brightness(.50);
-}
-
 .anuncio-finalizado {
     position: absolute;
     margin-left: auto;

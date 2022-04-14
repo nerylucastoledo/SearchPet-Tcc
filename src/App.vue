@@ -151,5 +151,7 @@ input:focus {
     background-color: #fff;
 }
 
-
+.finalizado {
+    filter: brightness(.50);
+}
 </style>
