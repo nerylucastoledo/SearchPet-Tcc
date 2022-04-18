@@ -27,7 +27,7 @@
 
             </div>
 
-            <div class="info-animal">
+            <div v-if="!anuncio.pausado" class="info-animal">
                 <div>
                     <div class="box-info">
                         <div>
@@ -75,48 +75,75 @@
                     </div>
                 </div>
             </div>
-        </div>
-        
-        <div v-if="!anuncio.pausado">
-            <h2 class="titulo">Entre em contato 🐶</h2>
 
-            <div class="info-contato">
+
+            <div class="info-animal" v-else>
                 <div>
-                    <p>
-                        Minha ONG:
-                        <strong style="color: #36C9D2">{{dono.nameOng}}</strong>
-                    </p>
+                    <h1 class="titulo titulo-adotado">Quem {{categoria}}</h1>
 
-                    <p>
-                        Ligue para:
-                        <strong style="color: #36C9D2">{{dono.whatsapp}}</strong>
-                    </p>
-                </div>
-
-                <div>
-                    <p>
-                        Rua: 
-                        <strong style="color: #36C9D2">{{dono.street}}</strong>
-                    </p>
-
-                    <p>
-                        Bairro: 
-                        <strong style="color: #36C9D2">{{dono.district}}</strong>
-                    </p>
+                    <div class="box-info anuncio-pausado">
+                        <p>{{anuncio.nome_finalizado}}</p>
+                    </div>
+                    <div class="box-info anuncio-pausado">
+                        <p>{{formatarData(anuncio.data_finalizado)}}</p>
+                    </div>
+                    <div class="box-info anuncio-pausado">
+                        <p>{{anuncio.cidade_finalizado}}</p>
+                    </div>
+                    <div class="box-info anuncio-pausado contato-finalizado">
+                        <a target= "_blank" :href="`https://api.whatsapp.com/send?phone=55${anuncio.contato_finalizado}&amp;text=Gostaria%20de%20falar%20sobre%20o(a)%20${anuncio.nome}.`">
+                            <span>{{anuncio.contato_finalizado}}</span>
+                            <img src="../assets/whatsapp.png" alt="Logo do Whatsapp">
+                        </a>
+                    </div>
                 </div>
             </div>
         </div>
 
-        <a  v-if="!anuncio.pausado" 
-            target = "_blank" 
-            :href="whatsapp"
-            >
-            <button class="button-whatsapp">
-                <span>Me chame</span>
+        <div v-if="!anuncio.pausado">
+            <div>
+                <h2 class="titulo">Entre em contato 🐶</h2>
 
-                <img src="../assets/whatsapp.png" alt="Loggo do Whatsapp">
-            </button>
-        </a>
+                <div class="info-contato">
+                    <div>
+                        <p>
+                            Minha ONG:
+                            <strong style="color: #36C9D2">{{dono.nameOng}}</strong>
+                        </p>
+
+                        <p>
+                            Ligue para:
+                            <strong style="color: #36C9D2">{{dono.whatsapp}}</strong>
+                        </p>
+                    </div>
+
+                    <div>
+                        <p>
+                            Cidade: 
+                            <strong style="color: #36C9D2">{{dono.city}}</strong>
+                        </p>
+
+                        <p>
+                            Rua: 
+                            <strong style="color: #36C9D2">{{dono.street}}</strong>
+                        </p>
+
+                        <p>
+                            Bairro: 
+                            <strong style="color: #36C9D2">{{dono.district}}</strong>
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <a target = "_blank" :href="whatsapp">
+                <button class="button-whatsapp">
+                    <span>Me chame</span>
+
+                    <img src="../assets/whatsapp.png" alt="Logo do Whatsapp">
+                </button>
+            </a>
+        </div>
 
         <PorqueAdotar/>
     </div>
@@ -137,7 +164,8 @@ export default {
         return {
             anuncio: '',
             dono: '',
-            whatsapp: ''
+            whatsapp: '',
+            categoria: ''
         }
     },
 
@@ -167,6 +195,11 @@ export default {
                                         .replaceAll(" ", "")
 
             return numeroFormatado
+        },
+
+        formatarData(data) {
+            var dataSeparada = data.split("-")
+            return `${dataSeparada[2]}/${dataSeparada[1]}/${dataSeparada[0]}`
         }
     },
 
@@ -178,6 +211,7 @@ export default {
         .child(id)
         .once("value", snapshot => {
             this.anuncio = snapshot.val()
+            this.categoria = this.anuncio.categoria === "Perdido" ? "achou" : "adotou"
             this.pegarNumeroDono()
         })
     },
@@ -234,7 +268,7 @@ export default {
     margin-right: auto;
     left: 0;
     right: 0;
-    bottom: 40px;
+    bottom: 80px;
     color: #fff;
     font-size: 32px;
     text-align: center;
@@ -252,6 +286,12 @@ export default {
     padding: 20px;
     text-align: center;
 }
+
+.titulo-adotado {
+    margin-top: 0px;
+    margin-bottom: 20px;
+}
+
 .box-info img {
     width: 30px;
     height: 30px;
@@ -291,6 +331,27 @@ export default {
     margin-top: 30px !important;
 }
 
+.anuncio-pausado {
+    background-color: #36C9D2;
+    color: #fff;
+    font-size: 18px;
+}
+
+.anuncio-pausado img {
+    position: unset !important;
+}
+
+.contato-finalizado a {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: #fff;
+}
+
+.contato-finalizado img {
+    margin-left: 10px;
+}
+
 .button-whatsapp {
     background-color: #25D366;
     display: block;
@@ -325,6 +386,10 @@ export default {
     .info-animal > div > div {
         width: 80%;
     }
+
+    .anuncio-pausado {
+        width: 85% !important;
+    }
 }
 
 @media (max-width: 994px) {
@@ -345,6 +410,11 @@ export default {
 
     .info-animal > div > div {
         width: 85%;
+    }
+
+    .anuncio-pausado {
+        display: block;
+        margin: 0 auto;
     }
 
     .perfil-animal > .info-animal {

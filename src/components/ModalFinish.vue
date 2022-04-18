@@ -25,6 +25,16 @@
                 v-model="form.contato_finalizado"
             >
 
+            <label for="">Cidade da pessoa</label>
+            <input 
+                type="text"
+                id="cidade_finalizado" 
+                name="cidade_finalizado"
+                placeholder="Pouso Alegre - MG"
+                required 
+                v-model="form.cidade_finalizado"
+            >
+
             <div>
                 <button class="btn-form" type="submit">Finalizar</button>
             </div>
@@ -53,6 +63,7 @@ export default {
                 nome_finalizado: "",
                 data_finalizado: "",
                 contato_finalizado: "",
+                cidade_finalizado: ""
             },
             mensagem: "",
             success: true,
