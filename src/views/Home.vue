@@ -1,119 +1,124 @@
 <template>
-    <main class="container content-principal">
-        <div v-if="mensagem.length">
-            <ModalSuccess 
-                :mensagem="mensagem" 
-                :success="success">
-            </ModalSuccess>
-        </div>
+    <main>
 
-        <FilterData :citys="citys"></FilterData>
+        <Introducao/>
 
-        <div v-if="!loading">
-            <div v-if="anuncios.length" class="cards">
-                <div 
-                    v-for="anuncio, index in anuncios" 
-                    :key="anuncio.id"
-                    >
-                    <router-link :to="`/animal/${anuncio.categoria}/${anuncio.id}`">
-                        <div class="box-imagem-nome">
-                            <img 
-                                :src="anuncio.imagem" 
-                                :class="{ finalizado: anuncio.pausado }"
-                                alt="Imagem de um animal">
+        <div class="container content-principal">
+            <div v-if="mensagem.length">
+                <ModalSuccess 
+                    :mensagem="mensagem" 
+                    :success="success">
+                </ModalSuccess>
+            </div>
 
-                            <div class="box-nome-logo">
-                                <h1>{{anuncio.nome}}</h1>
+            <FilterData :citys="citys"></FilterData>
 
+            <div v-if="!loading">
+                <div v-if="anuncios.length" class="cards">
+                    <div 
+                        v-for="anuncio, index in anuncios" 
+                        :key="anuncio.id"
+                        >
+                        <router-link :to="`/animal/${anuncio.categoria}/${anuncio.id}`">
+                            <div class="box-imagem-nome">
                                 <img 
-                                    v-if="anuncio.logo_ong" 
-                                    :src="anuncio.logo_ong" 
-                                    alt="Logo da ONG"
-                                >
+                                    :src="anuncio.imagem" 
+                                    :class="{ finalizado: anuncio.pausado }"
+                                    alt="Imagem de um animal">
+
+                                <div class="box-nome-logo">
+                                    <h1>{{anuncio.nome}}</h1>
+
+                                    <img 
+                                        v-if="anuncio.logo_ong" 
+                                        :src="anuncio.logo_ong" 
+                                        alt="Logo da ONG"
+                                    >
+                                </div>
+
+                                <span 
+                                    v-if="anuncio.pausado && anuncio.categoria === 'Adocao'"
+                                    class="anuncio-finalizado"
+                                    >
+                                    Adotado 🐶
+                                </span>
+
+                                <span 
+                                    v-else-if="anuncio.pausado"
+                                    class="anuncio-finalizado"
+                                    >
+                                    Encontrado 🐶
+                                </span>
                             </div>
 
-                            <span 
-                                v-if="anuncio.pausado && anuncio.categoria === 'Adocao'"
-                                class="anuncio-finalizado"
+                            <div 
+                                id="category" 
+                                :class="[anuncio.categoria === 'Adocao' ? 'adocao' : 'perdido']"
                                 >
-                                Adotado 🐶
-                            </span>
-
-                            <span 
-                                v-else-if="anuncio.pausado"
-                                class="anuncio-finalizado"
-                                >
-                                Encontrado 🐶
-                            </span>
-                        </div>
-
-                        <div 
-                            id="category" 
-                            :class="[anuncio.categoria === 'Adocao' ? 'adocao' : 'perdido']"
-                            >
-                            <p>{{anuncio.categoria}}</p>
-                        </div>
-
-                        <div class="dados">
-                            <div>
-                                <div>
-                                    <p>{{anuncio.idade}}</p>
-
-                                    <span>
-                                        <img src="../assets/idade.png" alt="Icon Calendario">
-                                    </span>
-                                </div>
-
-                                <div>
-                                    <p v-if="anuncio.castrado === false">Não castrado</p>
-                                    <p v-else>Castrado</p>
-
-                                    <span>
-                                        <img src="../assets/castrado.png" alt="Logo pata">
-                                    </span>
-                                </div>
+                                <p>{{anuncio.categoria}}</p>
                             </div>
 
-                            <div>
+                            <div class="dados">
                                 <div>
-                                    <p :class="[anuncio.sexo === 'Macho' ? 'macho' : 'femea']">
-                                        {{anuncio.sexo}}
-                                    </p>
-                                    
-                                    <span>
-                                        <img src="../assets/sexo.png" alt="Icon Sexo">
-                                    </span>
+                                    <div>
+                                        <p>{{anuncio.idade}}</p>
+
+                                        <span>
+                                            <img src="../assets/idade.png" alt="Icon Calendario">
+                                        </span>
+                                    </div>
+
+                                    <div>
+                                        <p v-if="anuncio.castrado === false">Não castrado</p>
+                                        <p v-else>Castrado</p>
+
+                                        <span>
+                                            <img src="../assets/castrado.png" alt="Logo pata">
+                                        </span>
+                                    </div>
                                 </div>
 
                                 <div>
-                                    <p>{{anuncio.peso}} Kg</p>
-                                    
-                                    <span>
-                                        <img src="../assets/peso.png" alt="Icon KG">
-                                    </span>
+                                    <div>
+                                        <p :class="[anuncio.sexo === 'Macho' ? 'macho' : 'femea']">
+                                            {{anuncio.sexo}}
+                                        </p>
+                                        
+                                        <span>
+                                            <img src="../assets/sexo.png" alt="Icon Sexo">
+                                        </span>
+                                    </div>
+
+                                    <div>
+                                        <p>{{anuncio.peso}} Kg</p>
+                                        
+                                        <span>
+                                            <img src="../assets/peso.png" alt="Icon KG">
+                                        </span>
+                                    </div>
                                 </div>
                             </div>
-                        </div>
-                    </router-link>
+                        </router-link>
 
-                    <div class="favoritar">
-                        <p @click="favoritar(index, anuncio)">
-                            <font-awesome-icon icon="heart" size="2x"/>
-                        </p>
+                        <div class="favoritar">
+                            <p @click="favoritar(index, anuncio)">
+                                <font-awesome-icon icon="heart" size="2x"/>
+                            </p>
+                        </div>
                     </div>
+                </div>
+
+                <div v-else>
+                    <h1 class="not-found-anuncio">Ooops! Nenhum anúncio encontrado :(</h1>
                 </div>
             </div>
 
             <div v-else>
-                <h1 class="not-found-anuncio">Ooops! Nenhum anúncio encontrado :(</h1>
+                <Loading/>
             </div>
-        </div>
 
-        <div v-else>
-            <Loading/>
+            <PorqueAdotar/>
         </div>
-
-        <PorqueAdotar/>
     </main>
 </template>
 
@@ -123,6 +128,7 @@ import { getMydatas } from '@/help.js'
 import firebase from 'firebase'
 
 import PorqueAdotar from '../components/PorqueAdotar.vue'
+import Introducao from '../components/Introducao.vue'
 import Loading from '../components/Loading'
 import ModalSuccess from '../components/ModalSuccess.vue'
 import FilterData from '../components/FilterData.vue'
@@ -133,7 +139,8 @@ export default {
         PorqueAdotar,
         ModalSuccess,
         FilterData,
-        Loading
+        Loading,
+        Introducao
     },
 
     data() {
