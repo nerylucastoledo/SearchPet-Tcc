@@ -78,7 +78,7 @@ export default {
     methods: {
         login() {
             firebase.auth().signInWithEmailAndPassword(this.form.email, this.form.password)
-            .then(() => this.$router.replace({ name: "home" }))
+            .then(() => {this.$router.replace({ name: "home" })})
             .catch(error => {
                 if(error.code === "auth/user-not-found") {
                     this.notFoundUser = 'Usuário não encontrado'

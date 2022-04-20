@@ -166,13 +166,10 @@ export default {
 
         atualizarPerfil() {
             const file = this.$refs.newImagem.files[0];
-
             if(file) {
                 this.salvarNovaImagem(file)
                 return
             }
-
-            console.log('entrei')
 
             this.atualizarDados()
         },

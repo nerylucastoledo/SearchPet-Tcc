@@ -183,7 +183,7 @@ export default {
             botaoInserirAnuncios: true,
             mensagemFavoritada: false,
             tipoConta: '',
-            username: this.$store.state.user.data.displayName,
+            username: '',
             listaDeFavoritos: []
         }
     },
@@ -306,6 +306,7 @@ export default {
     },
 
     async mounted() {
+        this.username = localStorage.getItem("displayName")
         await this.pegarTipoDeConta()
         if(this.tipoConta === 'particular') {
             this.filtrarAnunciosFavoritos(0)

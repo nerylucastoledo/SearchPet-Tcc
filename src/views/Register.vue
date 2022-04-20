@@ -1,6 +1,6 @@
 <template>
 
-    <div class=" container login-form">
+    <div class="container login-form">
         <div v-if="mensagem.length">
             <ModalSuccess :mensagem="mensagem" :success="success"></ModalSuccess>
         </div>
@@ -63,7 +63,7 @@
                 <div>
                     <div>
                         <label for="email">Seu email</label>
-                        <input 
+                        <input
                         type="email"
                         id="email" 
                         name="email"
@@ -160,18 +160,15 @@
                     <div>
                         <label for="image">Foto de perfil</label>
                         <input 
-                        type="file" 
-                        ref="imageData"
-                        accept="image/*"
+                            required
+                            type="file" 
+                            ref="imageData"
+                            accept="image/*"
                         >
                     </div>
                 </div>
 
-                <button 
-                    class="btn-form" 
-                    type="submit">
-                    Cadastrar
-                </button>
+                <button class="btn-form" type="submit">Cadastrar</button>
             </form>
         </div>
     </div>
@@ -215,22 +212,28 @@ export default {
         registrarCadastro() {
             if(this.typeAccount === 'ONG' && this.usernameApproved) {
                 this.adicionarFoto()
+                return
             }
             
             if(this.usernameApproved) {
                 this.criarUsuario()
+                return
             }
+            
+            this.mostrarMensagem('Username já em uso', false, 2000)
         },
 
         async adicionarFoto() {
             const file = this.$refs.imageData.files[0];
             
-            const storageRef = firebase.storage().ref(`${file.name}`).put(file);
+            const storageRef = firebase.storage().ref(`${file.name}`).put(file)
             storageRef.on(`state_changed`, snapshot => {}, error => {}, () => {
-                    storageRef.snapshot.ref.getDownloadURL().then((url) => {
+                    storageRef.snapshot.ref.getDownloadURL()
+                    .then((url) => {
                         this.form.image = url
                         this.criarUsuario()
                     })
+                    .catch(() => this.mostrarMensagem('Essa imagem já existe', false, 2000))
                 }
             );
         },
@@ -241,29 +244,26 @@ export default {
                 firebase.auth().currentUser.updateProfile({ 
                     displayName: this.username 
                 })  
-
-                this.mostrarMensagem('Usuario criado com sucesso!', true, 2000)
+                this.mostrarMensagem('Conta criada com sucesso', true, 2000)
                 this.inserirOsDadosDaPessoa(this.username)
             })
-            .catch(() => this.mostrarMensagem('Não foi possível criar!', false, 1000))
+            .catch(() => this.mostrarMensagem('Já existe uma conta com esse e-mail', false, 2000))
         },
 
         async inserirOsDadosDaPessoa(username) {
             await firebase.database()
             .ref(`/${username}`)
-            .once("value", snapshot => {
-                if(snapshot.exists()) {
-                    this.mostrarMensagem('Username existente!', false, 1000)
-                    return
-                }
-
+            .once("value", () => {
                 firebase.database()
                 .ref(`/${username}`)
                 .update({
                     ...this.form,
                     type: this.typeAccount
                 })
-                .then(() => this.$router.push({name: 'home'}), 4000)
+                .then(() => {
+                    localStorage.setItem('displayName', username)
+                    this.$router.push({name: 'home'}), 4000
+                })
             })
         },
 
@@ -302,7 +302,6 @@ export default {
                     document.getElementById('username').style.border = '1px solid red'
                     this.mostrarMensagem('Username existente!', false, 2000)
                     this.usernameApproved = false
-
                     return
                 }
 
