@@ -123,7 +123,7 @@
                                     </div>
 
                                     <div>
-                                        <p class="castrado">{{anuncio.peso}}</p>
+                                        <p class="castrado">{{anuncio.peso}} Kg</p>
                                         
                                         <span>
                                             <img src="../assets/peso.png" alt="Calendario">

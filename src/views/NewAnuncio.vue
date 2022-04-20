@@ -171,7 +171,7 @@
             </div>
         </form>
 
-        <form class="image-animal form-geral hide-now">
+        <form class="image-animal form-geral hide-now" @submit.prevent="createAnuncio">
             <h1 class="titulo">Ele deve ser lindo :)</h1>
 
             <p>Gostaria de mostrar ele pro mundo?</p>
@@ -183,12 +183,13 @@
             >
 
             <input 
+                required
                 type="file"
                 accept="image/*" 
                 @change="previewImage"
             >        
 
-            <button class="btn-form" type="submit" @click.prevent="createAnuncio">Salvar</button>
+            <button class="btn-form" id="save-anuncio" :disabled="disabled" type="submit">Salvar</button>
 
             <router-link to="/">
                 <button class="btn-form btn-cancel" type="submit">Cancelar</button>
@@ -227,7 +228,6 @@ export default {
                 nome: "",
                 peso: '',
                 sexo: "",
-                idade: "",
                 castrado: "",
                 categoria: "",
                 imagem: '',
@@ -242,43 +242,34 @@ export default {
             preview: null,
             success: true,
             mensagem: "",
-            dataUser: ""
-        }
-    },
-    watch: {
-        preview() {
-            return this.preview
+            dataUser: "",
+            disabled: false
         }
     },
 
     methods: {
         backForm() {
             this.idForm -= 1
-
             this.showForm()
         },
 
         nextForm() {
             this.idForm += 1
-
             this.showForm()
         },
 
         animalSelected(animalSelected, id) {
             this.effectSelectDiv('#animal', '.animal', id)
-
             this.anuncio.type = animalSelected
         },
 
         sexoAnimal(sexoSelected, id) {
             this.effectSelectDiv('#sexo', '.sexo-name', id)
-
             this.anuncio.sexo = sexoSelected
         },
 
         castramento(valueCastrado, id) {
             this.effectSelectDiv('#castrado', '.castrado', id)
-
             this.anuncio.castrado = valueCastrado
         },
 
@@ -315,33 +306,24 @@ export default {
             this.picture = null;
             this.imageData = event.target.files[0];
             const fileReader = new FileReader()
-
             fileReader.onloadend = () => this.preview = fileReader.result
-
             fileReader.readAsDataURL(this.imageData)
         },
 
         async createAnuncio() {
-            if(this.imageData) {
-                await this.addPhotoAndSaveUrl()
-
-            } else {
-                this.create()
-            }
-
+            this.disabled = true;
+            await this.addPhotoAndSaveUrl()
         },
 
         async addPhotoAndSaveUrl() {
-            const storageRef = firebase.storage().ref(`${this.imageData.name}`).put(this.imageData);
-            
+            const storageRef = firebase.storage().ref(`${this.imageData.name}`).put(this.imageData)
             storageRef.on(`state_changed`, () => {
                 storageRef.snapshot.ref.getDownloadURL()
                 .then((url) => {
                     this.anuncio.imagem = url;
-
                     this.create()
-                });
-            });
+                })
+            })
         },
 
         async create() {
@@ -353,25 +335,24 @@ export default {
             .update({
                 [id]: {
                     ...this.anuncio,
-                    idade: `${this.idadeSelected.toString()} ${this.tempo}`,
-                    peso: `${this.anuncio.peso} Kg`,
                     cidade: this.dataUser.city,
                     id: id,
+                    idade: `${this.idadeSelected.toString()} ${this.tempo}`,
                     local: this.dataUser.district,
+                    logo_ong: this.dataUser.image,
                     pausado: false,
                     telefone: this.dataUser.whatsapp, 
                     username: this.$store.state.user.data.displayName,
-                    logo_ong: this.dataUser.image
                 }
             })
             .then(() => {
                 this.mensagem = 'Anuncio inserido!'
                 this.success = true
 
-                setTimeout(() => this.mensagem = '', 1000)
+                setTimeout(() => this.mensagem = '', 2000)
                 setTimeout(() => this.$router.replace(
                     { name: "home" }
-                ), 1500);
+                ), 2000);
             })
         }
     },

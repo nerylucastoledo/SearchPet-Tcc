@@ -86,7 +86,7 @@
                                 </div>
 
                                 <div>
-                                    <p>{{anuncio.peso}}</p>
+                                    <p>{{anuncio.peso}} Kg</p>
                                     
                                     <span>
                                         <img src="../assets/peso.png" alt="Icon KG">

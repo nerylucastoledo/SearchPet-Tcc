@@ -17,6 +17,12 @@
                 <option value="Adocao">Adoção</option>
                 <option value="Perdido">Perdidos</option>
             </select>
+
+            <select v-model="pausado" class="filter-selected">
+                <option disabled value="">Tipo de anuncio</option>
+                <option value="false">Ativos</option>
+                <option value="true">FInalizados</option>
+            </select>
         </div>
 
         <p 
