@@ -174,6 +174,7 @@ export default {
     },
 
     mounted() {
+        document.title = "Página inicial"
         this.buscarTodosAnuncios()
         this.$root.$on('filterPageHome', (filter) => this.filter(filter))
     },

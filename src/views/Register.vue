@@ -312,6 +312,7 @@ export default {
     },
 
     mounted() {
+        document.title = "Novo cadastro"
         this.typeAccount = 'ONG'
     }
 }

@@ -351,6 +351,7 @@ export default {
 
     beforeCreate() {
         const userName = this.$store.state.user.data.displayName
+        document.title = "Novo anúncio"
         
         firebase.database()
         .ref(userName)

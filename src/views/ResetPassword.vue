@@ -64,6 +64,10 @@ export default {
             .catch(() => this.error = "Email não encontrado.")
         }
     },
+
+    created() {
+        document.title = "Resetar senha"
+    }
 }
 </script>
 

@@ -221,6 +221,7 @@ export default {
 
     created() {
         const displayName = localStorage.getItem('displayName')
+        document.title = "Meu perfil"
 
         firebase.database()
         .ref(displayName)

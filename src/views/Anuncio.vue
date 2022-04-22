@@ -289,6 +289,7 @@ export default {
             this.anuncio.categoria = snapshot.val()["categoria"]
             this.anuncio.castrado = snapshot.val()["castrado"]
             this.anuncio.id = snapshot.val()["id"]
+            document.title = `Anuncio - ${snapshot.val()["Nome"]}`
         })
     }
 }

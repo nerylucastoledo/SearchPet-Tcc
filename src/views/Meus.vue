@@ -233,6 +233,7 @@ export default {
 
     async mounted() {
         this.username = localStorage.getItem("displayName")
+        document.title = "Meus anúncios"
 
         await this.pegarConta()
         if(this.tipoConta === 'particular') {

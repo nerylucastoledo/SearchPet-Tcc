@@ -184,7 +184,6 @@ export default {
             .once("value", snapshot => {
                 this.dono = snapshot.val()
                 var numero = this.formatarNumero(this.dono.whatsapp)
-                console.log(numero)
                 this.whatsapp = `https://api.whatsapp.com/send?phone=55${numero}`
             })
         },
@@ -212,6 +211,7 @@ export default {
         .child(id)
         .once("value", snapshot => {
             this.anuncio = snapshot.val()
+            document.title = `Detalhe - ${snapshot.val()["Nome"]}`
             this.categoria = this.anuncio.categoria === "Perdido" ? "achou" : "adotou"
             this.pegarNumeroDono()
         })

@@ -80,7 +80,9 @@ export default {
             firebase.auth().signInWithEmailAndPassword(this.form.email, this.form.password)
             .then(() => {
                 localStorage.setItem('login', true)
-                this.$router.replace({ name: "home" })
+                setTimeout(() => {
+                    this.$router.replace({ name: "home" })
+                }, 500);
             })
             .catch(error => {
                 if(error.code === "auth/user-not-found") {
