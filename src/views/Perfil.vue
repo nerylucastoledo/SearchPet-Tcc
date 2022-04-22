@@ -135,6 +135,7 @@ export default {
                 street: "",
                 whatsapp: "",
             },
+            typeAccount: "",
             imagemBanco: null,
             newImagem: '',
             picture: '',
@@ -165,6 +166,12 @@ export default {
         },
 
         atualizarPerfil() {
+
+            if(this.typeAccount === 'particular') {
+                this.atualizarDados()
+                return
+            }
+
             const file = this.$refs.newImagem.files[0];
             if(file) {
                 this.salvarNovaImagem(file)
@@ -188,7 +195,11 @@ export default {
 
         async atualizarDados() {
             const displayName = localStorage.getItem('displayName')
-            const imagem = this.picture ? this.picture : this.imagemBanco
+            var imagem = this.picture ? this.picture : this.imagemBanco
+
+            if(this.typeAccount === 'particular') {
+                imagem = ""
+            }
 
             firebase.database()
             .ref(displayName)
@@ -209,12 +220,6 @@ export default {
     },
 
     created() {
-        const logado = localStorage.getItem('login')
-        if(!logado) {
-            this.$router.replace({ name: "login" });
-            return
-        }
-            
         const displayName = localStorage.getItem('displayName')
 
         firebase.database()
@@ -229,6 +234,7 @@ export default {
                 street: snapshot.val()["street"],
                 whatsapp: snapshot.val()["whatsapp"],
             }
+            this.typeAccount = snapshot.val()["type"]
         })
     },
 }

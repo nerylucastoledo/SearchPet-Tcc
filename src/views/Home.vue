@@ -1,13 +1,11 @@
 <template>
     <main>
-
-        <Introducao/>
-
         <div class="container content-principal">
             <div v-if="mensagem.length">
                 <ModalSuccess 
                     :mensagem="mensagem" 
-                    :success="success">
+                    :success="success"
+                    >
                 </ModalSuccess>
             </div>
 
@@ -20,84 +18,7 @@
                         :key="anuncio.id"
                         >
                         <router-link :to="`/animal/${anuncio.categoria}/${anuncio.id}`">
-                            <div class="box-imagem-nome">
-                                <img 
-                                    :src="anuncio.imagem" 
-                                    :class="{ finalizado: anuncio.pausado }"
-                                    alt="Imagem de um animal">
-
-                                <div class="box-nome-logo">
-                                    <h1>{{anuncio.nome}}</h1>
-
-                                    <img 
-                                        v-if="anuncio.logo_ong" 
-                                        :src="anuncio.logo_ong" 
-                                        alt="Logo da ONG"
-                                    >
-                                </div>
-
-                                <span 
-                                    v-if="anuncio.pausado && anuncio.categoria === 'Adocao'"
-                                    class="anuncio-finalizado"
-                                    >
-                                    Adotado 🐶
-                                </span>
-
-                                <span 
-                                    v-else-if="anuncio.pausado"
-                                    class="anuncio-finalizado"
-                                    >
-                                    Encontrado 🐶
-                                </span>
-                            </div>
-
-                            <div 
-                                id="category" 
-                                :class="[anuncio.categoria === 'Adocao' ? 'adocao' : 'perdido']"
-                                >
-                                <p>{{anuncio.categoria}}</p>
-                            </div>
-
-                            <div class="dados">
-                                <div>
-                                    <div>
-                                        <p>{{anuncio.idade}}</p>
-
-                                        <span>
-                                            <img src="../assets/idade.png" alt="Icon Calendario">
-                                        </span>
-                                    </div>
-
-                                    <div>
-                                        <p v-if="anuncio.castrado === false">Não castrado</p>
-                                        <p v-else>Castrado</p>
-
-                                        <span>
-                                            <img src="../assets/castrado.png" alt="Logo pata">
-                                        </span>
-                                    </div>
-                                </div>
-
-                                <div>
-                                    <div>
-                                        <p :class="[anuncio.sexo === 'Macho' ? 'macho' : 'femea']">
-                                            {{anuncio.sexo}}
-                                        </p>
-                                        
-                                        <span>
-                                            <img src="../assets/sexo.png" alt="Icon Sexo">
-                                        </span>
-                                    </div>
-
-                                    <div>
-                                        <p>{{anuncio.peso}} Kg</p>
-                                        
-                                        <span>
-                                            <img src="../assets/peso.png" alt="Icon KG">
-                                        </span>
-                                    </div>
-                                </div>
-                            </div>
+                            <Cards :anuncio="anuncio"></Cards>
                         </router-link>
 
                         <div class="favoritar">
@@ -129,6 +50,7 @@ import firebase from 'firebase'
 
 import PorqueAdotar from '../components/PorqueAdotar.vue'
 import Introducao from '../components/Introducao.vue'
+import Cards from '../components/Cards';
 import Loading from '../components/Loading'
 import ModalSuccess from '../components/ModalSuccess.vue'
 import FilterData from '../components/FilterData.vue'
@@ -140,7 +62,8 @@ export default {
         ModalSuccess,
         FilterData,
         Loading,
-        Introducao
+        Introducao,
+        Cards
     },
 
     data() {
@@ -170,7 +93,6 @@ export default {
         async buscarTodosAnuncios() {
             this.anuncios = await getMydatas()
             this.backupAnuncios = this.anuncios
-
             setTimeout(() => this.loading = false, 1000)
         },
 
@@ -192,10 +114,8 @@ export default {
                     this.mensagem = `${anuncio.nome} foi adicionado aos favoritos`
                     this.success = true
                     favorito[index].style.color = 'red'
-
                     setTimeout(() => this.mensagem = '', 1000)
                 })
-
                 return
             }
 
@@ -216,26 +136,15 @@ export default {
                 }
 
                 Object.keys(snapshot.val()).forEach((key) => {
-                    console.log(key)
                     if(snapshot.val()[key] === id) {
                         favoriteExist = true
                     }
                 })
             })
-
             return favoriteExist
         },
-    },
 
-    mounted() {
-        const logado = localStorage.getItem('login')
-        if(!logado) {
-            this.$router.replace({ name: "login" })
-        }
-
-        setTimeout(() => this.buscarTodosAnuncios(), 300)
-
-        this.$root.$on('filterPageHome', (filter) => {
+        filter(filter) {
             this.anuncios = this.backupAnuncios
             var filterNow = ''
 
@@ -261,7 +170,12 @@ export default {
             } 
                 
             this.anuncios = this.anuncios.filter(anuncio => anuncio[filterNow] === filter[filterNow])
-        })
+        }
+    },
+
+    mounted() {
+        this.buscarTodosAnuncios()
+        this.$root.$on('filterPageHome', (filter) => this.filter(filter))
     },
 }
 </script>

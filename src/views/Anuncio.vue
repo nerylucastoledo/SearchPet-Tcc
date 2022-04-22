@@ -290,13 +290,6 @@ export default {
             this.anuncio.castrado = snapshot.val()["castrado"]
             this.anuncio.id = snapshot.val()["id"]
         })
-    },
-
-    beforeCreate() {
-        const logado = localStorage.getItem('login')
-        if(!logado) {
-            this.$router.replace({ name: "login" });
-        }
     }
 }
 </script>

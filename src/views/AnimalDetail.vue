@@ -1,5 +1,5 @@
 <template>
-    <div class="container">
+    <div class="container" v-if="anuncio">
         <h1 class="titulo">{{anuncio.nome}}</h1>
 
         <div class="perfil-animal">
@@ -184,7 +184,8 @@ export default {
             .once("value", snapshot => {
                 this.dono = snapshot.val()
                 var numero = this.formatarNumero(this.dono.whatsapp)
-                this.whatsapp = `https://api.whatsapp.com/send?phone=55${numero}&amp;text=Ola,%20gostaria%20de%20falar%20sobre%20o%20anúncio%20da(o)%20${this.anuncio.nome}."`
+                console.log(numero)
+                this.whatsapp = `https://api.whatsapp.com/send?phone=55${numero}`
             })
         },
 
@@ -215,14 +216,6 @@ export default {
             this.pegarNumeroDono()
         })
     },
-
-    beforeCreate() {
-        const logado = localStorage.getItem('login')
-        if(!logado) {
-            this.$router.replace({ name: "login" });
-        }
-    }
-    
 }
 </script>
 

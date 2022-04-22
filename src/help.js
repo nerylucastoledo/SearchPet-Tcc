@@ -6,10 +6,7 @@ export async function getMydatas(name_filter = '', value = '') {
 
     await firebase.database().ref('/Anuncios')
     .once("value", snapshot => {
-        Object.keys(snapshot.val()).forEach((key) => {
-            listKey.push(key)
-        })
-
+        Object.keys(snapshot.val()).forEach(key => listKey.push(key))
 
         listKey.forEach(key => {
             firebase.database()
@@ -17,7 +14,7 @@ export async function getMydatas(name_filter = '', value = '') {
             .child(key)
             .once("value", snapshot => {
                 Object.keys(snapshot.val()).forEach((key2) => {
-                firebase.database()
+                    firebase.database()
                     .ref('/Anuncios')
                     .child(`${key}/${key2}`)
                     .once("value", item => {
@@ -30,10 +27,8 @@ export async function getMydatas(name_filter = '', value = '') {
                         }
                     }) 
                 })
-
             })
         })
     })
-
     return listAnuncios
 }

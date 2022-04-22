@@ -10,10 +10,7 @@
         </div>
 
         <div class="container carrosel-form">
-            <div 
-                class="seta-esquerda" 
-                @click="backForm()"
-            >
+            <div class="seta-esquerda" @click="backForm()">
                 <font-awesome-icon icon="angle-left" id="angle-left" size="4x"/>
             </div>
 
@@ -21,7 +18,7 @@
                 class="seta-direita" 
                 @click="nextForm()"
                 v-if="idForm === -1 | idForm < 6"
-            >
+                >
                 <font-awesome-icon icon="angle-right" id="angle-right" size="4x"/>
             </div>
         </div>
@@ -29,19 +26,19 @@
         <h1 v-if="idForm === -1" class="titulo especie">Qual a espécie do seu pet?</h1>
 
         <div v-if="idForm === -1" class="animal-category">
-            <div @click="animalSelected('Cachorro', 0)">
+            <div @click="addDataForm('type', 'animal', 'Cachorro', 0)">
                 <font-awesome-icon icon="dog" id="animal" size="6x"/>
 
                 <p class="animal">Cachorro</p>
             </div>
 
-            <div @click="animalSelected('Gato', 1)">
+            <div @click="addDataForm('type', 'animal', 'Gato', 1)">
                 <font-awesome-icon icon="cat" id="animal" size="6x"/>
 
                 <p class="animal">Gato</p>
             </div>
 
-            <div @click="animalSelected('Pássaro', 2)">
+            <div @click="addDataForm('type', 'animal', 'Pássaro', 2)">
                 <font-awesome-icon icon="kiwi-bird" id="animal" size="6x"/>
 
                 <p class="animal">Pássaro</p>
@@ -110,13 +107,13 @@
             <p>{{anuncio.nome}} é castrado(a)?</p>
 
             <div>
-                <div @click="castramento('true', 0)">
+                <div @click="addDataForm('castrado', 'castrado', 'true', 0)">
                     <font-awesome-icon icon="thumbs-up" id="castrado" size="6x"/>
 
                     <p class="castrado">Sim</p>
                 </div>
 
-                <div @click="castramento('false', 1)">
+                <div @click="addDataForm('castrado', 'castrado', 'false', 1)">
                     <font-awesome-icon icon="thumbs-down" id="castrado" size="6x"/>
 
                     <p class="castrado">Não</p>
@@ -258,19 +255,14 @@ export default {
             this.showForm()
         },
 
-        animalSelected(animalSelected, id) {
-            this.effectSelectDiv('#animal', '.animal', id)
-            this.anuncio.type = animalSelected
+        addDataForm(key, css, value, id) {
+            this.effectSelectDiv(`#${css}`, `.${css}`, id)
+            this.anuncio[key] = value
         },
 
         sexoAnimal(sexoSelected, id) {
             this.effectSelectDiv('#sexo', '.sexo-name', id)
             this.anuncio.sexo = sexoSelected
-        },
-
-        castramento(valueCastrado, id) {
-            this.effectSelectDiv('#castrado', '.castrado', id)
-            this.anuncio.castrado = valueCastrado
         },
 
         effectSelectDiv(iconAddBorder, classParagraph, idSelected) {
@@ -358,16 +350,11 @@ export default {
     },
 
     beforeCreate() {
-        const logado = localStorage.getItem('login')
         const userName = this.$store.state.user.data.displayName
         
         firebase.database()
         .ref(userName)
         .once("value", snapshot => this.dataUser = snapshot.val())
-        
-        if(!logado) {
-            this.$router.replace({ name: "login" })
-        }
     }
 }
 </script>

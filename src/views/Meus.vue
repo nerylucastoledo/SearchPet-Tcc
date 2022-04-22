@@ -8,7 +8,6 @@
                 
                 <div v-if="tipoConta === 'ONG'">
                     <p  
-                        v-if="tipoConta === 'ONG'"
                         @click="filtrarMeusAnuncios(0, '')" 
                         class="link-filter"
                         >
@@ -16,7 +15,6 @@
                     </p>
 
                     <p 
-                        v-if="tipoConta === 'ONG'"
                         @click="filtrarMeusAnuncios(1, 'pausado', false)" 
                         class="link-filter"
                         >
@@ -24,7 +22,6 @@
                     </p>
 
                     <p 
-                        v-if="tipoConta === 'ONG'"
                         @click="filtrarMeusAnuncios(2, 'pausado', true)" 
                         class="link-filter"
                         >
@@ -51,7 +48,7 @@
 
                 <div class="cards" v-if="anuncios.length">
                     <div v-for="anuncio in anuncios" :key="anuncio.nome+1">
-                         <p
+                        <p
                             v-if="favorite"
                             class="fechar"
                             @click="procurarAnuncioPeloId(anuncio)"
@@ -60,77 +57,7 @@
                         </p>
 
                         <router-link :to=" !favorite ? `/anuncio/${anuncio.categoria}/${anuncio.id}` : `/animal/${anuncio.categoria}/${anuncio.id}`">
-                            <div class="box-imagem-nome">
-                                <img 
-                                    :src="anuncio.imagem" 
-                                    alt="Imagem de um animal"
-                                    :class="{finalizado: anuncio.pausado}"
-                                >
-                                
-                                <span 
-                                    v-if="anuncio.pausado && anuncio.categoria === 'Adocao'"
-                                    class="anuncio-finalizado"
-                                    >
-                                    Adotado 🐶
-                                </span>
-
-                                <span 
-                                    v-else-if="anuncio.pausado"
-                                    class="anuncio-finalizado"
-                                    >
-                                    Encontrado 🐶
-                                </span>
-
-                                <h1>{{anuncio.nome}}</h1>
-                            </div>
-
-                            <div 
-                                id="category" 
-                                :class="[anuncio.categoria === 'Adocao' ? 'adocao' : 'perdido']"
-                                >
-                                <p>{{anuncio.categoria}}</p>
-                            </div>
-
-                            <div class="dados">
-                                <div>
-                                    <div>
-                                        <p class="castrado">{{anuncio.idade}}</p>
-
-                                        <span>
-                                            <img src="../assets/idade.png" alt="Calendario">
-                                        </span>
-                                    </div>
-
-                                    <div>
-                                        <p v-if="anuncio.castrado === false">Não castrado</p>
-                                        <p v-else>Castrado</p>
-
-                                        <span>
-                                            <img src="../assets/castrado.png" alt="Calendario">
-                                        </span>
-                                    </div>
-                                </div>
-
-                                <div>
-                                    <div>
-                                        <p :class="[anuncio.sexo === 'Macho' ? 'macho' : 'femea']">
-                                            {{anuncio.sexo}}
-                                        </p>
-
-                                        <span>
-                                            <img src="../assets/sexo.png" alt="Calendario">
-                                        </span>
-                                    </div>
-
-                                    <div>
-                                        <p class="castrado">{{anuncio.peso}} Kg</p>
-                                        
-                                        <span>
-                                            <img src="../assets/peso.png" alt="Calendario">
-                                        </span>
-                                    </div>
-                                </div>
-                            </div>
+                            <Cards :anuncio="anuncio"></Cards>
                         </router-link>
                     </div>
                 </div>
@@ -165,11 +92,13 @@
 import firebase from 'firebase'
 import { getMydatas } from '@/help.js'
 import Loading from '../components/Loading'
+import Cards from '../components/Cards'
 
 export default {
 
     components: {
-        Loading
+        Loading,
+        Cards
     },
 
     data() {
@@ -267,7 +196,7 @@ export default {
                     }
                     
                     this.filtrarAnunciosFavoritos(3)
-                }, 500);
+                }, 500)
             })
         },
 
@@ -284,30 +213,28 @@ export default {
             document.querySelector('.side-meus-anuncios').classList.toggle('open-modal')
         },
 
-        async pegarFotoNomeOng() {
-            const fotoNome = await this.pegarDadosDoBanco(this.username)
-            this.nomeOng = fotoNome.val()["nameOng"]
-            this.imagemOng = fotoNome.val()["image"]
-
-            setTimeout(() => this.loading = false, 500)
-        },
-
         async pegarDadosDoBanco(ref, child = '') {
             return await firebase.database()
                 .ref(`${ref}/${child}`)
                 .once("value", snapshot => snapshot.exists() ? snapshot.val() : null)
         },
 
-        async pegarTipoDeConta() {
+        async pegarConta() {
             await firebase.database()
             .ref(this.username)
-            .once("value", snapshot => this.tipoConta = snapshot.val()["type"])
+            .once("value", snapshot => {
+                this.tipoConta = snapshot.val()["type"]
+                this.nomeOng = snapshot.val()["nameOng"]
+                this.imagemOng = snapshot.val()["image"]
+            })
+            setTimeout(() => this.loading = false, 500)
         }
     },
 
     async mounted() {
         this.username = localStorage.getItem("displayName")
-        await this.pegarTipoDeConta()
+
+        await this.pegarConta()
         if(this.tipoConta === 'particular') {
             this.filtrarAnunciosFavoritos(0)
             return
@@ -318,16 +245,6 @@ export default {
         const todosAnunciosDaConta = await getMydatas('username', this.username)
         this.anuncios = todosAnunciosDaConta
         this.backupAnuncios = todosAnunciosDaConta
-
-        this.pegarFotoNomeOng()
-    },
-
-    beforeCreate() {
-        document.title = 'Meus'
-        const logado = localStorage.getItem('login')
-        if(!logado) {
-            this.$router.replace({ name: "login" })
-        }
     }
 }
 </script>

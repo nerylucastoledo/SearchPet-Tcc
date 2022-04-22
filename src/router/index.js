@@ -13,11 +13,28 @@ import NewAnuncio from '../views/NewAnuncio.vue'
 
 Vue.use(VueRouter)
 
+function guardMyroute(to, from, next) { 
+  var isAuthenticated= false; 
+  if(localStorage.getItem('login')) {
+    isAuthenticated = true
+  } else {
+    isAuthenticated= false
+  }
+  if(isAuthenticated) { 
+    next()
+  } 
+  else { 
+    next('/login') 
+  } 
+}
+
 const routes = [
   {
     path: '/',
     name: 'home',
-    component: Home
+    beforeEnter : guardMyroute,
+    component: Home,
+    meta: {title: 'Pagina INICIAL'}
   },
   {
     path: '/login',
@@ -37,31 +54,37 @@ const routes = [
   {
     path: '/animal/:anuncio/:id',
     name: 'animal',
+    beforeEnter : guardMyroute,
     component: AnimalDetail
   },
   {
     path: '/meus',
     name: 'meus',
+    beforeEnter : guardMyroute,
     component: Meus
   },
   {
     path: '/anuncio/:anuncio/:id',
     name: 'anuncio',
+    beforeEnter : guardMyroute,
     component: Anuncio
   },
   {
     path: '/perfil',
     name: 'perfil',
+    beforeEnter : guardMyroute,
     component: Perfil
   },
   {
     path: '/vacinas',
     name: 'vacinas',
+    beforeEnter : guardMyroute,
     component: Vacinas
   },
   {
     path: '/new-anuncio',
     name: 'new',
+    beforeEnter : guardMyroute,
     component: NewAnuncio
   },
 ]
