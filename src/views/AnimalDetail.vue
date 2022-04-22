@@ -120,17 +120,12 @@
                     <div>
                         <p>
                             Cidade: 
-                            <strong style="color: #36C9D2">{{dono.city}}</strong>
-                        </p>
-
-                        <p>
-                            Rua: 
-                            <strong style="color: #36C9D2">{{dono.street}}</strong>
+                            <strong style="color: #36C9D2">{{anuncio.cidade}}</strong>
                         </p>
 
                         <p>
                             Bairro: 
-                            <strong style="color: #36C9D2">{{dono.district}}</strong>
+                            <strong style="color: #36C9D2">{{anuncio.local}}</strong>
                         </p>
                     </div>
                 </div>
