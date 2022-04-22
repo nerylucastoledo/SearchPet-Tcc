@@ -175,7 +175,9 @@ export default {
 
     mounted() {
         document.title = "Página inicial"
-        this.buscarTodosAnuncios()
+        setTimeout(() => {
+            this.buscarTodosAnuncios()
+        }, 400)
         this.$root.$on('filterPageHome', (filter) => this.filter(filter))
     },
 }
