@@ -10,7 +10,6 @@
                 <p>Você pode ter a <strong>Search Pet</strong> no seu celular, clique abaixo para baixar</p>
             
                <button
-                    ref="addBtn"
                     class="btn-padrao"
                     @click="installPWA"
                     >
