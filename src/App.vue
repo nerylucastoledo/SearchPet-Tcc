@@ -154,4 +154,17 @@ input:focus {
 .finalizado {
     filter: brightness(.50);
 }
+
+.btn-padrao {
+    font-family: "Montserrat", Sans-serif;
+    color: #ffffff;
+    background-color: #36C9D2;
+    border-style: solid;
+    border-color: #36C9D2;
+    border-radius: 45px 45px 45px 45px;
+    box-shadow: 0px 10px 30px -8px rgb(0 0 0 / 16%);
+    font-size: 18px;
+    padding: 15px 30px;
+    cursor: pointer;
+}
 </style>

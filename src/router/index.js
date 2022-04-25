@@ -5,6 +5,7 @@ import Login from '../views/Login.vue'
 import Register from '../views/Register.vue'
 import ResetPassword from '../views/ResetPassword.vue'
 import AnimalDetail from '../views/AnimalDetail.vue'
+import TodosAnuncios from '../views/TodosAnuncios.vue'
 import Perfil from '../views/Perfil.vue'
 import Meus from '../views/Meus.vue'
 import Anuncio from '../views/Anuncio.vue'
@@ -34,7 +35,14 @@ const routes = [
     name: 'home',
     beforeEnter : guardMyroute,
     component: Home,
-    meta: {title: 'Pagina INICIAL'}
+    meta: {title: 'Pagina Inicial'}
+  },
+  {
+    path: '/todos-anuncios',
+    name: 'todosanuncios',
+    beforeEnter : guardMyroute,
+    component: TodosAnuncios,
+    meta: {title: 'Todos Anúncios'}
   },
   {
     path: '/login',

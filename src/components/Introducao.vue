@@ -1,74 +1,118 @@
 <template>
-    <div class="introducao">
-        <div class="container">
-            <div class="box-texto">
-                <h2>Adote um amiguinho, não compre</h2>
-                <p>Adote, porque o amor não tem preço e nem raça.</p>
+    <div class="container">
+        <div class="introducao">
+            <div class="mensagem-inicial">
+                <h1 class="titulo">Faça uma adoção, porque o amor não tem preço e nem raça.</h1>
+
+                <p>Nós da <strong>Search Pet</strong> acreditamos que nenhum dinheiro é capaz de comprar o amor, com isso, criamos esse site para que você possa encontrar o amiguinho que é a sua cara, seja ele um <strong>cachorro</strong>, <strong>gato</strong> ou até um <strong>passarinho</strong>.</p>
+                <p>Aqui você também irá ajudar a encontrar os animaizinhos que estão desaparecidos dos seus respectivos donos. Você pode encontrar algum animalzinho perdido em qualquer cidade, ajudar nunca é demais, ne? ❤️</p>
+                <p>Caso você encontre um amiguinho a sua cara conosco, você pode publicar um final feliz no nosso blog e mostrar pra todos o quão bom é fazer o bem para uma vida!</p>
+                <p>Você pode ter a <strong>Search Pet</strong> no seu celular, clique abaixo para baixar</p>
+
+                <button class="btn-padrao">BAIXAR APP ➡︎</button>
+            </div>
+
+            <div class="carrossel">
+                <Carousel :per-page="1" :mouse-drag="true" :autoplay="true">
+                    <slide>
+                        <img class="imagem-carrossel" src="../assets/app-background.png" alt="Imagem celular">
+                    </slide>
+                    <slide>
+                        <img class="imagem-carrossel" src="../assets/app-background-2.png" alt="Imagem celular">
+                    </slide>
+                </Carousel>
             </div>
         </div>
     </div>
 </template>
 
+<script>
+
+import { Carousel, Slide } from 'vue-carousel';
+
+export default {
+
+    components: {
+        Carousel,
+        Slide
+    },
+
+}
+</script>
+
 <style scoped>
 
+.container {
+    padding: 0 30px;
+}
+
 .introducao {
-    background-image: url(../assets/inicio.png);
-    background-repeat: no-repeat;
-    background-position: center;
-    background-size: cover;
-    padding: 120px 0;
+    margin-top: 60px;
+    display: flex;
+    justify-content: space-around;
 }
 
-.box-texto {
-    max-width: 50%;
+img {
+    height: 650px;
 }
 
-.introducao h2 {
-    font-size: 2em;
+.carrossel {
     text-align: center;
-    color: #fff;
-    font-weight: bold;
-    font-family: 'Montserrat',sans-serif;
-    margin-bottom: 60px;
+    max-width: 400px;
 }
 
-.introducao p {
-    color: #fff;
-    font-size: 1.125em;
-    text-align: center;
-    width: 250px;
+.mensagem-inicial h1 {
+    max-width: 700px;
+    margin: 40px 0px;
+    color: #222;
+}
+
+.mensagem-inicial p {
+    max-width: 700px;
+    margin: 30px 10px;
+    font-size: 18px;
+    color: #7A7A7A;
+    line-height: 1.5rem;
+}
+
+.mensagem-inicial p strong {
+    color: #36C9D2;
+}
+
+.btn-padrao {
     display: block;
-    margin: 0 auto;
+    margin: 0px;
 }
 
-.introducao p::after, .introducao p::before {
-    content: "";
-    width: 80px;
-    height: 3px;
-    display: block;
-    background-color: #fff;
-    margin: 10px auto;
-}
-
-@media (max-width: 739px) {
-
+@media (max-width: 930px) {
     .introducao {
-        padding: 20px 0;
+        align-items: center;
     }
 
-    .introducao h2 {
-        margin-bottom: 40px;
+    .titulo {
+        text-align: initial;
     }
-    
-    .introducao p {
-        color: #fff;
-        font-size: 1.125em;
-        text-align: center;
-        width: 250px;
+
+    .mensagem-inicial p {
+        margin-right: 0px;
+        margin-left: 0px;
+    }
+
+    img {
+        margin-top: 60px;
+        height: 500px;
+    }
+}
+
+@media (max-width: 800px) {
+    .introducao {
+        display: block;
+    }
+
+    .carrossel {
         display: block;
         margin: 0 auto;
     }
-
 }
 
 </style>

@@ -20,9 +20,10 @@ import { faDog,
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 import * as firebase from 'firebase';
 import VueMask from 'v-mask';
+import VueCarousel from 'vue-carousel';
 
 Vue.config.productionTip = false
-Vue.use(VueMask)
+Vue.use(VueCarousel, VueMask)
 
 new Vue({
   router,
