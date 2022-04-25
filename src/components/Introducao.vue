@@ -9,7 +9,20 @@
                 <p>Caso você encontre um amiguinho a sua cara conosco, você pode publicar um final feliz no nosso blog e mostrar pra todos o quão bom é fazer o bem para uma vida!</p>
                 <p>Você pode ter a <strong>Search Pet</strong> no seu celular, clique abaixo para baixar</p>
 
-                <PWAPrompt />
+                <button 
+                    class="btn-padrao" 
+                    v-if="deferredPrompt" 
+                    @click="install"
+                    >
+                    BAIXAR APP ➡︎
+                </button>
+                <button 
+                    class="btn-padrao" 
+                    v-if="deferredPrompt" 
+                    @click="dismiss"
+                    >
+                    Fechar
+                </button>
             </div>
 
             <div class="carrossel">
@@ -29,16 +42,38 @@
 <script>
 
 import { Carousel, Slide } from 'vue-carousel';
-import PWAPrompt from '@/components/PWAPrompt'
 
 export default {
 
     components: {
-        PWAPrompt,
         Carousel,
         Slide
     },
 
+    data() {
+        return {
+            deferredPrompt: null
+        }
+    },
+
+    created() {
+        window.addEventListener("beforeinstallprompt", e => {
+            e.preventDefault();
+            this.deferredPrompt = e;
+        })
+        window.addEventListener("appinstalled", () => {
+            this.deferredPrompt = null;
+        });
+  },
+  methods: {
+    async dismiss() {
+      this.deferredPrompt = null
+    },
+
+    async install() {
+      this.deferredPrompt.prompt()
+    }
+  }
 }
 </script>
 
