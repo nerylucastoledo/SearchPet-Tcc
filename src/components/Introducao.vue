@@ -1,6 +1,5 @@
 <template>
     <div class="container">
-        <PWAPrompt />
         <div class="introducao">
             <div class="mensagem-inicial">
                 <h1 class="titulo">Faça uma adoção, porque o amor não tem preço e nem raça.</h1>
@@ -9,6 +8,14 @@
                 <p>Aqui você também irá ajudar a encontrar os animaizinhos que estão desaparecidos dos seus respectivos donos. Você pode encontrar algum animalzinho perdido em qualquer cidade, ajudar nunca é demais, ne? ❤️</p>
                 <p>Caso você encontre um amiguinho a sua cara conosco, você pode publicar um final feliz no nosso blog e mostrar pra todos o quão bom é fazer o bem para uma vida!</p>
                 <p>Você pode ter a <strong>Search Pet</strong> no seu celular, clique abaixo para baixar</p>
+            
+               <button
+                    ref="addBtn"
+                    class="btn-padrao"
+                    @click="installPWA"
+                    >
+                    BAIXAR APP ➡︎
+                </button>
             </div>
 
             <div class="carrossel">
@@ -28,40 +35,46 @@
 <script>
 
 import { Carousel, Slide } from 'vue-carousel';
-import PWAPrompt from '../components/PWAPrompt.vue'
 
 export default {
 
     components: {
         Carousel,
         Slide,
-        PWAPrompt
     },
 
     data: () => ({
-        deferredPrompt: null,
+        installEvent: undefined,
+        shown: false,
     }),
 
-    mounted() {
-        this.captureEvent()
+    beforeMount() {
+        window.addEventListener('beforeinstallprompt', (e) => {
+            console.log('um', e)
+            e.preventDefault()
+            this.installEvent = e
+            this.shown = true
+            console.log('dois', e)
+        })
     },
 
     methods: {
-        captureEvent() {
-            window.addEventListener('beforeinstallprompt', (e) => {
-                console.log(e)
-                e.preventDefault()
-                this.deferredPrompt = e
-            })
-        },
-        clickCallback() {
-            this.deferredPrompt.prompt()
-            this.deferredPrompt.userChoice.then((choiceResult) => {
-                if (choiceResult.outcome === 'accepted') {
+        installPWA() {
+            console.log('teste', this.installEvent)
+            console.log('cliquei')
+            this.installEvent.prompt()
+            this.installEvent.userChoice.then((choice) => {
+                this.dismissPrompt()
+                if (choice.outcome === 'accepted') {
+                // Do something additional if the user chose to install
+                } else {
+                // Do something additional if the user declined
                 }
-                this.deferredPrompt = null
             })
         },
+        dismissPrompt() {
+            this.shown = false
+        }
     }
 }
 </script>
