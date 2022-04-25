@@ -10,6 +10,7 @@
                 <p>Você pode ter a <strong>Search Pet</strong> no seu celular, clique abaixo para baixar</p>
             
                <button
+                    v-if="shown"
                     class="btn-padrao"
                     @click="installPWA"
                     >
@@ -43,24 +44,20 @@ export default {
     },
 
     data: () => ({
-        installEvent: undefined,
+        installEvent: "",
         shown: false,
     }),
 
     beforeMount() {
-        window.addEventListener('beforeinstallprompt', (e) => {
-            console.log('um', e)
+        window.addEventListener('beforeinstallprompt', function(e) {
             e.preventDefault()
             this.installEvent = e
             this.shown = true
-            console.log('dois', e)
         })
     },
 
     methods: {
         installPWA() {
-            console.log('teste', this.installEvent)
-            console.log('cliquei')
             this.installEvent.prompt()
             this.installEvent.userChoice.then((choice) => {
                 this.dismissPrompt()
