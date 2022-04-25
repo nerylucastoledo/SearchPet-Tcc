@@ -9,10 +9,10 @@
                 <p>Caso você encontre um amiguinho a sua cara conosco, você pode publicar um final feliz no nosso blog e mostrar pra todos o quão bom é fazer o bem para uma vida!</p>
                 <p>Você pode ter a <strong>Search Pet</strong> no seu celular, clique abaixo para baixar</p>
 
-                <button class="btn-padrao" @click="installPWA">BAIXAR APP ➡︎</button>
+                <PWAPrompt />
             </div>
 
-            <div class="carrossel" v-if="shown">
+            <div class="carrossel">
                 <Carousel :per-page="1" :mouse-drag="true" :autoplay="true">
                     <slide>
                         <img class="imagem-carrossel" src="../assets/app-background.png" alt="Imagem celular">
@@ -29,42 +29,14 @@
 <script>
 
 import { Carousel, Slide } from 'vue-carousel';
+import PWAPrompt from '@/components/PWAPrompt'
 
 export default {
 
     components: {
+        PWAPrompt,
         Carousel,
         Slide
-    },
-
-    data: () => ({
-        shown: false,
-    }),
-
-    methods: {
-        dismissPrompt() {
-            this.shown = false
-        }
-    },
-
-    installPWA() {
-      this.installEvent.prompt()
-      this.installEvent.userChoice.then((choice) => {
-        this.dismissPrompt()
-        if (choice.outcome === 'accepted') {
-          // Do something additional if the user chose to install
-        } else {
-          // Do something additional if the user declined
-        }
-      })
-    },
-
-    beforeMount() {
-        window.addEventListener('beforeinstallprompt', (e) => {
-            e.preventDefault()
-            this.installEvent = e
-            this.shown = true
-        })
     },
 
 }

@@ -23,7 +23,8 @@ import VueMask from 'v-mask';
 import VueCarousel from 'vue-carousel';
 
 Vue.config.productionTip = false
-Vue.use(VueCarousel, VueMask)
+Vue.use(VueMask)
+Vue.use(VueCarousel)
 
 new Vue({
   router,
