@@ -8,20 +8,14 @@
                 <p>Aqui você também irá ajudar a encontrar os animaizinhos que estão desaparecidos dos seus respectivos donos. Você pode encontrar algum animalzinho perdido em qualquer cidade, ajudar nunca é demais, ne? ❤️</p>
                 <p>Caso você encontre um amiguinho a sua cara conosco, você pode publicar um final feliz no nosso blog e mostrar pra todos o quão bom é fazer o bem para uma vida!</p>
                 <p>Você pode ter a <strong>Search Pet</strong> no seu celular, clique abaixo para baixar</p>
-
-                <button 
-                    class="btn-padrao" 
-                    v-if="deferredPrompt" 
-                    @click="install"
+            
+               <button
+                    v-if="deferredPrompt"
+                    ref="addBtn"
+                    class="btn-padrao"
+                    @click="clickCallback"
                     >
                     BAIXAR APP ➡︎
-                </button>
-                <button 
-                    class="btn-padrao" 
-                    v-if="deferredPrompt" 
-                    @click="dismiss"
-                    >
-                    Fechar
                 </button>
             </div>
 
@@ -47,33 +41,34 @@ export default {
 
     components: {
         Carousel,
-        Slide
+        Slide,
     },
 
-    data() {
-        return {
-            deferredPrompt: null
-        }
+    data: () => ({
+        deferredPrompt: null,
+    }),
+
+    mounted() {
+        this.captureEvent()
     },
 
-    created() {
-        window.addEventListener("beforeinstallprompt", e => {
-            e.preventDefault();
-            this.deferredPrompt = e;
-        })
-        window.addEventListener("appinstalled", () => {
-            this.deferredPrompt = null;
-        });
-  },
-  methods: {
-    async dismiss() {
-      this.deferredPrompt = null
-    },
-
-    async install() {
-      this.deferredPrompt.prompt()
+    methods: {
+        captureEvent() {
+            window.addEventListener('beforeinstallprompt', (e) => {
+                console.log(e)
+                e.preventDefault()
+                this.deferredPrompt = e
+            })
+        },
+        clickCallback() {
+            this.deferredPrompt.prompt()
+            this.deferredPrompt.userChoice.then((choiceResult) => {
+                if (choiceResult.outcome === 'accepted') {
+                }
+                this.deferredPrompt = null
+            })
+        },
     }
-  }
 }
 </script>
 
@@ -115,6 +110,7 @@ img {
 .mensagem-inicial p strong {
     color: #36C9D2;
 }
+
 
 .btn-padrao {
     display: block;
