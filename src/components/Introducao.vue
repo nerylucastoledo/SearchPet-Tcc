@@ -10,9 +10,9 @@
                 <p>Você pode ter a <strong>Search Pet</strong> no seu celular, clique abaixo para baixar</p>
             
                <button
-                    v-if="shown"
                     class="btn-padrao"
-                    @click="installPWA"
+                    v-if="deferredPrompt" 
+                    @click="promptInstall"
                     >
                     BAIXAR APP ➡︎
                 </button>
@@ -35,8 +35,11 @@
 <script>
 
 import { Carousel, Slide } from 'vue-carousel';
+import { VuePwaInstallMixin } from "vue-pwa-install";
+import { BeforeInstallPromptEvent } from "vue-pwa-install";
 
 export default {
+    mixins: [VuePwaInstallMixin],
 
     components: {
         Carousel,
@@ -45,36 +48,33 @@ export default {
 
     data() {
         return {
-            installEvent: "",
-            shown: false,
+            deferredPrompt: null,
         }
     },
 
     methods: {
-        async installPWA() {
-            if(this.installEvent !== null) {
-                this.installEvent.prompt()
-                const { outcome } = await this.installEvent.userChoice
-                if(outcome === "accepted") {
-                    this.dismissPrompt()
-                }
-            }
-        },
+        promptInstall() {
+            this.deferredPrompt.prompt()
 
-        dismissPrompt() {
-            this.shown = false
-        }
+            this.deferredPrompt.userChoice.then((choiceResult) => {
+                if (choiceResult.outcome === "accepted") {
+                    console.log("User accepted the install prompt")
+                } else {
+                    console.log("User dismissed the install prompt")
+                }
+
+                this.deferredPrompt = null
+            })
+        },
     },
 
     created() {
-        console.log('fui criado')
-        window.addEventListener('beforeinstallprompt', (e) => {
-            this.installEvent = e
-            this.shown = true
-
+        this.$on("canInstall", (event) => {
             console.log('entrei')
+            event.preventDefault()
+            this.deferredPrompt = event
         })
-    },
+    }
 }
 </script>
 
