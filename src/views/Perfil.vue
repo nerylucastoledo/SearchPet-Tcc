@@ -45,11 +45,11 @@
                         <input 
                             id="cep" 
                             name="cep" 
-                            required 
                             autofocus 
+                            placeholder="xxxxx-xxx"
+                            required 
                             v-mask="'#####-###'"
                             v-model="form.cep"
-                            placeholder="xxxxx-xxx"
                             @keyup="addCep()"
                         >
                     </div>
@@ -74,10 +74,9 @@
                         <input 
                             id="district" 
                             name="district" 
-                            required 
-                            autofocus 
-                            v-model="form.district"
                             placeholder="Digite o bairro"
+                            required 
+                            v-model="form.district"
                         >
                     </div>
                 </div>  
@@ -100,10 +99,9 @@
                             id="cellphone" 
                             name="cellphone" 
                             required 
-                            autofocus 
-                            v-model="form.whatsapp"
-                            v-mask="'(##) # ####-####'"
                             placeholder="(xx) x xxxx-xxxx"
+                            v-mask="'(##) # ####-####'"
+                            v-model="form.whatsapp"
                         >
                     </div>
                 </div>   
@@ -156,7 +154,6 @@ export default {
                     this.form.city = res.localidade,
                     this.form.district = res.bairro,
                     this.form.street = res.logradouro
-
                     document.getElementById('cep').style.border = 'none'
                 })
                 return
@@ -166,7 +163,6 @@ export default {
         },
 
         atualizarPerfil() {
-
             if(this.typeAccount === 'particular') {
                 this.atualizarDados()
                 return

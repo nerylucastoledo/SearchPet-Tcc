@@ -1,9 +1,8 @@
 <template>
-
     <div class="form-geral">
         <div class="container login-form">
             <div class="login-img">
-                <img src="../assets/logo.png" alt="Logo da Empresa">
+                <img src="../assets/logo.webp" alt="Logo da Empresa">
             </div>
 
             <form class="login" @submit.prevent="login">
@@ -49,12 +48,7 @@
                     </router-link>
                 </p>
 
-                <button 
-                    class="btn-form" 
-                    type="submit"
-                    >
-                    Login
-                </button>
+                <button class="btn-form" type="submit">Login</button>
             </form>
         </div>
     </div>
@@ -77,20 +71,19 @@ export default {
 
     methods: {
         login() {
-            firebase.auth().signInWithEmailAndPassword(this.form.email, this.form.password)
+            firebase.auth()
+            .signInWithEmailAndPassword(this.form.email, this.form.password)
             .then(() => {
                 localStorage.setItem('login', true)
-                setTimeout(() => {
-                    this.$router.replace({ name: "home" })
-                }, 500);
+                setTimeout(() => this.$router.replace({ name: "home" }), 500)
             })
             .catch(error => {
                 if(error.code === "auth/user-not-found") {
                     this.notFoundUser = 'Usuário não encontrado'
-
-                } else if (error.code === "auth/wrong-password") {
-                    this.notFoundUser = 'Senha invalida'
+                    return
                 }
+
+                this.notFoundUser = 'Senha invalida'
             })
         }
     },

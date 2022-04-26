@@ -7,7 +7,7 @@
                 <button 
                     v-if="anuncio.categoria === 'Adocao'" 
                     class="btn-finish" 
-                    @click="finalizarAnuncio(anuncio)"
+                    @click="finalizarAnuncio"
                     >
                     Finalizar adoção ✓
                 </button>
@@ -37,11 +37,12 @@
             <img 
                 v-if="!preview" 
                 :src="imagemAnimal" 
-                alt=""
+                alt="Preview Imagem"
             >
             <img 
                 v-else 
                 id="img_preview" 
+                alt="Imagem principal"
                 :src="preview"
             >
             <input
@@ -58,28 +59,28 @@
                 <div>
                     <label for="name">Nome dele(a)</label>
                     <input 
+                        :class="{readonly: anuncio.pausado}"
                         type="text" 
                         id="name" 
                         name="name" 
                         placeholder="Nome" 
-                        v-model="anuncio.nome" 
                         required
                         :readonly="anuncio.pausado"
-                        :class="{readonly: anuncio.pausado}"
+                        v-model="anuncio.nome" 
                     >
                 </div>
 
                 <div>
                     <label for="peso">Peso em KG</label>
                     <input 
+                        :class="{readonly: anuncio.pausado}"
                         type="number" 
                         id="peso" 
                         name="peso" 
                         placeholder="Peso" 
-                        v-model="anuncio.peso" 
                         required
                         :readonly="anuncio.pausado"
-                        :class="{readonly: anuncio.pausado}"
+                        v-model="anuncio.peso" 
                     >
                 </div>
             </div>   
@@ -87,25 +88,25 @@
             <div>
                 <div>
                     <label for="idade">Idade dele(a)</label>
-                    <input 
+                    <input
+                        :class="{readonly: anuncio.pausado}"
                         type="text" 
                         id="idade" 
                         name="idade" 
                         placeholder="idade" 
-                        v-model="anuncio.idade" 
                         required
                         :readonly="anuncio.pausado"
-                        :class="{readonly: anuncio.pausado}"
+                        v-model="anuncio.idade" 
                     >
                 </div>
 
                 <div>
                     <label for="peso">Sexo</label>
                     <select 
-                        v-model="anuncio.sexo" 
-                        :disabled="anuncio.pausado" 
-                        :class="{readonly: anuncio.pausado}"
                         class="filter-selected"
+                        :class="{readonly: anuncio.pausado}"
+                        :disabled="anuncio.pausado" 
+                        v-model="anuncio.sexo" 
                         >
                         <option disabled value="">Sexo</option>
                         <option value="Macho">Macho</option>
@@ -118,10 +119,10 @@
                 <div class="form-select">
                     <label for="idade">Categoria</label>
                     <select 
+                        class="filter-selected"
+                        :class="{readonly: anuncio.pausado}"
                         v-model="anuncio.categoria" 
                         disabled
-                        :class="{readonly: anuncio.pausado}"
-                        class="filter-selected"
                         >
                         <option disabled value="">Categoria</option>
                         <option value="Adocao">Para adoção</option>
@@ -132,10 +133,10 @@
                 <div class="form-select">
                     <label for="peso">Castrado</label>
                     <select 
+                        class="filter-selected"
+                        :class="{readonly: anuncio.pausado}"
                         v-model="anuncio.castrado" 
                         :disabled="anuncio.pausado" 
-                        :class="{readonly: anuncio.pausado}"
-                        class="filter-selected"
                         >
                         <option disabled value="">Castrado</option>
                         <option :value=true>Sim</option>
@@ -233,9 +234,7 @@ export default {
         async salvarFoto() {
             this.picture = null
 
-            const storageRef = firebase.storage()
-                                .ref(`${this.imageData.name}`)
-                                .put(this.imageData)
+            const storageRef = firebase.storage().ref(`${this.imageData.name}`).put(this.imageData)
             
             storageRef.on(`state_changed`, snapshot => {}, error => {}, () => {
                     storageRef.snapshot.ref.getDownloadURL().then(url => {

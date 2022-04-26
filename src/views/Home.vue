@@ -7,7 +7,7 @@
 
             <div v-if="anuncios.length" class="cards">
                 <div 
-                    v-for="anuncio in anuncios" 
+                    v-for="anuncio in anuncios.slice(0, 6)" 
                     :key="anuncio.id"
                     >
                     <router-link :to="`/animal/${anuncio.categoria}/${anuncio.id}`">
@@ -53,7 +53,6 @@ export default {
     data() {
         return {
             anuncios: [],
-            backupAnuncios: [],
             loading: true,
             success: true,
             mensagem: "",
@@ -63,7 +62,6 @@ export default {
     methods: {
         async buscarTodosAnuncios() {
             this.anuncios = await getMydatas("pausado", false)
-            this.backupAnuncios = this.anuncios
             setTimeout(() => this.loading = false, 1000)
         },
     },

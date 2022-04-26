@@ -11,9 +11,7 @@
             <div class="new-user">
                 <p>Já possui conta?</p>
 
-                <router-link to="/login" class="go-register">
-                    Login
-                </router-link>
+                <router-link to="/login" class="go-register">Login</router-link>
             </div>
 
             <h1 class="titulo">Resetar senha</h1>
@@ -23,20 +21,16 @@
             <div>
                 <label for="email">E-mail</label>
                 <input 
-                type="text"
-                id="email" 
-                name="email"
-                placeholder="Seu email"
-                required 
-                v-model="email"
+                    type="text"
+                    id="email" 
+                    name="email"
+                    placeholder="Seu email"
+                    required 
+                    v-model="email"
                 >
             </div>
 
-            <button 
-                class="btn-form" 
-                type="submit">
-                Recuperar
-            </button>
+            <button class="btn-form" type="submit">Recuperar</button>
         </form>
     </div>
 </template>

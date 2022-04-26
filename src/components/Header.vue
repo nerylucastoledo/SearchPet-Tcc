@@ -2,7 +2,7 @@
     <header class="header-principal">
         <nav class="container">
             <router-link to="/">
-                <img id="logo" src="../assets/logo.png" alt="Logo da empresa">
+                <img id="logo" src="../assets/logo.webp" alt="Logo da empresa">
             </router-link>
 
             <div class="menu-btn" @click="openMenu">
@@ -13,15 +13,19 @@
                 <li @click="openMenu">
                     <router-link to="/">Home</router-link>
                 </li>
+                
                 <li @click="openMenu">
                     <router-link to="/meus">Meus</router-link>
                 </li>
+
                 <li @click="openMenu">
                     <router-link to="/vacinas">Vacinas</router-link>
                 </li>
+
                 <li @click="openMenu">
                     <router-link to="/perfil">Perfil</router-link>
                 </li>
+
                 <li @click="singOut" class="sign-out" v-if="user">
                     <font-awesome-icon icon="sign-out-alt" size="2x"/>
                 </li>

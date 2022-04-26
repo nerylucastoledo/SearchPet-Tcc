@@ -10,9 +10,7 @@
                 <p>Você pode ter a <strong>Search Pet</strong> no seu celular, clique abaixo para baixar</p>
             
                <button
-                    v-if="shown"
                     class="btn-padrao"
-                    @click="installPWA"
                     >
                     BAIXAR APP ➡︎
                 </button>
@@ -42,36 +40,6 @@ export default {
         Carousel,
         Slide,
     },
-
-    data: () => ({
-        installEvent: "",
-        shown: false,
-    }),
-
-    beforeMount() {
-        window.addEventListener('beforeinstallprompt', function(e) {
-            e.preventDefault()
-            this.installEvent = e
-            this.shown = true
-        })
-    },
-
-    methods: {
-        installPWA() {
-            this.installEvent.prompt()
-            this.installEvent.userChoice.then((choice) => {
-                this.dismissPrompt()
-                if (choice.outcome === 'accepted') {
-                // Do something additional if the user chose to install
-                } else {
-                // Do something additional if the user declined
-                }
-            })
-        },
-        dismissPrompt() {
-            this.shown = false
-        }
-    }
 }
 </script>
 

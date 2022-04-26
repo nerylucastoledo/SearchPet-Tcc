@@ -84,15 +84,19 @@
                     <div class="box-info anuncio-pausado">
                         <p>{{anuncio.nome_finalizado}}</p>
                     </div>
+
                     <div class="box-info anuncio-pausado">
                         <p>{{formatarData(anuncio.data_finalizado)}}</p>
                     </div>
+
                     <div class="box-info anuncio-pausado">
                         <p>{{anuncio.cidade_finalizado}}</p>
                     </div>
+                    
                     <div class="box-info anuncio-pausado contato-finalizado">
                         <a target= "_blank" :href="`https://api.whatsapp.com/send?phone=55${anuncio.contato_finalizado}&amp;text=Gostaria%20de%20falar%20sobre%20o(a)%20${anuncio.nome}.`">
                             <span>{{anuncio.contato_finalizado}}</span>
+                            
                             <img src="../assets/whatsapp.png" alt="Logo do Whatsapp">
                         </a>
                     </div>

@@ -177,6 +177,7 @@
                 id="img_preview"
                 v-if="preview" 
                 :src="preview"
+                alt="Preview Imagem"
             >
 
             <input 

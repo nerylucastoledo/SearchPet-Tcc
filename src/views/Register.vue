@@ -1,31 +1,42 @@
 <template>
-
     <div class="container login-form">
         <div v-if="mensagem.length">
-            <ModalSuccess :mensagem="mensagem" :success="success"></ModalSuccess>
+            <ModalSuccess 
+                :mensagem="mensagem" 
+                :success="success">
+            </ModalSuccess>
         </div>
 
         <div class="login">
             <div class="new-user">
                 <p>Já possui conta?</p>
 
-                <router-link to="/login" class="go-register">
-                    Login
-                </router-link>
+                <router-link to="/login" class="go-register">Login</router-link>
             </div>
 
-            <img src="../assets/logo.png" alt="">
+            <img src="../assets/logo.webp" alt="Logo">
 
             <h1 class="titulo">Criar conta 🐶</h1>
 
             <div class="type-account">
                 <label class="form-control">
-                    <input type="radio" checked name="radio" value="ONG" v-model="typeAccount"/>
+                    <input 
+                        type="radio" 
+                        checked 
+                        name="radio" 
+                        value="ONG" 
+                        v-model="typeAccount"
+                    >
                     ONG
                 </label>
 
                 <label class="form-control">
-                    <input type="radio" name="radio" value="particular" v-model="typeAccount"/>
+                    <input 
+                        type="radio" 
+                        name="radio" 
+                        value="particular" 
+                        v-model="typeAccount"
+                    >
                     Particular
                 </label>
             </div>
@@ -35,12 +46,12 @@
                     <div>
                         <label for="name">Nome</label>
                         <input 
-                        type="text"
-                        id="name" 
-                        name="name"
-                        placeholder="Nome"
-                        required 
-                        v-model="form.nameOng"
+                            type="text"
+                            id="name" 
+                            name="name"
+                            placeholder="Nome"
+                            required 
+                            v-model="form.nameOng"
                         >
                     </div>
 
@@ -50,9 +61,9 @@
                             type="text"
                             id="username" 
                             name="username"
+                            placeholder="Username"
                             maxlength="10"
                             minlength="4"
-                            placeholder="Username"
                             required 
                             v-model="username"
                             @change="validarUsername(username)"
@@ -64,25 +75,25 @@
                     <div>
                         <label for="email">Seu email</label>
                         <input
-                        type="email"
-                        id="email" 
-                        name="email"
-                        placeholder="email"
-                        required 
-                        v-model="email"
+                            type="email"
+                            id="email" 
+                            name="email"
+                            placeholder="email"
+                            required 
+                            v-model="email"
                         >
                     </div>
 
                     <div>
                         <label for="password">Sua senha</label>
                         <input 
-                        type="password"
-                        id="password" 
-                        name="password"
-                        placeholder="Sua senha"
-                        required 
-                        autocomplete="off"
-                        v-model="password"
+                            type="password"
+                            id="password" 
+                            name="password"
+                            placeholder="Sua senha"
+                            autocomplete="off"
+                            required 
+                            v-model="password"
                         >
                     </div>
                 </div>
@@ -91,29 +102,29 @@
                     <div>
                         <label for="cep">Cep</label>
                         <input 
-                        type="number"
-                        id="cep" 
-                        name="cep"
-                        placeholder="Cep"
-                        required 
-                        v-mask="'########'"
-                        v-model="form.cep"
-                        minlength="7"
-                        maxlength="8"
-                        @keyup="validarCep(form.cep)"
+                            type="number"
+                            id="cep" 
+                            name="cep"
+                            placeholder="Cep"
+                            required 
+                            v-mask="'########'"
+                            minlength="7"
+                            maxlength="8"
+                            v-model="form.cep"
+                            @keyup="validarCep(form.cep)"
                         >
                     </div>
                     <div>
                         <label for="city">Cidade</label>
                         <input 
-                        class="read"
-                        type="text"
-                        id="city" 
-                        name="city"
-                        placeholder="Cidade"
-                        required 
-                        v-model="form.city"
-                        readonly
+                            class="read"
+                            type="text"
+                            id="city" 
+                            name="city"
+                            placeholder="Cidade"
+                            required 
+                            readonly
+                            v-model="form.city"
                         >
                     </div>
                 </div>
@@ -148,12 +159,12 @@
                     <div>
                         <label for="whatsapp">Whatsapp</label>
                         <input 
-                        id="whatsapp" 
-                        name="whatsapp"
-                        placeholder="Celular"
-                        required 
-                        v-mask="'(##) # ####-####'"
-                        v-model="form.whatsapp"
+                            id="whatsapp" 
+                            name="whatsapp"
+                            placeholder="Celular"
+                            required 
+                            v-mask="'(##) # ####-####'"
+                            v-model="form.whatsapp"
                         >
                     </div>
 
@@ -235,15 +246,14 @@ export default {
                     })
                     .catch(() => this.mostrarMensagem('Essa imagem já existe', false, 2000))
                 }
-            );
+            )
         },
 
         async criarUsuario() {
-            await firebase.auth().createUserWithEmailAndPassword(this.email, this.password)
+            await firebase.auth()
+            .createUserWithEmailAndPassword(this.email, this.password)
             .then(() => {
-                firebase.auth().currentUser.updateProfile({ 
-                    displayName: this.username 
-                })  
+                firebase.auth().currentUser.updateProfile({ displayName: this.username })  
                 this.mostrarMensagem('Conta criada com sucesso', true, 2000)
                 this.inserirOsDadosDaPessoa(this.username)
             })
@@ -270,7 +280,6 @@ export default {
         mostrarMensagem(message, boolean, time) {
             this.mensagem = message
             this.success = boolean
-
             setTimeout(() => this.mensagem = '', time)
         },
 
@@ -287,7 +296,6 @@ export default {
 
                     document.getElementById('cep').style.border = 'none'
                 })
-
                 return
             }
                 

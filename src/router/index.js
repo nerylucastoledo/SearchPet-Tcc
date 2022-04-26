@@ -35,14 +35,12 @@ const routes = [
     name: 'home',
     beforeEnter : guardMyroute,
     component: Home,
-    meta: {title: 'Pagina Inicial'}
   },
   {
     path: '/todos-anuncios',
     name: 'todosanuncios',
     beforeEnter : guardMyroute,
     component: TodosAnuncios,
-    meta: {title: 'Todos Anúncios'}
   },
   {
     path: '/login',

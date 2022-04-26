@@ -17,23 +17,23 @@
             </div>
 
             <span 
-                v-if="anuncio.pausado && anuncio.categoria === 'Adocao'"
                 class="anuncio-finalizado"
+                v-if="anuncio.pausado && anuncio.categoria === 'Adocao'"
                 >
                 Adotado 🐶
             </span>
 
             <span 
-                v-else-if="anuncio.pausado"
                 class="anuncio-finalizado"
+                v-else-if="anuncio.pausado"
                 >
                 Encontrado 🐶
             </span>
         </div>
 
         <div 
-            id="category" 
             :class="[anuncio.categoria === 'Adocao' ? 'adocao' : 'perdido']"
+            id="category" 
             >
             <p>{{anuncio.categoria}}</p>
         </div>

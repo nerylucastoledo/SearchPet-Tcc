@@ -8,29 +8,29 @@
                 
                 <div v-if="tipoConta === 'ONG'">
                     <p  
-                        @click="filtrarMeusAnuncios(0, '')" 
                         class="link-filter"
+                        @click="filtrarMeusAnuncios(0, '')" 
                         >
                         Todos anuncios
                     </p>
 
                     <p 
-                        @click="filtrarMeusAnuncios(1, 'pausado', false)" 
                         class="link-filter"
+                        @click="filtrarMeusAnuncios(1, 'pausado', false)" 
                         >
                         Anuncios ativos
                     </p>
 
                     <p 
-                        @click="filtrarMeusAnuncios(2, 'pausado', true)" 
                         class="link-filter"
+                        @click="filtrarMeusAnuncios(2, 'pausado', true)" 
                         >
                         Anuncios finalizados
                     </p>
                 </div>
                 <p 
-                    @click="filtrarAnunciosFavoritos(3)" 
                     class="link-filter"
+                    @click="filtrarAnunciosFavoritos(3)" 
                     >
                     Escolhidos por vocẽ
                 </p>
@@ -39,18 +39,18 @@
             <div v-if="!loading">
                 <div class="open-filter">
                     <font-awesome-icon 
-                        @click="abrirMenuFiltros" 
                         id="filter" 
                         icon="filter" 
                         size="2x"
+                        @click="abrirMenuFiltros" 
                     />
                 </div>
 
                 <div class="cards" v-if="anuncios.length">
                     <div v-for="anuncio in anuncios" :key="anuncio.nome+1">
                         <p
-                            v-if="favorite"
                             class="fechar"
+                            v-if="favorite"
                             @click="procurarAnuncioPeloId(anuncio)"
                             >
                             X
@@ -215,8 +215,8 @@ export default {
 
         async pegarDadosDoBanco(ref, child = '') {
             return await firebase.database()
-                .ref(`${ref}/${child}`)
-                .once("value", snapshot => snapshot.exists() ? snapshot.val() : null)
+                        .ref(`${ref}/${child}`)
+                        .once("value", snapshot => snapshot.exists() ? snapshot.val() : null)
         },
 
         async pegarConta() {
