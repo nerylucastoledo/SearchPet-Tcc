@@ -21,7 +21,7 @@ Lado usuário:
 - Visualizar quem adotou / encontrou um pet
 - Filtrar os pets
 
-Lado ONGG:
+Lado ONG:
 - Inserir um novo pet no site
 - Adicionar um pet aos favoritos
 - Atualizar os dados do pet anunciado
