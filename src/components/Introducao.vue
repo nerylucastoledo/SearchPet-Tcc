@@ -64,21 +64,19 @@ export default {
         dismissPrompt() {
             this.shown = false
         },
-
-        onBeforeInstallPrompt(e) {
-            console.log('entrei')
-            this.shown = true
-            console.log(e)
-            this.installEvent = e
-        }
     },
 
     created() {
-        console.log('fui criado')
-        window.addEventListener('beforeinstallprompt', function(e) {
-            console.log('entrei no window')
-            this.onBeforeInstallPrompt(e)
+        window.addEventListener('scroll', () => {
+            console.log('scrollei')
         })
+        window.addEventListener('beforeinstallprompt', (event) => {
+            event.preventDefault()
+            console.log('entrei')
+            this.shown = true
+            this.installEvent = event
+            console.log('👍', 'beforeinstallprompt', event)
+        });
         console.log('passei a funcao')
     },
 }
