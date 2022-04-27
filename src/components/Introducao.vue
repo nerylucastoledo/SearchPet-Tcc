@@ -10,7 +10,6 @@
                 <p>Você pode ter a <strong>Search Pet</strong> no seu celular, clique abaixo para baixar</p>
             
                <button
-                    v-if="shown"
                     class="btn-padrao"
                     @click="installPWA"
                     >
@@ -19,7 +18,7 @@
             </div>
 
             <div class="carrossel">
-                <Carousel :per-page="1" :mouse-drag="true" :autoplay="true">
+                <Carousel :per-page="1" :mouse-drag="true" :autoplay="true" :loop="true">
                     <slide>
                         <img class="imagem-carrossel" src="../assets/app-background.png" alt="Imagem celular">
                     </slide>
@@ -67,17 +66,12 @@ export default {
     },
 
     created() {
-        window.addEventListener('scroll', () => {
-            console.log('scrollei')
-        })
         window.addEventListener('beforeinstallprompt', (event) => {
             event.preventDefault()
             console.log('entrei')
             this.shown = true
             this.installEvent = event
-            console.log('👍', 'beforeinstallprompt', event)
         });
-        console.log('passei a funcao')
     },
 }
 </script>
