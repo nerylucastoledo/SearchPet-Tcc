@@ -1,6 +1,6 @@
 <template>
     <main>
-        <div class="container content-principal">
+        <div class="container content-principal todos-anuncios">
             <div v-if="mensagem.length">
                 <ModalSuccess 
                     :mensagem="mensagem" 
@@ -182,6 +182,10 @@ export default {
 
 .content-principal {
     margin-top: 60px;
+}
+
+.todos-anuncios {
+    margin-bottom: 60px;
 }
 
 .not-found-anuncio {

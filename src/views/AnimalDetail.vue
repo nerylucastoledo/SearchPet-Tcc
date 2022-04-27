@@ -60,7 +60,7 @@
                             <img src="../assets/peso.png" alt="Logo peso">
                         </div>
 
-                        <span>{{anuncio.peso}}</span>
+                        <span>{{anuncio.peso}} Kg</span>
                     </div>
 
                     <div class="box-info">
