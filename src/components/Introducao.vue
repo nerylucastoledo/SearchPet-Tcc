@@ -10,9 +10,9 @@
                 <p>Você pode ter a <strong>Search Pet</strong> no seu celular, clique abaixo para baixar</p>
             
                <button
+                    v-if="shown"
                     class="btn-padrao"
-                    v-if="deferredPrompt" 
-                    @click="promptInstall"
+                    @click="installPWA"
                     >
                     BAIXAR APP ➡︎
                 </button>
@@ -35,11 +35,8 @@
 <script>
 
 import { Carousel, Slide } from 'vue-carousel';
-import { VuePwaInstallMixin } from "vue-pwa-install";
-import { BeforeInstallPromptEvent } from "vue-pwa-install";
 
 export default {
-    mixins: [VuePwaInstallMixin],
 
     components: {
         Carousel,
@@ -48,33 +45,42 @@ export default {
 
     data() {
         return {
-            deferredPrompt: null,
+            installEvent: "",
+            shown: false,
         }
     },
 
     methods: {
-        promptInstall() {
-            this.deferredPrompt.prompt()
-
-            this.deferredPrompt.userChoice.then((choiceResult) => {
-                if (choiceResult.outcome === "accepted") {
-                    console.log("User accepted the install prompt")
-                } else {
-                    console.log("User dismissed the install prompt")
+        async installPWA() {
+            if(this.installEvent !== null) {
+                this.installEvent.prompt()
+                const { outcome } = await this.installEvent.userChoice
+                if(outcome === "accepted") {
+                    this.dismissPrompt()
                 }
-
-                this.deferredPrompt = null
-            })
+            }
         },
+
+        dismissPrompt() {
+            this.shown = false
+        },
+
+        onBeforeInstallPrompt(e) {
+            console.log('entrei')
+            this.shown = true
+            console.log(e)
+            this.installEvent = e
+        }
     },
 
     created() {
-        this.$on("canInstall", (event) => {
-            console.log('entrei')
-            event.preventDefault()
-            this.deferredPrompt = event
+        console.log('fui criado')
+        window.addEventListener('beforeinstallprompt', function(e) {
+            console.log('entrei no window')
+            this.onBeforeInstallPrompt(e)
         })
-    }
+        console.log('passei a funcao')
+    },
 }
 </script>
 
