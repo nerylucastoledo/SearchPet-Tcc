@@ -35,6 +35,8 @@
 
 import { Carousel, Slide } from 'vue-carousel';
 
+window.addEventListener('scroll', () => console.log('scrollei'))
+
 export default {
 
     components: {
@@ -63,17 +65,27 @@ export default {
         dismissPrompt() {
             this.shown = false
         },
+
+        OnBeforeInstallPrompt() {
+            console.log('fui chamado')
+        },
+
+        async isRunningStandalone() {
+            return (window.matchMedia('(display-mode: standalone)').matches)
+        }
     },
 
-    created() {
-        window.onload = () => document.querySelector(".carrossel").click();
+    mounted() {
+        window.onload = () => document.querySelector(".carrossel").click()
+
+        const isRunningStandalone = this.isRunningStandalone()
+        if(isRunningStandalone) {
+            document.querySelector('.carrossel').style.display = 'none'
+
+        } else {
+            window.addEventListener('beforeinstallprompt', this.OnBeforeInstallPrompt)
+        }
         
-        window.addEventListener('beforeinstallprompt', (event) => {
-            event.preventDefault()
-            console.log('entrei')
-            this.shown = true
-            this.installEvent = event
-        });
     },
 }
 </script>
