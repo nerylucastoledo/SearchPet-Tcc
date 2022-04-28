@@ -66,6 +66,8 @@ export default {
     },
 
     created() {
+        window.onload = () => document.querySelector(".carrossel").click();
+        
         window.addEventListener('beforeinstallprompt', (event) => {
             event.preventDefault()
             console.log('entrei')
