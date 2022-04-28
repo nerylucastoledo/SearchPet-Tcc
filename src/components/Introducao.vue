@@ -1,6 +1,6 @@
 <template>
     <div class="container">
-        <div class="introducao">
+        <div class="introducao" v-if="install">
             <div class="mensagem-inicial">
                 <h1 class="titulo">Faça uma adoção, porque o amor não tem preço e nem raça.</h1>
 
@@ -35,7 +35,11 @@
 
 import { Carousel, Slide } from 'vue-carousel';
 
-window.addEventListener('beforeinstallprompt', (e) => console.log('scrollei', e))
+export var install = ''
+window.addEventListener('beforeinstallprompt', (e) => {
+    console.log('eu entrei no evento', e)
+    install = e
+})
 
 export default {
 
@@ -46,16 +50,15 @@ export default {
 
     data() {
         return {
-            installEvent: "",
-            shown: false,
+            install
         }
     },
 
     methods: {
         async installPWA() {
-            if(this.installEvent !== null) {
-                this.installEvent.prompt()
-                const { outcome } = await this.installEvent.userChoice
+            if(this.install !== null) {
+                this.install.prompt()
+                const { outcome } = await this.install.userChoice
                 if(outcome === "accepted") {
                     this.dismissPrompt()
                 }
@@ -63,30 +66,12 @@ export default {
         },
 
         dismissPrompt() {
-            this.shown = false
+            this.install = false
         },
-
-        OnBeforeInstallPrompt() {
-            console.log('fui chamado')
-        },
-
-        async isRunningStandalone() {
-            return (window.matchMedia('(display-mode: standalone)').matches)
-        }
     },
 
     mounted() {
         window.onload = () => document.querySelector(".carrossel").click()
-
-        const isRunningStandalone = this.isRunningStandalone()
-        if(isRunningStandalone) {
-            document.querySelector('.mensagem-inicial').style.display = 'none'
-            document.querySelector('.carrossel').style.display = 'none'
-
-        } else {
-            window.addEventListener('beforeinstallprompt', this.OnBeforeInstallPrompt)
-        }
-        
     },
 }
 </script>
