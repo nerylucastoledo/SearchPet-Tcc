@@ -36,10 +36,7 @@
 import { Carousel, Slide } from 'vue-carousel';
 
 export var install = ''
-window.addEventListener('beforeinstallprompt', (e) => {
-    console.log('eu entrei no evento', e)
-    install = e
-})
+window.addEventListener('beforeinstallprompt', (e) => install = e)
 
 export default {
 
