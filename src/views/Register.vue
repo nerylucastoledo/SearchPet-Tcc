@@ -179,6 +179,11 @@
                     </div>
                 </div>
 
+                <p class="termos">
+                    Ao se inscrever, você concorda com os 
+                    <router-link to="termos-de-uso">Termos de Uso</router-link>.
+                </p>
+
                 <button class="btn-form" type="submit">Cadastrar</button>
             </form>
         </div>
@@ -215,7 +220,8 @@ export default {
             success: true,
             mensagem: "",
             cepError: '',
-            usernameApproved: null
+            usernameApproved: null,
+            termoDeUso: false
         }
     },
 
@@ -424,6 +430,15 @@ input[type="radio"]:checked {
     background-color: #36C9D2;
     text-align: center;
     width: 150px;
+}
+
+.termos {
+    text-align: center;
+    margin: 20px 0 40px;
+}
+
+.termos a {
+    color: #36C9D2;
 }
 
 @media (max-width: 745px) {

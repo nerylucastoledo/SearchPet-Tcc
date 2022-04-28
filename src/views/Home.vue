@@ -3,7 +3,7 @@
         <Introducao/>
 
         <div class="container content-principal">
-            <h1 class="titulo">Anuncios</h1>
+            <h1 class="titulo">Alguns anúncios</h1>
 
             <div v-if="anuncios.length" class="cards">
                 <div 

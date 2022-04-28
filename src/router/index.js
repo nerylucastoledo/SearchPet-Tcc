@@ -11,6 +11,7 @@ import Meus from '../views/Meus.vue'
 import Anuncio from '../views/Anuncio.vue'
 import Vacinas from '../views/Vacinas.vue'
 import NewAnuncio from '../views/NewAnuncio.vue'
+import TermoDeUso from '../components/TermoDeUso'
 
 Vue.use(VueRouter)
 
@@ -21,15 +22,21 @@ function guardMyroute(to, from, next) {
   } else {
     isAuthenticated= false
   }
+  
   if(isAuthenticated) { 
     next()
-  } 
-  else { 
+    
+  } else { 
     next('/login') 
   } 
 }
 
 const routes = [
+  {
+    path: '/termos-de-uso',
+    name: 'termos',
+    component: TermoDeUso,
+  },
   {
     path: '/',
     name: 'home',

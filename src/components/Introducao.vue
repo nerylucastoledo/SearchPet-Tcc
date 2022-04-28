@@ -35,7 +35,7 @@
 
 import { Carousel, Slide } from 'vue-carousel';
 
-window.addEventListener('scroll', () => console.log('scrollei'))
+window.addEventListener('beforeinstallprompt', (e) => console.log('scrollei', e))
 
 export default {
 
@@ -80,6 +80,7 @@ export default {
 
         const isRunningStandalone = this.isRunningStandalone()
         if(isRunningStandalone) {
+            document.querySelector('.mensagem-inicial').style.display = 'none'
             document.querySelector('.carrossel').style.display = 'none'
 
         } else {
