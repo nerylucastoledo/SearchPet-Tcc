@@ -1,6 +1,6 @@
 <template>
     <div class="container">
-        <h1 class="titulo">Painel de vacinas</h1>
+        <h1 class="titulo painel">Painel de vacinas</h1>
 
         <div class="vacina-intro">
             <div>
@@ -14,7 +14,7 @@
 
         <h1 class="titulo-primeiro-dias titulo">Primeiros dias</h1>
 
-        <div class="box-primeiros-dias">
+        <div class="vacina-intro box-primeiros-dias">
             <div>
                 <img src="../assets/cao_filhote.png" alt="Cachorro">
             </div>
@@ -24,7 +24,7 @@
             </div>
         </div>
 
-        <div class="box-primeiros-dias">
+        <div class="vacina-intro box-primeiros-dias">
             <div>
                 <img src="../assets/cao_filhote.png" alt="Cachorro">
             </div>
@@ -66,7 +66,7 @@
 
         <div class="principais-vacinas">
             <div>
-                <h2>Vacina contra a gripe </h2>
+                <h2>Vacina contra a gripe</h2>
 
                 <div>
                     <p>A tosse dos cães costuma cursar com tosse, coriza, febre e falta de apetite. Parece que o cão está <strong>engasgado</strong>. O quadro pode, inclusive, evoluir para <strong>pneumonia</strong>.</p>
@@ -78,7 +78,7 @@
                 <h2>Vacina contra Giárdia</h2>
 
                 <div>
-                    <p>A giardíase pode provocar <strong>diarréia</strong>, <strong>vômito</strong>, <strong>apatia</strong> e <strong>perda de peso</strong>. Pode ser transmitida para as <strong>pessoas</strong> a partir de <strong>cães infectados</strong>.</p>
+                    <p>A giardíase pode provocar <strong>diarréia</strong>, <strong>vômito</strong>, <strong>apatia</strong> e <strong>perda de peso</strong>. Pode ser transmitida para as <strong>pessoas</strong> a partir de cães <strong>contaminados</strong> e que estão <strong>infectados</strong>.</p>
                     <p>A vacina deve ser aplicada a partir dos <strong>2 meses</strong> de idade. A segunda dose varia de <strong>3</strong> a <strong>4 semanas</strong> após a primeira dose para uma proteção adequada. O reforço contra a giardíase é feito <strong>anualmente</strong>.</p>
                 </div>
             </div>
@@ -100,52 +100,48 @@
 
         <div class="principais-vacinas">
             <div>
-                <h2>Vacina Polivalente (V10)</h2>
+                <h2>Panleucopenia (V3)</h2>
 
                 <div>
-                    <p>Essa vacina protege o cão de doenças contagiosas e zoonoses que podem levar a óbito. Ela é composta de <strong>3</strong> ou <strong>4 doses</strong> iniciais. A primeira, é aplicada nos primeiros <strong>45 dias</strong> de vida. As de reforco realizadas com intervalos de <strong>21</strong> a <strong>28 dias</strong>.</p>
-                    <p>O reforço da vacina polivalente V10 é anual, calculado com base na data da última dose.</p>
+                    <p><strong>Febre</strong>, <strong>vômitos</strong>, <strong>inapetência</strong>, <strong>prostração</strong> e <strong>diarreia</strong> são alguns dos sintomas em animais infectados. Pode prejudicar a coordenação motora de filhotes. É transmitida por meio do contato com animais doentes ou objetos contaminados.</p>
                 </div>
             </div>
 
             <div>
-                <h2>Vacina Antirrábica</h2>
+                <h2>Rinotraqueíte (V3)</h2>
 
                 <div>
-                    <p>A raiva é uma <strong>doença fatal</strong> em praticamente 100% dos casos, tanto em <strong>cães</strong> como em <strong>seres humanos</strong>. Ela pode ser transmitida dos pets para seus donos através de <strong>arranhões</strong> e <strong>mordidas</strong>.</p>
-                    <p>A primeira dose da vacina antirrábica é aplicada na fase de filhotes, a partir dos <strong>3 meses</strong> de idade. O reforço dessa vacina devem ser feitos <strong>anualmente</strong>. </p>
+                    <p>A rinotraqueíte é altamente <strong>contagiosa</strong>, os seus primeiros sintomas são <strong>espirros</strong>, <strong>secreções nasais</strong>, <strong>rinite</strong>, <strong>rinite</strong>, <strong>conjuntivite</strong>, <strong>febre</strong> e/ou <strong>falta de apetite</strong>. É causada pelo herpesvírus e pode levar os filhotes a óbito.</p>
                 </div>
             </div>
         </div>
 
         <div class="principais-vacinas">
             <div>
-                <h2>Vacina contra a gripe </h2>
+                <h2>Clamidiose (V4)</h2>
 
                 <div>
-                    <p>A tosse dos cães costuma cursar com tosse, coriza, febre e falta de apetite. Parece que o cão está <strong>engasgado</strong>. O quadro pode, inclusive, evoluir para <strong>pneumonia</strong>.</p>
-                    <p>A vacina contra a gripe pode ser aplicada por volta dos <strong>80 dias</strong> de vida. A segunda dose vai depender do tipo de vacina tomada: <strong>injetável</strong> ou <strong>intranasal</strong>. O reforço dessa vacina deve ser feito todos os <strong>anos</strong>.</p>
+                    <p>Afeta a <strong>conjuntiva</strong> dos animais, que é a membrana que recobre a parte frontal do globo ocular, posteriormente atingindo o <strong>sistema respiratório</strong>. Entre os sintomas estão a <strong>conjuntivite</strong>, <strong>corrimento nasal</strong>, <strong>espirros</strong>, <strong>dificuldade respiratória</strong>, <strong>febre</strong>, <strong>falta de apetite</strong>, <strong>pneumonia</strong>.</p>
                 </div>
             </div>
 
             <div>
-                <h2>Vacina contra Giárdia</h2>
+                <h2>Raiva</h2>
 
                 <div>
-                    <p>A giardíase pode provocar <strong>diarréia</strong>, <strong>vômito</strong>, <strong>apatia</strong> e <strong>perda de peso</strong>. Pode ser transmitida para as <strong>pessoas</strong> a partir de <strong>cães infectados</strong>.</p>
-                    <p>A vacina deve ser aplicada a partir dos <strong>2 meses</strong> de idade. A segunda dose varia de <strong>3</strong> a <strong>4 semanas</strong> após a primeira dose para uma proteção adequada. O reforço contra a giardíase é feito <strong>anualmente</strong>.</p>
+                    <p>Responsável por alterações no <strong>sistema neurológico</strong>, a Raiva <strong>não tem cura</strong>, e a única forma de prevenção é a <strong>vacina</strong>. Alterações de comportamento, <strong>fotofobia (medo de luz)</strong>, <strong>agressividade</strong>, <strong>hidrofobia (medo de água)</strong> e <strong>falta de apetite</strong> são alguns dos sintomas mais comuns da doença.</p>
                 </div>
             </div>
         </div>
 
         <div class="vacinal-geral principais-vacinas">
             <div>
-                <h2>Vacina contra Leishmaniose</h2>
+                <h2>Leucemia Felina (V5)</h2>
 
                 <div>
-                    <p>Os cães domésticos são considerados os principais reservatórios da Leishmaniose em <strong>áreas urbanas</strong>. A partir deles, algumas espécies de <strong>mosquitos</strong> podem <strong>espalhar a doença</strong> para toda a família.</p>
-                    <p>A leishmaniose é dividida em dois tipos: <strong>visceral</strong> ou <strong>tegumentar</strong>. Em humanos, a doença pode provocar desde <strong>feridas na pele</strong> e <strong>fraqueza</strong>, até aumento do baço, do fígado, problemas respiratórios, sangramentos e infecções por conta da queda da imunidade.</p>
-                    <p>As vacinas para cães contra leishmaniose devem ser feitas a partir de <strong>4 meses</strong> de idade. O protocolo completo deve ser feito com <strong>3 doses</strong>, respeitando o intervalo de <strong>21 dias</strong> entre cada aplicação. A revacinação é <strong>anual</strong>, contada a partir da 1ª dose.</p>
+                    <p>Causada pelo vírus <strong>FeLV (Feline leukemia virus)</strong>, compromete as <strong>defesas imunológicas</strong>, tornando os bichanos <strong>vulneráveis</strong> a doenças infecciosas, lesões na pele, desnutrição, cicatrização mais lenta de feridas e problemas reprodutivos.</p>
+                    <p>A infecção se dá pelo contato com <strong>saliva</strong>, <strong>urina</strong> e <strong>fezes</strong> de animais infectados, portanto, o simples fato de dividir a mesma tigela de água com um gato doente é suficiente para contaminar o sadio. <strong>Gatas prenhas</strong> podem transmitir o vírus pelo <strong>parto</strong> ou pelo <strong>leite</strong> a seus filhotes</p>
+                    <p>Entre os sintomas estão <strong>perda de peso</strong>, <strong>secreção nasal</strong> e <strong>ocular excessiva</strong>, <strong>diarreia persistente</strong>, <strong>imunodeficiência</strong> e <strong>tumores</strong> em células linfáticas.</p>
                 </div>
             </div>
         </div>
@@ -177,18 +173,18 @@ p {
     font-size: 18px;
 }
 
-.vacina-intro {
+.vacina-intro, .principais-vacinas {
     display: flex;
     grid-template-columns: 1fr 1fr;
     grid-gap: 40px;
 }
 
-.vacina-intro div, .box-primeiros-dias div, .principais-vacinas div div {
+.vacina-intro div, .principais-vacinas div div {
     box-shadow: 0px 7px 7px rgba(0, 0, 0, 0.25);
     border-radius: 10px;
 }
 
-.vacina-intro div, .box-primeiros-dias div {
+.vacina-intro div {
     width: 50%;
 }
 
@@ -211,7 +207,7 @@ p {
     margin-right: 10px;
 }
 
-.box-primeiros-dias, .principais-vacinas {
+.principais-vacinas {
     display: flex;
     align-items: center;
 }
@@ -220,24 +216,23 @@ p {
     margin-bottom: 30px;
 }
 
-.box-primeiros-dias div {
-    padding: 20px;
-    border-radius: 10px;
-    width: 50%;
-}
-
-.box-primeiros-dias div:nth-child(1) {
-    margin-right: 40px;
-}
-
 .box-primeiros-dias img {
     display: block;
     margin: 0 auto;
+    padding: 20px;
+    border-radius: 10px;
+    max-width: 100%;
+}
+
+.box-primeiros-dias div {
+    position: relative;
 }
 
 .box-primeiros-dias p {
-    padding: 0px 40px;
-    text-align: center;
+    position: relative;
+    top: 50%;
+    transform: translateY(-50%); 
+    padding: 0 20px;
 }
 
 .box-primeiros-dias strong {
@@ -247,10 +242,6 @@ p {
 .vacina-reforco p {
     margin-bottom: 20px;
     padding-left: 20px;
-}
-
-.principais-vacinas {
-    justify-content: space-between;
 }
 
 .principais-vacinas {
@@ -282,6 +273,60 @@ p {
 
 .vacinal-geral div:nth-child(1) {
     margin-right: 0px;
+}
+
+@media (max-width: 702px) {
+    .principais-vacinas {
+        display: block;
+    }
+
+    .principais-vacinas div {
+        margin-bottom: 60px;
+        width: 100%;
+    }
+
+    .vacina-intro {
+        display: block;
+    }
+
+    .vacina-intro div {
+        margin-bottom: 30px;
+        width: 100%;
+    }
+
+    .painel, .titulo-primeiro-dias {
+        margin-bottom: 40px;
+    }
+}
+
+@media (max-width: 760px) {
+    .box-primeiros-dias {
+        display: block;
+        box-shadow: 0px 7px 7px rgba(0, 0, 0, 0.25);
+        border-radius: 10px;
+    }
+
+    .box-primeiros-dias div {
+        box-shadow: unset;
+        width: 100%;
+    }
+
+    .box-primeiros-dias p {
+        position: unset;
+        top: unset;
+        transform: unset; 
+        padding: 0 20px 20px;
+    }
+
+    .box-primeiros-dias img {
+        padding: 20px 20px 0px;
+    }
+}
+
+@media (max-width: 540px) {
+    p {
+        font-size: 16px;
+    }
 }
 
 </style>
