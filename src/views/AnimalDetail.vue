@@ -203,14 +203,13 @@ export default {
     },
 
     mounted() {
-        const id = this.$route.params.id
-        const anuncio = this.$route.params.anuncio
+        const [id, anuncio] = [this.$route.params.id, this.$route.params.anuncio]
 
         firebase.database().ref('/Anuncios/' + anuncio)
         .child(id)
         .once("value", snapshot => {
             this.anuncio = snapshot.val()
-            document.title = `Detalhe - ${snapshot.val()["Nome"]}`
+            document.title = `Detalhe - ${snapshot.val()["nome"]}`
             this.categoria = this.anuncio.categoria === "Perdido" ? "achou" : "adotou"
             this.pegarNumeroDono()
         })

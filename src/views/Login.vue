@@ -16,7 +16,7 @@
 
                 <h1 class="titulo">Login</h1>
 
-                <p v-if="notFoundUser.length" class="not-found">{{notFoundUser}}</p>
+                <p v-if="notFoundUser" class="not-found">{{notFoundUser}}</p>
 
                 <div>
                     <label for="email">E-mail 🐶</label>
@@ -77,24 +77,13 @@ export default {
                 localStorage.setItem('login', true)
                 setTimeout(() => this.$router.replace({ name: "home" }), 500)
             })
-            .catch(error => {
-                if(error.code === "auth/user-not-found") {
-                    this.notFoundUser = 'Usuário não encontrado'
-                    return
-                }
-
-                this.notFoundUser = 'Senha invalida'
-            })
+            .catch(() => this.notFoundUser = 'Usuário ou senha incorreto')
         }
     },
 }
 </script>
 
 <style scoped>
-
-body {
-    background-image: url("../assets/pattern.svg");
-}
 
 .login-form {
     background-color: #fff;

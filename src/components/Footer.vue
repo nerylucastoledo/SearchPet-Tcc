@@ -1,9 +1,9 @@
 <template>
     <footer>
         <div>
-            <img src="../assets/linkedin.png" alt="Logo Linkedin">
-            <img src="../assets/facebook.png" alt="Logo facebook">
-            <img src="../assets/instagram.png" alt="Logo Instagram">
+            <img src="../assets/linkedin.png" alt="Logo Linkedin" loading="lazy">
+            <img src="../assets/facebook.png" alt="Logo facebook" loading="lazy">
+            <img src="../assets/instagram.png" alt="Logo Instagram" loading="lazy">
         </div>
         <p class="copyrigth">© 2022 - Nome da empresa</p>
     </footer>

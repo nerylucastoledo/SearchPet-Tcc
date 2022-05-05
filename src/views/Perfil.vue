@@ -1,7 +1,5 @@
 <template>
-
     <div class="container">
-
         <div v-if="mensagem.length">
             <ModalSuccess 
                 :mensagem="mensagem" 
@@ -183,7 +181,7 @@ export default {
                 storageRef.snapshot.ref
                 .getDownloadURL()
                 .then((url) => {
-                    this.picture = url;
+                    this.picture = url
                     this.atualizarDados()
                 })
             })
@@ -216,8 +214,8 @@ export default {
     },
 
     created() {
-        const displayName = localStorage.getItem('displayName')
         document.title = "Meu perfil"
+        const displayName = localStorage.getItem('displayName')
 
         firebase.database()
         .ref(displayName)

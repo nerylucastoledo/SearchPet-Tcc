@@ -4,7 +4,7 @@
 
             <div>
                 <div>
-                    <img src="../assets/cahcorro_adocao.png" alt="Logo Dog">
+                    <img src="../assets/cahcorro_adocao.png" alt="Logo Dog" loading="lazy">
 
                     <p>
                         Você estará ajudando a reduzir a quantidade de animais abadonados da rua que já passaram por muito sofrimento e que só querem ser feliz.
@@ -12,7 +12,7 @@
                 </div>
 
                 <div>
-                    <img src="../assets/cahcorro_adocao_2.png" alt="Logo Dog">
+                    <img src="../assets/cahcorro_adocao_2.png" alt="Logo Dog" loading="lazy">
 
                     <p>
                         Não existe coisa melhor do que vê-los felizes e saudáveis após receber muito amor e carinho. Então a pergunta é:  Se pode ajudar, porquê não ajudar?

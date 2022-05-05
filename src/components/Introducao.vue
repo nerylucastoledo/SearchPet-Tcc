@@ -9,10 +9,7 @@
                 <p>Caso você encontre um amiguinho a sua cara conosco, você pode publicar um final feliz no nosso blog e mostrar pra todos o quão bom é fazer o bem para uma vida!</p>
                 <p>Você pode ter a <strong>Search Pet</strong> no seu celular, clique abaixo para baixar</p>
             
-               <button
-                    class="btn-padrao"
-                    @click="installPWA"
-                    >
+               <button class="btn-padrao" @click="installPWA">
                     BAIXAR APP ➡︎
                 </button>
             </div>
@@ -65,11 +62,7 @@ export default {
         dismissPrompt() {
             this.install = false
         },
-    },
-
-    mounted() {
-        window.onload = () => document.querySelector(".carrossel").click()
-    },
+    }
 }
 </script>
 

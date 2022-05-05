@@ -54,8 +54,6 @@ export default {
         return {
             anuncios: [],
             loading: true,
-            success: true,
-            mensagem: "",
         }
     },
 

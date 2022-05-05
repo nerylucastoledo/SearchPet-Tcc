@@ -7,7 +7,7 @@
             <router-link to="/login" class="btn-ok">Tela de Login</router-link>
         </div>
 
-        <form v-else action="#" class="login" @submit.prevent="recoverPasssword">
+        <form v-else class="login" @submit.prevent="recoverPasssword">
             <div class="new-user">
                 <p>Já possui conta?</p>
 
@@ -51,9 +51,8 @@ export default {
 
     methods: {
         recoverPasssword() {
-            this.error = null;
-            firebase.auth()
-            .sendPasswordResetEmail(this.email)
+            this.error = null
+            firebase.auth().sendPasswordResetEmail(this.email)
             .then(() => this.emailSending = true)
             .catch(() => this.error = "Email não encontrado.")
         }
