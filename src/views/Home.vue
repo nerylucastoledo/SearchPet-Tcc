@@ -163,6 +163,7 @@ export default {
     width: 28px;
     height: 28px;
     margin-left: 20px;
+    object-fit: cover;
 }
 
 .btn-padrao {
