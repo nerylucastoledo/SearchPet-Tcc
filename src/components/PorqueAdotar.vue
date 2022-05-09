@@ -41,6 +41,7 @@
 
 .porque-adotar div img {
     height: 150px;
+    width: 188px;
 }
 
 .porque-adotar div p {

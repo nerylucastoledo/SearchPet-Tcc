@@ -27,6 +27,8 @@ footer {
 
 footer div img{
     margin: 0 25px;
+    width: 40px;
+    height: 40px;
 }
 
 .copyrigth {

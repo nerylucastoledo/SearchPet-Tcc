@@ -5,7 +5,6 @@
                 :src="anuncio.imagem" 
                 :class="{ finalizado: anuncio.pausado }"
                 alt="Imagem de um animal"
-                loading="lazy"
             >
 
             <div class="box-nome-logo">

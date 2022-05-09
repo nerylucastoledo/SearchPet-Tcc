@@ -88,6 +88,7 @@ export default {
 
 .header-principal img {
     width: 150px;
+    height: 62px;
 }
 
 .menu {

@@ -160,6 +160,8 @@ export default {
 }
 
 .dados > div div img {
+    width: 28px;
+    height: 28px;
     margin-left: 20px;
 }
 
