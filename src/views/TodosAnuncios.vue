@@ -67,6 +67,7 @@ export default {
             anuncios: [],
             backupAnuncios: [],
             citys: [],
+            filters: {},
             filterCity: '',
             filterType: '',
             loading: true,
@@ -142,30 +143,18 @@ export default {
 
         filter(filter) {
             this.anuncios = this.backupAnuncios
-            var filterNow = ''
 
-            if(filter === 'limpar') {
-                this.filterCity = ''
-                this.filterType = ''
-            } 
-            
-            if(filter.cidade) {
-                this.filterCity = filter.cidade
-                filterNow = 'cidade'
+            if (filter !== 'limpar') {
+                //[0] é a key do banco, nome do filtro
+                //[1] é o valor
+                this.filters[filter["filter"][0]] = filter["filter"][1]
+
+                Object.keys(this.filters).forEach(key => {
+                    this.anuncios = this.anuncios.filter(anuncio => anuncio[key] === this.filters[key])
+                })
+            } else {
+                this.filters = {}
             }
-
-            if (filter.categoria) {
-                this.filterType = filter.categoria
-                filterNow = 'categoria'
-            }
-
-            if(this.filterCity && this.filterType){
-                this.anuncios = this.anuncios.filter(
-                    anuncio => anuncio.cidade === this.filterCity && anuncio.categoria === this.filterType
-                )
-            } 
-                
-            this.anuncios = this.anuncios.filter(anuncio => anuncio[filterNow] === filter[filterNow])
         }
     },
 
@@ -179,24 +168,6 @@ export default {
 </script>
 
 <style>
-
-.clear-filter {
-    cursor: pointer;
-    padding: 10px;
-    display: block;
-    margin: 0 auto 20px;
-    text-align: center;
-    max-width: 140px;
-    border-radius: 15px;
-    margin-right: 40px;
-    box-shadow: 0px 7px 7px rgba(0, 0, 0, 0.25);
-    margin-top: -30px;
-}
-
-.clear-filter span {
-    color: red;
-    font-weight: bold;
-}
 
 .favoritar {
     text-align: center;

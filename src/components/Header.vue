@@ -171,7 +171,6 @@ export default {
         display: flex;
         justify-content: center;
         align-items: center;
-        width: 80px;
         height: 80px;
         cursor: pointer;
         transition: all .5s ease-in-out;
