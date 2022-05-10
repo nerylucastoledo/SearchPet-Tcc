@@ -80,6 +80,7 @@ export default {
 
 img {
     height: 650px;
+    width: 335px;
 }
 
 .carrossel {

@@ -255,4 +255,16 @@ export default {
     }
 }
 
+@media (max-width: 360px) {
+    .box-nome-logo img {
+        display: none;
+    }
+}
+
+@media (max-width: 359px) {
+    .box-nome-logo img {
+        display: block;
+    }
+}
+
 </style>
