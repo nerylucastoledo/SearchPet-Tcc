@@ -23,7 +23,6 @@
                 <option :value="false">Ativo</option>
                 <option :value="true">Inativo</option>
             </select>
-            {{pausado}}
         </div>
 
         <p 

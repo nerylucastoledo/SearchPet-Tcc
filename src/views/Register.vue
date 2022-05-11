@@ -435,6 +435,7 @@ input[type="radio"]:checked {
 .termos {
     text-align: center;
     margin: 20px 0 40px;
+    padding: 0 30px;
 }
 
 .termos a {
@@ -513,6 +514,12 @@ input[type="radio"]:checked {
         grid-template-columns: 30px auto;
         gap: 0.5em;
         height: 60px;
+    }
+}
+
+@media (max-width: 400px) {
+    .login .type-account {
+        display: grid !important;
     }
 }
 
