@@ -16,7 +16,7 @@
 
         <div class="vacina-intro box-primeiros-dias">
             <div>
-                <img src="../assets/cao_filhote.png" alt="Cachorro">
+                <img src="../assets/dog_primeira_vacina.png" alt="Cachorro">
             </div>
 
             <div>
@@ -26,7 +26,7 @@
 
         <div class="vacina-intro box-primeiros-dias">
             <div>
-                <img src="../assets/cao_filhote.png" alt="Cachorro">
+                <img src="../assets/gato_primeira_vacina.png" alt="Cachorro">
             </div>
 
             <div>
@@ -316,6 +316,7 @@ p {
         top: unset;
         transform: unset; 
         padding: 0 20px 20px;
+        margin-top: 20px;
     }
 
     .box-primeiros-dias img {
