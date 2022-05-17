@@ -3,7 +3,7 @@ module.exports = defineConfig({
   pwa: {
     name: "SearchPet",
     themeColor: "#36C9D2",
-"backgroundColor": "#fff",
+backgroundColor: "#fff",
     icons: {
       favicon32: 'img/icons/favicon-32x32',
       favicon16: 'img/icons/favicon-16x16.png',
