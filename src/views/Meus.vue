@@ -254,6 +254,7 @@ export default {
 
 .cards {
     padding: 0px !important;
+    grid-gap: 20px;
 }
 
 .cards > div {
