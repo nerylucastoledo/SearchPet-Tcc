@@ -254,7 +254,6 @@ export default {
 
 .cards {
     padding: 0px !important;
-    grid-gap: 20px !important;
 }
 
 .cards > div {
@@ -353,7 +352,7 @@ export default {
     text-align: center;
 }
 
-@media (max-width: 1355px) {
+@media (max-width: 1385px) {
     .cards {
         grid-template-columns: 1fr 1fr;
     }
