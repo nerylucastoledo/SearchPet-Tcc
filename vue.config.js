@@ -1,7 +1,7 @@
 const { defineConfig } = require('@vue/cli-service')
 module.exports = defineConfig({
   pwa: {
-    name: "SearchPet",
+    name: "Search Pet",
     themeColor: "#36C9D2",
     backgroundColor: "#ffffff",
     icons: {
