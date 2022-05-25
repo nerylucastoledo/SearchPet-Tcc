@@ -3,7 +3,9 @@ module.exports = defineConfig({
   pwa: {
     name: "Search Pet",
     themeColor: "#36C9D2",
-    backgroundColor: "#ffffff",
+    manifestOptions: {
+      background_color: "#FFFFFF"
+    },
     icons: {
       favicon32: 'img/icons/favicon-32x32',
       favicon16: 'img/icons/favicon-16x16.png',
