@@ -187,7 +187,7 @@
                 @change="previewImage"
             >        
 
-            <button class="btn-form" id="save-anuncio" :disabled="disabled" type="submit">Salvar</button>
+            <button class="btn-form" id="save-anuncio" type="submit">Salvar</button>
 
             <router-link to="/">
                 <button class="btn-form btn-cancel" type="submit">Cancelar</button>
@@ -242,12 +242,6 @@ export default {
             mensagem: "",
             dataUser: "",
             disabled: false
-        }
-    },
-
-    watch: {
-        disabled() {
-            return this.disabled
         }
     },
 
@@ -310,25 +304,40 @@ export default {
         },
 
         async createAnuncio() {
-            this.disabled = true;
-            await this.addPhotoAndSaveUrl()
+            if (this.anuncio.nome && this.anuncio.peso && this.anuncio.sexo &&
+                this.anuncio.castrado && this.anuncio.categoria && this.anuncio.type
+                && this.idadeSelected && this.tempo) {
+                
+                document.getElementById('save-anuncio').disabled = true
+                this.uploadPhoto()
+            }
+             else {
+                this.mensagem = 'Preencha todos os campos!'
+                this.success = false
+                setTimeout(() => this.mensagem = '', 2000)
+            }
         },
 
-        async addPhotoAndSaveUrl() {
+        async uploadPhoto() {
             const storageRef = firebase.storage().ref(`${this.imageData.name}`).put(this.imageData)
-            storageRef.on(`state_changed`, () => {
+            storageRef.on(`state_changed`, snapshot => {}, error => {}, () => {
                 storageRef.snapshot.ref.getDownloadURL()
                 .then((url) => {
-                    this.anuncio.imagem = url;
-                    this.create()
+                    this.anuncio.imagem = url
+                    this.saveData()
+                })
+                .catch(() => {
+                    this.mensagem = 'Essa imagem já existe!'
+                    this.success = false
+                    setTimeout(() => this.mensagem = '', 2000)
                 })
             })
         },
 
-        async create() {
+        async saveData() {
             var id = "id" + Math.random().toString(16).slice(2)
 
-            firebase.database()
+            await firebase.database()
             .ref('/Anuncios/')
             .child(this.anuncio.categoria)
             .update({
@@ -343,17 +352,13 @@ export default {
                     telefone: this.dataUser.whatsapp, 
                     username: this.$store.state.user.data.displayName,
                 }
-            })
-            .then(() => {
-                this.mensagem = 'Anuncio inserido!'
+            }).then(() => {
+                this.mensagem = 'Anúncio criado com sucesso!'
                 this.success = true
-
                 setTimeout(() => this.mensagem = '', 2000)
-                setTimeout(() => this.$router.replace(
-                    { name: "home" }
-                ), 2000);
+                setTimeout(() => this.$router.push({name: 'home'}), 2000)
             })
-        }
+        },
     },
 
     beforeCreate() {
