@@ -202,15 +202,15 @@ export default {
 }
 
 .box-nome-logo img {
-    width: 40px;
-    height: 40px;
-    top: 5px;
+    width: 35px;
+    height: 35px;
+    top: 62px;
     right: 30px;
     border-radius: 20px;
     position: absolute;
 }
 
-@media (max-width: 1040px) {
+@media (max-width: 1090px) {
     .cards {
         display: grid;
         grid-template-columns: 1fr 1fr;
@@ -219,7 +219,7 @@ export default {
     }
 }
 
-@media (max-width: 705px) {
+@media (max-width: 740px) {
     .cards {
         display: grid;
         grid-template-columns: 1fr;
@@ -251,19 +251,13 @@ export default {
     }
 
     .box-nome-logo img {
-        height: 40px;
+        height: 35px;
     }
 }
 
 @media (max-width: 360px) {
     .box-nome-logo img {
         display: none;
-    }
-}
-
-@media (max-width: 359px) {
-    .box-nome-logo img {
-        display: block;
     }
 }
 

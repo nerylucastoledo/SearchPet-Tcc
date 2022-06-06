@@ -175,11 +175,10 @@ export default {
     },
 
     methods: {
-        pegarNumeroDono() {
-            const userName = this.$store.state.user.data.displayName
+        pegarNumeroDono(username) {
 
             firebase.database()
-            .ref(userName)
+            .ref(username)
             .once("value", snapshot => {
                 this.dono = snapshot.val()
                 var numero = this.formatarNumero(this.dono.whatsapp)
@@ -211,7 +210,7 @@ export default {
             this.anuncio = snapshot.val()
             document.title = `Detalhe - ${snapshot.val()["nome"]}`
             this.categoria = this.anuncio.categoria === "Perdido" ? "achou" : "adotou"
-            this.pegarNumeroDono()
+            this.pegarNumeroDono(snapshot.val()["username"])
         })
     },
 }

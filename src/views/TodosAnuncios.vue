@@ -176,4 +176,8 @@ export default {
     cursor: pointer;
 }
 
+.todos-anuncios {
+    margin-bottom: 60px;
+}
+
 </style>
