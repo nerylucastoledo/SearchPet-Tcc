@@ -245,6 +245,12 @@ export default {
         }
     },
 
+    watch: {
+        disabled() {
+            return this.disabled
+        }
+    },
+
     methods: {
         backForm() {
             this.idForm -= 1
@@ -529,7 +535,7 @@ select {
 
 /* FORM IMAGE ANIMAL */
 #img_preview {
-    max-width: 400px;
+    max-width: 100%;
     display: block;
     margin: 0 auto 40px;
     border-radius: 10px;
