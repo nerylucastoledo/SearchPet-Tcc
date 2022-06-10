@@ -41,7 +41,7 @@
                 </label>
             </div>
 
-            <form action="#" @submit.prevent="registrarCadastro">
+            <form @submit.prevent="registrarCadastro">
                 <div>
                     <div>
                         <label for="name">Nome</label>
@@ -219,9 +219,7 @@ export default {
             typeAccount: '',
             success: true,
             mensagem: "",
-            cepError: '',
             usernameApproved: null,
-            termoDeUso: false
         }
     },
 
@@ -278,7 +276,7 @@ export default {
                 })
                 .then(() => {
                     localStorage.setItem('displayName', username)
-                    this.$router.push({name: 'home'}), 4000
+                    this.$router.push({name: 'home'})
                 })
             })
         },

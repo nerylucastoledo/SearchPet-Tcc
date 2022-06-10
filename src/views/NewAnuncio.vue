@@ -350,7 +350,7 @@ export default {
                     logo_ong: this.dataUser.image,
                     pausado: false,
                     telefone: this.dataUser.whatsapp, 
-                    username: this.$store.state.user.data.displayName,
+                    username: localStorage.getItem("displayName"),
                 }
             }).then(() => {
                 this.mensagem = 'Anúncio criado com sucesso!'
@@ -361,10 +361,10 @@ export default {
         },
     },
 
-    beforeCreate() {
-        const userName = this.$store.state.user.data.displayName
+    created() {
+        const userName = localStorage.getItem("displayName")
         document.title = "Novo anúncio"
-        
+
         firebase.database()
         .ref(userName)
         .once("value", snapshot => this.dataUser = snapshot.val())
