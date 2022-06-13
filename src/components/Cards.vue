@@ -50,7 +50,7 @@
                 </div>
 
                 <div>
-                    <p v-if="anuncio.castrado === false">Não castrado</p>
+                    <p v-if="anuncio.castrado === false || anuncio.castrado === 'false'">Não castrado</p>
                     <p v-else>Castrado</p>
 
                     <span>

@@ -70,7 +70,7 @@
                             <img src="../assets/castrado.png" alt="Logo pata">
                         </div>
 
-                        <span v-if="anuncio.castrado === false">Não castrado</span>
+                        <span v-if="anuncio.castrado === false || anuncio.castrado === 'false'">Não castrado</span>
                         <span v-else>Castrado</span>
                     </div>
                 </div>
