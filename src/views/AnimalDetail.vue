@@ -110,8 +110,14 @@
 
                 <div class="info-contato">
                     <div>
-                        <p>
+
+                        <p v-if="dono.type === 'ONG'">
                             Minha ONG:
+                            <strong style="color: #36C9D2">{{dono.nameOng}}</strong>
+                        </p>
+
+                        <p v-else>
+                            Meu dono:
                             <strong style="color: #36C9D2">{{dono.nameOng}}</strong>
                         </p>
 

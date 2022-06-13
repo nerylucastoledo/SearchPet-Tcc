@@ -27,7 +27,7 @@
             <form class="form-perfil" @submit.prevent="atualizarPerfil">
                 <div>
                     <div>
-                        <label for="name">Nome da Ong</label>
+                        <label for="name">Seu nome</label>
                         <input 
                             type="text"
                             id="name" 
@@ -92,7 +92,7 @@
                     </div>
 
                     <div>
-                        <label for="cellphone">whatssapp</label>
+                        <label for="cellphone">Whatsapp</label>
                         <input 
                             id="cellphone" 
                             name="cellphone" 
