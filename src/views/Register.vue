@@ -27,7 +27,7 @@
                         value="ONG" 
                         v-model="typeAccount"
                     >
-                    ONG
+                    Anunciar
                 </label>
 
                 <label class="form-control">
@@ -37,7 +37,7 @@
                         value="particular" 
                         v-model="typeAccount"
                     >
-                    Particular
+                    Adotar
                 </label>
             </div>
 
