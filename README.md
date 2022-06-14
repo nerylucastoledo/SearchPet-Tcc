@@ -2,9 +2,9 @@
 
 > Link do projeto: https://adotapet.netlify.app/
 > 
-> Status do Projeto: Em andamento!
+> Status do Projeto: Finalizado!
 
-## Um PWA para ong's anunciarem seus pets para doação / perdidos
+## Um PWA para ONGs anunciarem seus pets para doação / perdidos
 
 
 ### O que o site é capaz de fazer 💥
